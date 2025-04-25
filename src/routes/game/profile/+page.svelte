@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import type { PageServerData } from './$types';
 
 	let { data }: { data: PageServerData } = $props();
 </script>
 
-<main class="space-y-4 bg-surface-300-700 p-4">
-    {data.user.id}
+<main class="bg-surface-300-700 space-y-4 p-4">
+	<div class="card">
+		{data.playerData.id} <br />
+		{data.playerData.userId}
+	</div>
 </main>
