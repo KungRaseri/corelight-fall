@@ -2,16 +2,10 @@
 	import '../app.css';
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import Paperclip from '@lucide/svelte/icons/paperclip';
-	import Calendar from '@lucide/svelte/icons/calendar';
-	import CircleUser from '@lucide/svelte/icons/circle-user';
 
 	import { Navigation } from '@skeletonlabs/skeleton-svelte';
 	// Icons
-	import IconFolder from '@lucide/svelte/icons/folder';
-	import IconImage from '@lucide/svelte/icons/image';
-	import IconMusic from '@lucide/svelte/icons/music';
-	import IconVideo from '@lucide/svelte/icons/video';
+	import IconDashboard from '@lucide/svelte/icons/layout-dashboard';
 	import IconGames from '@lucide/svelte/icons/gamepad';
 	import IconMenu from '@lucide/svelte/icons/menu';
 	import IconSettings from '@lucide/svelte/icons/settings';
@@ -26,13 +20,12 @@
 	let { data, children } = $props();
 </script>
 
-<div>
+<div class="h-full">
 	<div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
 		<!-- Sidebar component, swap this element with another sidebar if you like -->
 		<Navigation.Rail expanded={sidebarExpanded}>
 			{#snippet header()}
 				<Navigation.Tile
-					labelExpanded="Menu"
 					onclick={() => (sidebarExpanded = !sidebarExpanded)}
 					title="Toggle Menu Width"
 				>
@@ -40,19 +33,10 @@
 				</Navigation.Tile>
 			{/snippet}
 			{#snippet tiles()}
-				<Navigation.Tile labelExpanded="Browse Files" href="#/files">
-					<IconFolder />
+				<Navigation.Tile labelExpanded="Dashboard" href="/">
+					<IconDashboard />
 				</Navigation.Tile>
-				<Navigation.Tile labelExpanded="Browse Images" href="#/images">
-					<IconImage />
-				</Navigation.Tile>
-				<Navigation.Tile labelExpanded="Browse Music" href="#/music">
-					<IconMusic />
-				</Navigation.Tile>
-				<Navigation.Tile labelExpanded="Browse Videos" href="#/videos">
-					<IconVideo />
-				</Navigation.Tile>
-				<Navigation.Tile labelExpanded="Browse Games" href="/games">
+				<Navigation.Tile labelExpanded="Game" href="/game">
 					<IconGames />
 				</Navigation.Tile>
 			{/snippet}
@@ -64,57 +48,16 @@
 		</Navigation.Rail>
 	</div>
 
-	<div class={sidebarExpanded ? 'pl-60' : 'pl-24'}>
+	<div class={sidebarExpanded ? 'lg:pl-60' : 'lg:pl-24'}>
 		<div
 			class="sticky top-0 z-40 flex shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white shadow-sm sm:gap-x-6"
 		>
-			<button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
-				<span class="sr-only">Open sidebar</span>
-				<svg
-					class="size-6"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					aria-hidden="true"
-					data-slot="icon"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-					/>
-				</svg>
-			</button>
-
-			<!-- Separator -->
-			<div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true"></div>
-
-			<header class="flex flex-1 self-stretch lg:gap-x-6">
+			<header class="flex flex-1 self-stretch lg:gap-x-3">
 				<AppBar>
 					{#snippet lead()}
-						<!-- <form class="grid flex-1 grid-cols-1" action="#" method="GET">
-							<input
-								type="search"
-								name="search"
-								aria-label="Search"
-								class="col-start-1 row-start-1 block size-full bg-white pl-8 text-base text-gray-200-800 outline-none placeholder:text-gray-400 sm:text-sm/6"
-								placeholder="Search"
-							/>
-							<svg
-								class="pointer-events-none col-start-1 row-start-1 size-5 self-center text-gray-400"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-								aria-hidden="true"
-								data-slot="icon"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
-									clip-rule="evenodd"
-								/>
-							</svg>
-						</form> -->
+						<div class="ml-5">
+							<a href="/about">About</a>
+						</div>
 					{/snippet}
 					{#snippet trail()}
 						{#if data.user}
@@ -153,17 +96,6 @@
 											<ChevronDown></ChevronDown>
 										</span>
 									</button>
-
-									<!--
-						Dropdown menu, show/hide based on menu state.
-		  
-						Entering: "transition ease-out duration-100"
-						  From: "transform opacity-0 scale-95"
-						  To: "transform opacity-100 scale-100"
-						Leaving: "transition ease-in duration-75"
-						  From: "transform opacity-100 scale-100"
-						  To: "transform opacity-0 scale-95"
-					  -->
 									{#if isUserMenuEnabled}
 										<div
 											class="bg-surface-200-800 absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
@@ -215,7 +147,7 @@
 				{@render children()}
 			</div>
 		</main>
-		<footer>
+		<footer class="hidden lg:block">
 			<div class="mx-auto max-w-7xl overflow-hidden px-10 py-5 sm:py-8 lg:px-8">
 				<nav
 					class="-mb-6 flex flex-wrap justify-center gap-x-12 gap-y-3 text-sm/6"
@@ -283,5 +215,16 @@
 				</p>
 			</div>
 		</footer>
+	</div>
+	<div class="sticky bottom-0 lg:hidden">
+		<!-- Sidebar component, swap this element with another sidebar if you like -->
+		<Navigation.Bar>
+			<Navigation.Tile labelExpanded="Dashboard" href="/">
+				<IconDashboard />
+			</Navigation.Tile>
+			<Navigation.Tile labelExpanded="Game" href="/game">
+				<IconGames />
+			</Navigation.Tile>
+		</Navigation.Bar>
 	</div>
 </div>

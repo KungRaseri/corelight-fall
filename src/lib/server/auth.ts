@@ -15,11 +15,11 @@ export function generateSessionToken() {
 	return token;
 }
 
-export async function createSession(token: string, userId: string) {
+export async function createSession(token: string, playerId: number) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: table.Session = {
 		id: sessionId,
-		userId,
+		playerId,
 		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
 	};
 	await db.insert(table.session).values(session);
@@ -31,24 +31,24 @@ export async function validateSessionToken(token: string) {
 	const [result] = await db
 		.select({
 			// Adjust user table here to tweak returned data
-			user: { id: table.user.id, username: table.user.username },
+			user: { id: table.player.id, username: table.player.username },
 			session: table.session,
-			playerData: table.playerData
+			playerResource: table.playerResource
 		})
 		.from(table.session)
-		.innerJoin(table.user, eq(table.session.userId, table.user.id))
-		.innerJoin(table.playerData, eq(table.user.id, table.playerData.userId))
+		.innerJoin(table.player, eq(table.session.playerId, table.player.id))
+		.innerJoin(table.playerResource, eq(table.player.id, table.playerResource.playerId))
 		.where(eq(table.session.id, sessionId));
 
 	if (!result) {
-		return { session: null, user: null, playerData: null };
+		return { session: null, user: null, playerResource: null };
 	}
-	const { session, user, playerData } = result;
+	const { session, user, playerResource } = result;
 
 	const sessionExpired = Date.now() >= session.expiresAt.getTime();
 	if (sessionExpired) {
 		await db.delete(table.session).where(eq(table.session.id, session.id));
-		return { session: null, user: null, playerData: null };
+		return { session: null, user: null, playerResource: null };
 	}
 
 	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
@@ -60,7 +60,7 @@ export async function validateSessionToken(token: string) {
 			.where(eq(table.session.id, session.id));
 	}
 
-	return { session, user, playerData };
+	return { session, user, playerResource };
 }
 
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
