@@ -8,7 +8,7 @@
 
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
 	<div class="sm:mx-auto sm:w-full sm:max-w-sm">
-		<Login class="mx-auto"/>
+		<Login class="mx-auto" />
 		<h2 class="text-center text-2xl/9 font-bold tracking-tight text-white">
 			Sign in to your account
 		</h2>
@@ -55,12 +55,12 @@
 				<button
 					type="submit"
 					class="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-					>Sign in</button
 				>
+					Sign in
+				</button>
 			</div>
+			<button class="btn preset-filled" formaction="?/register">Register</button>
 		</form>
-
-		<button formaction="?/register">Register</button>
 
 		<p style="color: red">{form?.message ?? ''}</p>
 	</div>

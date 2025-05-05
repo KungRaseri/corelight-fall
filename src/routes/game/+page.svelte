@@ -6,7 +6,5 @@
 </script>
 
 <main>
-	
-    {data.user.id}
+	{data.player.id}
 </main>
-	

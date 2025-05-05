@@ -31,19 +31,17 @@ export async function validateSessionToken(token: string) {
 	const [result] = await db
 		.select({
 			// Adjust user table here to tweak returned data
-			user: { id: table.player.id, username: table.player.username },
-			session: table.session,
-			playerResource: table.playerResource
+			player: { id: table.player.id, username: table.player.username },
+			session: table.session
 		})
 		.from(table.session)
 		.innerJoin(table.player, eq(table.session.playerId, table.player.id))
-		.innerJoin(table.playerResource, eq(table.player.id, table.playerResource.playerId))
 		.where(eq(table.session.id, sessionId));
 
 	if (!result) {
 		return { session: null, user: null, playerResource: null };
 	}
-	const { session, user, playerResource } = result;
+	const { session, player } = result;
 
 	const sessionExpired = Date.now() >= session.expiresAt.getTime();
 	if (sessionExpired) {
@@ -60,7 +58,7 @@ export async function validateSessionToken(token: string) {
 			.where(eq(table.session.id, session.id));
 	}
 
-	return { session, user, playerResource };
+	return { session, player };
 }
 
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;

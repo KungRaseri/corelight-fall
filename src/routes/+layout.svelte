@@ -60,7 +60,7 @@
 						</div>
 					{/snippet}
 					{#snippet trail()}
-						{#if data.user}
+						{#if data.player}
 							<div class="flex items-center gap-x-4 lg:gap-x-6">
 								<button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
 									<span class="sr-only">View notifications</span>
@@ -85,13 +85,13 @@
 										<span class="sr-only">Open user menu</span>
 										<img
 											class="size-8 rounded-full bg-gray-50"
-											src="https://picsum.photos/seed/{data.user.id}/120/120"
+											src="https://picsum.photos/seed/{data.player.id}/120/120"
 											alt=""
 										/>
 										<span class="hidden lg:flex lg:items-center">
 											<span
 												class="text-gray-200-800 ml-4 text-sm/6 font-semibold"
-												aria-hidden="true">{data.user.username}</span
+												aria-hidden="true">{data.player.username}</span
 											>
 											<ChevronDown></ChevronDown>
 										</span>
