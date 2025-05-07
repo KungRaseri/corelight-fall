@@ -19,25 +19,39 @@ export const actions: Actions = {
 		const username = formData.get('username');
 		const password = formData.get('password');
 
+		// Validate input
 		if (!validateUsername(username)) {
-			return fail(400, { message: 'Invalid username' });
+			return fail(400, { message: 'Username must be 3-31 characters (alphanumeric, hyphen, underscore).' });
 		}
 		if (!validatePassword(password)) {
-			return fail(400, { message: 'Invalid password' });
+			return fail(400, { message: 'Password must be 6-255 characters.' });
 		}
 
+		// Check for existing user
+		const existingUser = await db.select().from(table.player).where(table.player.username.eq(username)).get();
+		if (existingUser) {
+			return fail(409, { message: 'Username already taken.' });
+		}
+
+		// Generate user ID
 		const userId = generateUserId();
+
+		// Hash the password securely
 		const passwordHash = await hash(password, {
-			// recommended minimum parameters
 			memoryCost: 19456,
 			timeCost: 2,
 			outputLen: 32,
 			parallelism: 1
 		});
 
+		// Insert new player into the database
 		try {
-			let player = await db.insert(table.player).values({ username, passwordHash }).returning();
+			const player = await db.insert(table.player).values({ username, passwordHash }).returning();
+			if (!player || player.length === 0) {
+				return fail(500, { message: 'Error creating user. Please try again later.' });
+			}
 
+			// Create session
 			const sessionToken = auth.generateSessionToken();
 			const session = await auth.createSession(sessionToken, player[0].id);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
