@@ -7,6 +7,16 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import ToastNotifications from '$lib/components/ToastNotifications.svelte';
 
+	import { sidebarExpanded } from '$lib/stores/sidebar';
+
+	let expanded = $state<boolean>(true);
+	$effect(() => {
+		const unsubscribe = sidebarExpanded.subscribe((value) => {
+			expanded = value;
+		});
+		return unsubscribe;
+	});
+
 	let { children } = $props();
 </script>
 
@@ -17,7 +27,7 @@
 	</div>
 
 	<!-- Content wrapper -->
-	<div class="pl-24 lg:pl-60">
+	<div class={expanded ? 'lg:pl-60' : 'lg:pl-24'}>
 		<!-- AppBar -->
 		<AppBar />
 

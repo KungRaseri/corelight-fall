@@ -4,13 +4,15 @@
 	import IconGames from '@lucide/svelte/icons/gamepad';
 	import IconMenu from '@lucide/svelte/icons/menu';
 	import IconSettings from '@lucide/svelte/icons/settings';
+	import { sidebarExpanded, toggleSidebar } from '$lib/stores/sidebar';
 
-	let sidebarExpanded = $state(true);
+	let expanded: boolean;
+	sidebarExpanded.subscribe((value) => (expanded = value));
 </script>
 
-<Navigation.Rail expanded={sidebarExpanded}>
+<Navigation.Rail {expanded}>
 	{#snippet header()}
-		<Navigation.Tile onclick={() => (sidebarExpanded = !sidebarExpanded)} title="Toggle Menu Width">
+		<Navigation.Tile onclick={toggleSidebar} title="Toggle Menu Width">
 			<IconMenu />
 		</Navigation.Tile>
 	{/snippet}

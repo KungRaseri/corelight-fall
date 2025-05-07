@@ -26,7 +26,7 @@
 
 <AppBar>
 	<div class="flex w-full items-center justify-between">
-		<div class="ml-5 text-2xl font-bold text-primary-400">
+		<div class="text-primary-400 ml-5 text-2xl font-bold">
 			<a href="/">The Corelight Fall</a>
 		</div>
 
