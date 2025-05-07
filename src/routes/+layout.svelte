@@ -24,6 +24,7 @@
 	import type { Player } from '$lib/server/db/schema';
 	import { goto } from '$app/navigation';
 	import Footer from '$lib/components/Footer.svelte';
+	import LightSwitch from '$lib/components/LightSwitch.svelte';
 
 	// Subscribe to player store
 	let playerData = $state<Player | null>(null);
@@ -128,8 +129,10 @@
 
 				{#snippet trail()}
 					<div class="flex items-center gap-4 px-4">
+						<LightSwitch />
 						{#if !playerData}
-							<a href="/auth/login" class="btn btn-sm btn-secondary">Login / Register</a>
+							<a href="/auth/login" class="btn btn-sm btn-primary">Login</a>
+							<a href="/auth/register" class="btn btn-sm btn-secondary">Register</a>
 						{:else}
 							<div class="relative">
 								<!-- Profile button -->

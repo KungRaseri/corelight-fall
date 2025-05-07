@@ -9,6 +9,8 @@
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+
 /* Button Styling following Skeleton and Tailwind conventions */
 .btn {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium transition-all;
@@ -49,4 +51,27 @@
 
 .btn-lg {
     @apply text-lg px-5 py-3;
+}
+
+/* Enhanced Input Styling */
+.input {
+    @apply w-full px-3 py-2 rounded-md border border-surface-600 text-base text-surface-900 dark:text-surface-100 outline-none;
+}
+
+.input-primary {
+    @apply bg-surface-50 dark:bg-surface-800 border-surface-400 dark:border-surface-600;
+}
+
+.input:focus,
+.input-primary:focus {
+    @apply ring-2 ring-primary-500 dark:ring-primary-400;
+}
+
+.input:hover,
+.input-primary:hover {
+    @apply border-surface-500 dark:border-surface-400;
+}
+
+.input::placeholder {
+    @apply text-surface-500 dark:text-surface-300;
 }
