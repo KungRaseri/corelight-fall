@@ -4,6 +4,7 @@ import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
+import type { Session, Player } from '$lib/server/db/schema';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -41,7 +42,7 @@ export async function validateSessionToken(token: string) {
 	if (!result) {
 		return { session: null, user: null, playerResource: null };
 	}
-	const { session, player } = result;
+	const { player, session }: { session: Session, player: Player } = result;
 
 	const sessionExpired = Date.now() >= session.expiresAt.getTime();
 	if (sessionExpired) {

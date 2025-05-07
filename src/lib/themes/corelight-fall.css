@@ -1,0 +1,66 @@
+[data-theme='corelight-fall'] {
+	--text-scaling: 1.067;
+	--base-font-color: var(--color-surface-100);
+	--base-font-color-dark: var(--color-surface-100);
+	--base-font-family: 'Spectral', serif;
+	--base-font-size: inherit;
+	--base-line-height: 1.6;
+	--base-font-weight: 400;
+	--base-font-style: normal;
+	--base-letter-spacing: 0em;
+
+	--heading-font-color: var(--color-primary-400);
+	--heading-font-color-dark: var(--color-primary-300);
+	--heading-font-family: 'Cinzel', serif;
+	--heading-font-weight: 700;
+
+	--anchor-font-color: var(--color-accent-400);
+	--anchor-font-color-dark: var(--color-accent-300);
+	--anchor-text-decoration: none;
+	--anchor-text-decoration-hover: underline;
+
+	--spacing: 0.25rem;
+	--radius-base: 0.5rem;
+	--radius-container: 1.25rem;
+	--default-border-width: 1px;
+	--default-divide-width: 1px;
+	--default-ring-width: 2px;
+
+	--body-background-color: var(--color-surface-950);
+	--body-background-color-dark: var(--color-surface-950);
+
+    /* Radii & spacing */
+    --spacing: 0.25rem;
+    --radius-base: 0.75rem;
+    --radius-container: 1.5rem;
+
+	/* 🔥 Ember Orange (Primary) */
+	--color-primary-500: oklch(65% 0.19 55);
+	--color-primary-400: oklch(72% 0.15 50);
+	--color-primary-600: oklch(58% 0.22 60);
+
+	/* 🌿 Arcane Green-Teal (Secondary) */
+	--color-secondary-500: oklch(68% 0.16 190);
+	--color-secondary-400: oklch(74% 0.12 190);
+
+	/* ✨ Relic Violet (Accent) */
+	--color-accent-500: oklch(64% 0.18 310);
+	--color-accent-400: oklch(72% 0.14 305);
+
+	/* 🌫️ Neutral Surfaces */
+	--color-surface-950: oklch(18% 0 270); /* Near-black */
+	--color-surface-900: oklch(24% 0 270);
+	--color-surface-100: oklch(88% 0 270);
+	--color-surface-50: oklch(96% 0 270);
+
+	--color-surface-contrast-light: var(--color-surface-50);
+	--color-surface-contrast-dark: var(--color-surface-950);
+
+	/* Optional tweaks for vibe */
+	--theme-shadow: 0 4px 24px rgba(255, 100, 0, 0.2);
+	--theme-ring: var(--color-accent-400);
+
+    /* Optional text appearance */
+    --anchor-text-decoration: none;
+    --anchor-text-decoration-hover: underline;
+}

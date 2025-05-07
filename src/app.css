@@ -5,9 +5,6 @@
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton/optional/presets';
 @import '@skeletonlabs/skeleton/themes/cerberus';
+@import './lib/themes/corelight-fall.css';
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
-
-@theme {
-    --breakpoint-xs: 20rem;
-}
