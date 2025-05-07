@@ -4,11 +4,15 @@
 	import IconGames from '@lucide/svelte/icons/gamepad';
 </script>
 
-<Navigation.Bar>
-	<Navigation.Tile href="/" labelExpanded="Dashboard">
-		<IconDashboard />
-	</Navigation.Tile>
-	<Navigation.Tile href="/game" labelExpanded="Game">
-		<IconGames />
-	</Navigation.Tile>
-</Navigation.Bar>
+<div
+	class="bg-surface-900 text-surface-100 border-surface-700 fixed inset-x-0 bottom-0 z-50 border-t"
+>
+	<Navigation.Bar>
+		<Navigation.Tile href="/" labelExpanded="Dashboard">
+			<IconDashboard />
+		</Navigation.Tile>
+		<Navigation.Tile href="/game" labelExpanded="Game">
+			<IconGames />
+		</Navigation.Tile>
+	</Navigation.Bar>
+</div>
