@@ -42,7 +42,7 @@ export async function validateSessionToken(token: string) {
 	if (!result) {
 		return { session: null, user: null, playerResource: null };
 	}
-	const { player, session }: { session: Session, player: Player } = result;
+	const { session, player }: { session: Session | null, player: Player | null } = result;
 
 	const sessionExpired = Date.now() >= session.expiresAt.getTime();
 	if (sessionExpired) {

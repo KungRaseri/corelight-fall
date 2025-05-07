@@ -1,6 +1,7 @@
-import { writable } from 'svelte/store';
+import type { Player } from '$lib/server/db/schema';
+import { writable, type Writable } from 'svelte/store';
 
-export const player = writable(null);
+export const player: Writable<Player | null> = writable();
 
 
 export function setPlayer(data: any) {

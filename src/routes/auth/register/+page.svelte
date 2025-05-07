@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData } from './$types';
-	import Login from '@lucide/svelte/icons/log-in';
 
 	let { form }: { form: ActionData } = $props();
 </script>
@@ -10,14 +9,13 @@
 	class="bg-surface-50 dark:bg-surface-900 text-surface-900 dark:text-surface-100 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8"
 >
 	<div class="text-center sm:mx-auto sm:w-full sm:max-w-sm">
-		<Login class="text-primary-500 mx-auto" />
-		<h2 class="text-2xl font-bold tracking-tight text-white">Sign in to your account</h2>
+		<h2 class="text-2xl font-bold tracking-tight text-white">Create your account</h2>
 	</div>
 
 	<div class="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
 		<form
 			method="POST"
-			action="?/login"
+			action="?/register"
 			use:enhance
 			class="bg-surface-100 dark:bg-surface-800 space-y-6 rounded-lg p-8 shadow-md"
 		>
@@ -27,7 +25,6 @@
 					type="text"
 					name="username"
 					id="username"
-					autocomplete="username"
 					required
 					class="input input-primary mt-2 w-full"
 				/>
@@ -39,19 +36,18 @@
 					type="password"
 					name="password"
 					id="password"
-					autocomplete="current-password"
 					required
 					class="input input-primary mt-2 w-full"
 				/>
 			</div>
 
 			<div>
-				<button type="submit" class="btn btn-primary w-full">Sign In</button>
+				<button type="submit" class="btn btn-secondary w-full">Register</button>
 			</div>
 
 			<p class="text-surface-300 mt-4 text-center text-sm">
-				Don't have an account? <a href="/auth/register" class="text-primary-600 hover:underline"
-					>Register here</a
+				Already have an account? <a href="/auth/login" class="text-primary-600 hover:underline"
+					>Login here</a
 				>
 			</p>
 

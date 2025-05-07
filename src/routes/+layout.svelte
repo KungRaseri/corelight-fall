@@ -22,15 +22,26 @@
 	let { children } = $props();
 	import { player, setPlayer, clearPlayer } from '$lib/stores/player';
 	import type { Player } from '$lib/server/db/schema';
+	import { goto } from '$app/navigation';
+	import Footer from '$lib/components/Footer.svelte';
 
 	// Subscribe to player store
-	let playerData = $state(null);
-	player.subscribe((value) => (playerData = value));
+	let playerData = $state<Player | null>(null);
 
 	// Set player data on page load
-	if (page.data.player) {
-		setPlayer(page.data.player);
-	}
+	$effect(() => {
+		if (page.data?.player) {
+			setPlayer(page.data.player);
+		}
+	});
+
+	$effect(() => {
+		const unsubscribe = player.subscribe((value) => {
+			playerData = value;
+		});
+
+		return unsubscribe;
+	});
 
 	const toaster = createToaster();
 
@@ -49,9 +60,15 @@
 				});
 
 				// Update UI without reloading the page
-				setPlayer(null);
+				clearPlayer();
 
-				return redirect(302, '/auth/login');
+				setTimeout(
+					() =>
+						goto('/', {
+							invalidateAll: true
+						}),
+					1000
+				);
 			} else {
 				const result = await response.json();
 				toaster.error({
@@ -60,7 +77,6 @@
 				});
 			}
 		} catch (error) {
-			console.log(error);
 			toaster.error({
 				title: 'Network Error',
 				description: 'Could not reach the server.'
@@ -112,7 +128,9 @@
 
 				{#snippet trail()}
 					<div class="flex items-center gap-4 px-4">
-						{#if playerData}
+						{#if !playerData}
+							<a href="/auth/login" class="btn btn-sm btn-secondary">Login / Register</a>
+						{:else}
 							<div class="relative">
 								<!-- Profile button -->
 								<button
@@ -135,7 +153,9 @@
 										class="bg-surface-800 ring-opacity-5 absolute right-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black"
 										transition:slide
 									>
-										<a href="/profile" class="text-surface-100 block px-4 py-2 text-sm">Profile</a>
+										<a href="/game/profile" class="text-surface-100 block px-4 py-2 text-sm"
+											>Profile</a
+										>
 										<button
 											class="text-surface-100 hover:bg-surface-700 block w-full px-4 py-2 text-left text-sm"
 											onclick={handleLogout}
@@ -145,8 +165,6 @@
 									</div>
 								{/if}
 							</div>
-						{:else}
-							<a href="/auth/login" class="btn btn-sm btn-secondary">Login / Register</a>
 						{/if}
 					</div>
 				{/snippet}
@@ -161,9 +179,7 @@
 		</main>
 
 		<!-- Footer -->
-		<footer class="text-surface-400 py-4 text-center text-sm">
-			&copy; {new Date().getFullYear()} Corelight Studios
-		</footer>
+		<Footer />
 	</div>
 
 	<!-- Mobile Nav -->

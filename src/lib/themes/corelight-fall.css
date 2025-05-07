@@ -29,10 +29,10 @@
 	--body-background-color: var(--color-surface-950);
 	--body-background-color-dark: var(--color-surface-950);
 
-    /* Radii & spacing */
-    --spacing: 0.25rem;
-    --radius-base: 0.75rem;
-    --radius-container: 1.5rem;
+	/* Radii & spacing */
+	--spacing: 0.25rem;
+	--radius-base: 0.75rem;
+	--radius-container: 1.5rem;
 
 	/* 🔥 Ember Orange (Primary) */
 	--color-primary-500: oklch(65% 0.19 55);
@@ -48,7 +48,8 @@
 	--color-accent-400: oklch(72% 0.14 305);
 
 	/* 🌫️ Neutral Surfaces */
-	--color-surface-950: oklch(18% 0 270); /* Near-black */
+	--color-surface-950: oklch(18% 0 270);
+	/* Near-black */
 	--color-surface-900: oklch(24% 0 270);
 	--color-surface-100: oklch(88% 0 270);
 	--color-surface-50: oklch(96% 0 270);
@@ -60,7 +61,7 @@
 	--theme-shadow: 0 4px 24px rgba(255, 100, 0, 0.2);
 	--theme-ring: var(--color-accent-400);
 
-    /* Optional text appearance */
-    --anchor-text-decoration: none;
-    --anchor-text-decoration-hover: underline;
+	/* Optional text appearance */
+	--anchor-text-decoration: none;
+	--anchor-text-decoration-hover: underline;
 }

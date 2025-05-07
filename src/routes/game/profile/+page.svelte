@@ -18,7 +18,7 @@
 				type="text"
 				name="userId"
 				disabled
-				value={data.user.id}
+				value={data.player.id}
 			/>
 			<label class="text-gray-900-100 block text-sm/6 font-medium" for="username">Username</label>
 			<input

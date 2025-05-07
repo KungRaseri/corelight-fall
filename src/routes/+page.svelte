@@ -1,5 +1,13 @@
-<main class="space-y-4 bg-green-500 p-4">
-	<p class="h-[512px] bg-purple-500 p-4">Paragraph 1</p>
-	<p class="h-[512px] bg-purple-500 p-4">Paragraph 2</p>
-	<p class="h-[512px] bg-purple-500 p-4">Paragraph 3</p>
-</main>
+<script lang="ts">
+	import Hero from '$lib/components/Hero.svelte';
+	import About from '$lib/components/About.svelte';
+	import Features from '$lib/components/Features.svelte';
+	import Preview from '$lib/components/Preview.svelte';
+</script>
+
+<div class="landing-page">
+	<Hero />
+	<About />
+	<Features />
+	<Preview />
+</div>
