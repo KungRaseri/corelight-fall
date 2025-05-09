@@ -2,6 +2,8 @@
 	import { Navigation } from '@skeletonlabs/skeleton-svelte';
 	import IconDashboard from '@lucide/svelte/icons/layout-dashboard';
 	import IconGames from '@lucide/svelte/icons/gamepad';
+	import IconInventory from '@lucide/svelte/icons/boxes'
+	import IconMap from '@lucide/svelte/icons/globe'
 	import IconMenu from '@lucide/svelte/icons/menu';
 	import IconSettings from '@lucide/svelte/icons/settings';
 	import { sidebarExpanded, toggleSidebar } from '$lib/stores/sidebar';
@@ -23,6 +25,12 @@
 		</Navigation.Tile>
 		<Navigation.Tile labelExpanded="Game" href="/game">
 			<IconGames />
+		</Navigation.Tile>
+		<Navigation.Tile labelExpanded="Inventory" href="/game/inventory">
+			<IconInventory />
+		</Navigation.Tile>
+		<Navigation.Tile labelExpanded="Map" href="/game/map">
+			<IconMap />
 		</Navigation.Tile>
 	{/snippet}
 

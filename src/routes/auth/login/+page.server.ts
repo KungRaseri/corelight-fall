@@ -10,6 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.player) {
 		return redirect(302, '/game');
 	}
+
 	return {};
 };
 

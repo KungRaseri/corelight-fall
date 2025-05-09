@@ -8,6 +8,15 @@
 	import ToastNotifications from '$lib/components/ToastNotifications.svelte';
 
 	import { sidebarExpanded } from '$lib/stores/sidebar';
+	import { setPlayer } from '$lib/stores/player';
+	import { page } from '$app/state';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		if (page.data?.player) {
+            setPlayer(page.data.player);
+        }
+	});
 
 	let expanded = $state<boolean>(true);
 	$effect(() => {

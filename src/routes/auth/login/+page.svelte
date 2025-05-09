@@ -18,7 +18,6 @@
 		<form
 			method="POST"
 			action="?/login"
-			use:enhance
 			class="bg-surface-100 dark:bg-surface-800 space-y-6 rounded-lg p-8 shadow-md"
 		>
 			<div>
