@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PlayerItemWithDetails } from '$lib/types';
+	import type { PlayerItemWithDetails } from '$lib/types/PlayerItemWithDetails';
 
 	export let selectedItem: PlayerItemWithDetails;
 

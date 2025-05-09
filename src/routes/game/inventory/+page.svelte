@@ -4,7 +4,7 @@
 	import ItemDetails from '$lib/components/ItemDetails.svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
-	import type { PlayerItemWithDetails } from '$lib/types';
+	import type { PlayerItemWithDetails } from '$lib/types/PlayerItemWithDetails';
 
 	let inventory: PlayerItemWithDetails[] = [];
 	let selectedItem: PlayerItemWithDetails | null = null;

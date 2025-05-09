@@ -5,7 +5,7 @@
 	import { player, clearPlayer } from '$lib/stores/player';
 	import { goto } from '$app/navigation';
 	import { slide } from 'svelte/transition';
-	import type { Player } from '$lib/server/db/schema';
+	import type { Player } from '$lib/server/db/types';
 
 	let isUserMenuEnabled = $state(false);
 	let playerData = $state<Player | null>(null);
@@ -14,7 +14,7 @@
 		const unsubscribe = player.subscribe((value) => {
 			playerData = value;
 		});
-		
+
 		return unsubscribe;
 	});
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Player } from '$lib/server/db/schema';
+	import type { Player } from '$lib/server/db/types';
 	import { player } from '$lib/stores/player';
 
 	let playerData = $state<Player | null>(null);

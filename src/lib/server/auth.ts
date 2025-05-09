@@ -3,8 +3,9 @@ import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
-import * as table from '$lib/server/db/schema';
-import type { Session, Player } from '$lib/server/db/schema';
+import type { Player, Session } from './db/types';
+import { session } from './db/schema/core/session';
+import { player } from './db/schema/core/player';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -18,54 +19,62 @@ export function generateSessionToken() {
 
 export async function createSession(token: string, playerId: number) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const session: table.Session = {
+	const sessionObject: Session = {
 		id: sessionId,
 		playerId,
 		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
 	};
-	await db.insert(table.session).values(session);
-	return session;
+	await db.insert(session).values(sessionObject);
+	return sessionObject;
 }
 
 export async function validateSessionToken(token: string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+
+	// Fetch session and player from the database
 	const [result] = await db
 		.select({
-			// Adjust user table here to tweak returned data
-			player: { id: table.player.id, username: table.player.username },
-			session: table.session
+			playerData: player, // Select all fields from the player table
+			sessionData: session // Select all fields from the session table
 		})
-		.from(table.session)
-		.innerJoin(table.player, eq(table.session.playerId, table.player.id))
-		.where(eq(table.session.id, sessionId));
+		.from(session)
+		.innerJoin(player, eq(session.playerId, player.id))
+		.where(eq(session.id, sessionId));
 
+	// Return nulls if no valid result is found
 	if (!result) {
-		return { session: null, user: null, playerResource: null };
+		return { session: null, player: null, playerResource: null };
 	}
-	const { session, player }: { session: Session | null, player: Player | null } = result;
 
-	const sessionExpired = Date.now() >= session.expiresAt.getTime();
+	// Destructure the result using distinct names
+	const { sessionData, playerData }: { sessionData: Session, playerData: Player } = result;
+
+	// Check if the session is expired
+	const sessionExpired = Date.now() >= sessionData.expiresAt.getTime();
 	if (sessionExpired) {
-		await db.delete(table.session).where(eq(table.session.id, session.id));
-		return { session: null, user: null, playerResource: null };
+		await db.delete(session).where(eq(session.id, sessionData.id));
+		return { session: null, player: null, playerResource: null };
 	}
 
-	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
+	// Renew session if close to expiration (15 days)
+	const renewSession = Date.now() >= sessionData.expiresAt.getTime() - DAY_IN_MS * 15;
 	if (renewSession) {
-		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
+		sessionData.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
 		await db
-			.update(table.session)
-			.set({ expiresAt: session.expiresAt })
-			.where(eq(table.session.id, session.id));
+			.update(session)
+			.set({ expiresAt: sessionData.expiresAt })
+			.where(eq(session.id, sessionData.id));
 	}
 
-	return { session, player };
+	// Return the session and player data
+	return { session: sessionData, player: playerData };
 }
+
 
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
 
 export async function invalidateSession(sessionId: string) {
-	await db.delete(table.session).where(eq(table.session.id, sessionId));
+	await db.delete(session).where(eq(session.id, sessionId));
 }
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
