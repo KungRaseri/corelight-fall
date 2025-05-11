@@ -14,6 +14,7 @@ export const actions: Actions = {
 		if (!event.locals.session) {
 			return fail(401);
 		}
+
 		await auth.invalidateSession(event.locals.session.id);
 		auth.deleteSessionTokenCookie(event);
 

@@ -28,6 +28,7 @@
 <AppBar>
 	{#snippet lead()}
 		<div class="text-primary-400">
+			<a href="/" class="btn btn-link">Home</a>
 			<a href="/about" class="btn btn-link">About</a>
 			<a href="/features" class="btn btn-link">Features</a>
 			<a href="/blog" class="btn btn-link">Blog</a>

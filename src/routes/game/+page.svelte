@@ -1,18 +1,32 @@
 <script lang="ts">
-    import { page } from '$app/state';
-    import { player } from '$lib/stores/player';
-    import { onMount } from 'svelte';
+	import Recap from '$lib/components/Recap.svelte';
+	import Status from '$lib/components/Status.svelte';
+	import QuickLinks from '$lib/components/QuickLinks.svelte';
+	import { player } from '$lib/stores/player';
+	import type { Player } from '$lib/server/db/types';
 
-    let gameState;
-    let playerData;
+	let playerData = $state<Player | null>(null);
 
-    onMount(() => {
-        player.subscribe(value => playerData = value);
-        gameState = page.data?.gameState || 'Exploring the ruins...';
-    });
+	$effect(() => {
+		const unsubscribe = player.subscribe((value) => {
+			playerData = value;
+		});
+		return unsubscribe;
+	});
 </script>
 
-<div class="p-6">
-    <h2 class="text-xl font-bold mb-4">Game State</h2>
-    <p class="text-lg">{gameState}</p>
+<div class="p-8">
+	<h1 class="mb-4 text-3xl font-bold">Welcome back, {playerData?.username}!</h1>
+
+	<section class="mb-6">
+		<Recap />
+	</section>
+
+	<section class="mb-6">
+		<Status />
+	</section>
+
+	<section>
+		<QuickLinks />
+	</section>
 </div>

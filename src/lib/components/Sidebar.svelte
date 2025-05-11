@@ -20,11 +20,8 @@
 	{/snippet}
 
 	{#snippet tiles()}
-		<Navigation.Tile labelExpanded="Dashboard" href="/">
+		<Navigation.Tile labelExpanded="Dashboard" href="/game">
 			<IconDashboard />
-		</Navigation.Tile>
-		<Navigation.Tile labelExpanded="Game" href="/game">
-			<IconGames />
 		</Navigation.Tile>
 		<Navigation.Tile labelExpanded="Inventory" href="/game/inventory">
 			<IconInventory />

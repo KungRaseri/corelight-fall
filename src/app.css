@@ -25,7 +25,7 @@
 }
 
 .btn-outline {
-    @apply border border-surface-700 text-surface-900 hover:bg-surface-100 dark:border-surface-300 dark:text-surface-100 dark:hover:bg-surface-800;
+    @apply border border-surface-700 text-surface-900 hover:bg-surface-200 dark:border-surface-300 dark:text-surface-100 dark:hover:bg-surface-700;
 }
 
 .btn:hover {
