@@ -6,6 +6,8 @@ import { db } from '$lib/server/db';
 import type { Player, Session } from './db/types';
 import { session } from './db/schema/core/session';
 import { player } from './db/schema/core/player';
+import type { SafePlayer } from '$lib/types/safe';
+import { sanitizePlayerData } from '$lib/utils/sanitizer';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -66,8 +68,10 @@ export async function validateSessionToken(token: string) {
 			.where(eq(session.id, sessionData.id));
 	}
 
+	const safePlayerData: SafePlayer = sanitizePlayerData(playerData);
+
 	// Return the session and player data
-	return { session: sessionData, player: playerData };
+	return { session: sessionData, player: safePlayerData };
 }
 
 
