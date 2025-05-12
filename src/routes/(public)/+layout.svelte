@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../app.css';
+	import '../../app.css';
 
 	import AppBar from '$lib/components/AppBar.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
@@ -14,8 +14,8 @@
 
 	onMount(() => {
 		if (page.data?.player) {
-            setPlayer(page.data.player);
-        }
+			setPlayer(page.data.player);
+		}
 	});
 
 	let expanded = $state<boolean>(true);
