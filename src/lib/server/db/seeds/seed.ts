@@ -53,7 +53,7 @@ async function hashPassword(password: string): Promise<string> {
     });
 }
 
-export default async function seed() {
+export async function seedDatabase() {
     console.log('🌱 Seeding initial data...');
 
     try {

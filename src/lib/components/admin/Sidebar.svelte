@@ -28,7 +28,7 @@
             <Navigation.Tile labelExpanded="Settings" href="/admin/settings">
                 <IconSettings />
             </Navigation.Tile>
-            <Navigation.Tile labelExpanded="Seed Data" href="/admin/seed">
+            <Navigation.Tile labelExpanded="Seed Data" href="/admin/database">
                 <IconSeed />
             </Navigation.Tile>
         {/snippet}

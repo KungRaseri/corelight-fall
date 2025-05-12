@@ -1,7 +1,7 @@
 import { db } from '../index';
 import { player, stat, region, location, faction } from '../schema';
 
-export async function reset() {
+export async function resetDatabase() {
     console.log('🔄 Resetting database...');
     await db.delete(player);
     await db.delete(stat);
