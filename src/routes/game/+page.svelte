@@ -1,32 +1,26 @@
 <script lang="ts">
 	import Recap from '$lib/components/Recap.svelte';
-	import Status from '$lib/components/Status.svelte';
+	import PlayerStats from '$lib/components/PlayerStats.svelte';
 	import QuickLinks from '$lib/components/QuickLinks.svelte';
-	import { player } from '$lib/stores/player';
-	import type { Player } from '$lib/server/db/types';
+	import { playerStats, setPlayerStats } from '$lib/stores/playerStats';
 
-	let playerData = $state<Player | null>(null);
+	const { data } = $props();
 
+	// Update player stats on load
 	$effect(() => {
-		const unsubscribe = player.subscribe((value) => {
-			playerData = value;
-		});
-		return unsubscribe;
+		setPlayerStats(data.stats);
 	});
 </script>
 
-<div class="p-8">
-	<h1 class="mb-4 text-3xl font-bold">Welcome back, {playerData?.username}!</h1>
-
-	<section class="mb-6">
+<div class="space-y-8 p-8">
+	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+		<!-- Recent Activities -->
 		<Recap />
-	</section>
 
-	<section class="mb-6">
-		<Status />
-	</section>
+		<!-- Player Stats -->
+		<PlayerStats />
 
-	<section>
+		<!-- Quick Links -->
 		<QuickLinks />
-	</section>
+	</div>
 </div>
