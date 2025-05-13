@@ -58,33 +58,27 @@ export async function seedDatabase() {
 
     try {
         console.log('🌱 Seeding roles and permissions...');
-        const dbRoles = await db.select().from(role);
 
         // Seed Roles and Permissions
-        await db.insert(role).values(roles);
-        const dbPermissions = await db.select().from(permission);
-
-        await db.insert(permission).values(permissions);
-
-        const dbRolePermissions = await db.select().from(rolePermission);
-
-        await db.insert(rolePermission).values(rolePermissions);
+        await db.insert(role).values(roles).onConflictDoNothing();
+        await db.insert(permission).values(permissions).onConflictDoNothing();
+        await db.insert(rolePermission).values(rolePermissions).onConflictDoNothing();
         console.log('✅ Roles and permissions seeded.');
 
         // Seed Stats
-        await db.insert(stat).values(stats);
+        await db.insert(stat).values(stats).onConflictDoNothing();
         console.log('✅ Stats seeded');
 
         // Seed Regions
-        await db.insert(region).values(regions);
+        await db.insert(region).values(regions).onConflictDoNothing();
         console.log('✅ Regions seeded');
 
         // Seed Locations
-        await db.insert(location).values(locations);
+        await db.insert(location).values(locations).onConflictDoNothing();
         console.log('✅ Locations seeded');
 
         // Seed Factions
-        await db.insert(faction).values(factions);
+        await db.insert(faction).values(factions).onConflictDoNothing();
         console.log('✅ Factions seeded');
 
         // Seed Test Player
@@ -93,7 +87,7 @@ export async function seedDatabase() {
             username: 'TestPlayer',
             passwordHash,
             createdAt: new Date()
-        }).returning();
+        }).returning().onConflictDoNothing();
         const playerId = newPlayer.id;
         console.log('✅ Test player seeded');
 
@@ -103,7 +97,7 @@ export async function seedDatabase() {
             statId: index + 1,
             value: stat.baseValue
         }));
-        await db.insert(playerStat).values(playerStats);
+        await db.insert(playerStat).values(playerStats).onConflictDoNothing();
         console.log('✅ Player stats seeded');
 
         console.log('🌱 Seed complete!');
@@ -111,7 +105,3 @@ export async function seedDatabase() {
         console.error('❌ Seeding failed:', error);
     }
 }
-
-seed().catch((reason) => {
-    console.log(reason);
-});

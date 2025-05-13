@@ -5,6 +5,7 @@ import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
+import { eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.player) {
@@ -28,8 +29,8 @@ export const actions: Actions = {
 		}
 
 		// Check for existing user
-		const existingUser = await db.select().from(table.player).where(table.player.username.eq(username)).get();
-		if (existingUser) {
+		const existingUser = await db.select().from(table.player).where(eq(table.player.username, username));
+		if (existingUser.length > 0) {
 			return fail(409, { message: 'Username already taken.' });
 		}
 
