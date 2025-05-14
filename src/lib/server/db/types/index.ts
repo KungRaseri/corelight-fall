@@ -31,6 +31,11 @@ import type { playerRecipe } from "../schema/world/playerRecipe";
 import type { recipe } from "../schema/world/recipe";
 import type { recipeIngredient } from "../schema/world/recipeIngredient";
 import type { worldState } from "../schema/world/worldState";
+import type { role } from "../schema/core/role";
+import type { permission } from "../schema/core/permission";
+import type { rolePermission } from "../schema/core/rolePermission";
+import type { playerEquipment } from "../schema/gameplay/playerEquipment";
+
 
 export type Session = typeof session.$inferSelect;
 export type Player = typeof player.$inferSelect;
@@ -65,3 +70,7 @@ export type PlayerAchievement = typeof playerAchievement.$inferSelect;
 export type LogEntry = typeof logEntry.$inferSelect;
 export type Location = typeof location.$inferSelect;
 export type PlayerLocation = typeof playerLocation.$inferSelect;
+export type Role = typeof role.$inferSelect;
+export type Permission = typeof permission.$inferSelect;
+export type RolePermission = typeof rolePermission.$inferSelect;
+export type PlayerEquipment = typeof playerEquipment.$inferSelect;

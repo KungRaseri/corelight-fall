@@ -10,6 +10,7 @@ export * from './core/rolePermission';
 // Gameplay
 export * from './gameplay/item';
 export * from './gameplay/playerItem';
+export * from './gameplay/playerEquipment';
 export * from './gameplay/resource';
 export * from './gameplay/playerResource'
 export * from './gameplay/quest';

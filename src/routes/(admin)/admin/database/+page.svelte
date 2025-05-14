@@ -11,6 +11,16 @@
 		}
 	}
 
+	async function seedTestData() {
+		try {
+			const response = await fetch('/api/admin/database/seed/test-data', { method: 'POST' });
+			const result = await response.json();
+			message = result.message;
+		} catch (err) {
+			message = 'Error seeding the database';
+		}
+	}
+
 	async function resetDatabase() {
 		try {
 			const response = await fetch('/api/admin/database/reset', { method: 'POST' });
@@ -27,6 +37,7 @@
 
 	<div class="space-y-4">
 		<button class="btn btn-primary" onclick={seedDatabase}>Seed Database</button>
+		<button class="btn" onclick={seedTestData}>Seed Test Data</button>
 		<button class="btn btn-secondary" onclick={resetDatabase}>Reset Database</button>
 
 		{#if message}
