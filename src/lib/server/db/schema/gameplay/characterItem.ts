@@ -1,13 +1,13 @@
 import { pgTable, integer, primaryKey } from 'drizzle-orm/pg-core';
-import { player } from '../core/player';
 import { item } from './item';
+import { character } from '../core/character';
 
-export const playerItem = pgTable('player_item', {
-    playerId: integer('player_id').references(() => player.id).notNull(),
+export const characterItem = pgTable('character_item', {
+    characterId: integer('character_id').references(() => character.id).notNull(),
     itemId: integer('item_id').references(() => item.id).notNull(),
     quantity: integer('quantity').notNull()
 }, (table) => [
     primaryKey({
-        columns: [table.playerId, table.itemId]
+        columns: [table.characterId, table.itemId]
     })
 ]);

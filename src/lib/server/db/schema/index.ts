@@ -1,5 +1,5 @@
 // Core
-export * from './core/player';
+export * from './core/user';
 export * from './core/session';
 export * from './core/log';
 export * from './core/role';
@@ -9,18 +9,18 @@ export * from './core/rolePermission';
 
 // Gameplay
 export * from './gameplay/item';
-export * from './gameplay/playerItem';
-export * from './gameplay/playerEquipment';
+export * from './gameplay/characterItem';
+export * from './gameplay/characterEquipment';
 export * from './gameplay/resource';
-export * from './gameplay/playerResource'
+export * from './gameplay/characterResource'
 export * from './gameplay/quest';
-export * from './gameplay/playerQuest'
+export * from './gameplay/characterQuest'
 export * from './gameplay/combat';
 export * from './gameplay/event';
-export * from './gameplay/playerStat';
-export * from './gameplay/stat';
+export * from './gameplay/characterAttribute';
+export * from './gameplay/attribute';
 export * from './gameplay/statusEffect';
-export * from './gameplay/playerStatusEffect';
+export * from './gameplay/characterStatusEffect';
 
 // Map
 export * from './map/location';

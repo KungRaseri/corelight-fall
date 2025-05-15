@@ -3,8 +3,8 @@ import { db } from '$lib/server/db';
 import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { redirect, type Actions, fail } from '@sveltejs/kit';
-import { stat } from '$lib/server/db/schema/gameplay/stat';
-import { playerStat } from '$lib/server/db/schema/gameplay/playerStat';
+import { stat } from '$lib/server/db/schema/gameplay/attribute';
+import { playerStat } from '$lib/server/db/schema/gameplay/characterAttribute';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.player) {

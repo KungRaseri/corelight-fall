@@ -1,11 +1,11 @@
 import { pgTable, integer } from 'drizzle-orm/pg-core';
-import { player } from '../core/player';
 import { resource } from './resource';
+import { character } from '../core/character';
 
-export const playerResource = pgTable('player_resource', {
-	playerId: integer('player_id')
+export const characterResource = pgTable('character_resource', {
+	characterId: integer('character_id')
 		.notNull()
-		.references(() => player.id),
+		.references(() => character.id),
 	resourceId: integer('resource_id')
 		.notNull()
 		.references(() => resource.id),

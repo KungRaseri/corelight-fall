@@ -1,5 +1,5 @@
 import { integer, pgTable } from "drizzle-orm/pg-core";
-import { player } from "../core/player";
+import { player } from "../core/user";
 import { faction } from "./faction";
 
 export const playerFaction = pgTable('player_faction', {

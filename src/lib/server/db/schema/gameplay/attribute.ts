@@ -1,6 +1,6 @@
 import { pgTable, serial, text, integer } from 'drizzle-orm/pg-core';
 
-export const stat = pgTable('stat', {
+export const attribute = pgTable('attribute', {
     id: serial('id').primaryKey(),
     name: text('name').notNull().unique(),
     description: text('description'),

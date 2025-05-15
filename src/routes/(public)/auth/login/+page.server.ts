@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import type { Actions, PageServerLoad } from './$types';
-import { player } from '$lib/server/db/schema/core/player';
+import { player } from '$lib/server/db/schema/core/user';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.player) {

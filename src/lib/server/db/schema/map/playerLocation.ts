@@ -1,5 +1,5 @@
 import { pgTable, integer, serial } from 'drizzle-orm/pg-core';
-import { player } from '../core/player';
+import { player } from '../core/user';
 import { location } from './location';
 
 export const playerLocation = pgTable('player_location', {

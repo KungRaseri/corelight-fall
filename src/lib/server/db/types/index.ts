@@ -1,18 +1,18 @@
 import type { logEntry } from "../schema/core/log";
-import type { player } from "../schema/core/player";
+import type { player } from "../schema/core/user";
 import type { session } from "../schema/core/session";
 import type { combatEncounter } from "../schema/gameplay/combat";
 import type { enemy } from "../schema/gameplay/enemy";
 import type { event } from "../schema/gameplay/event";
 import type { item } from "../schema/gameplay/item";
-import type { playerItem } from "../schema/gameplay/playerItem";
-import type { playerQuest } from "../schema/gameplay/playerQuest";
-import type { playerResource } from "../schema/gameplay/playerResource";
-import type { playerStat } from "../schema/gameplay/playerStat";
-import type { playerStatusEffect } from "../schema/gameplay/playerStatusEffect";
+import type { playerItem } from "../schema/gameplay/characterItem";
+import type { playerQuest } from "../schema/gameplay/characterQuest";
+import type { playerResource } from "../schema/gameplay/characterResource";
+import type { playerStat } from "../schema/gameplay/characterAttribute";
+import type { playerStatusEffect } from "../schema/gameplay/characterStatusEffect";
 import type { quest } from "../schema/gameplay/quest";
 import type { resource } from "../schema/gameplay/resource";
-import type { stat } from "../schema/gameplay/stat";
+import type { stat } from "../schema/gameplay/attribute";
 import type { statusEffect } from "../schema/gameplay/statusEffect";
 import type { location } from "../schema/map/location";
 import type { playerLocation } from "../schema/map/playerLocation";
@@ -34,7 +34,7 @@ import type { worldState } from "../schema/world/worldState";
 import type { role } from "../schema/core/role";
 import type { permission } from "../schema/core/permission";
 import type { rolePermission } from "../schema/core/rolePermission";
-import type { playerEquipment } from "../schema/gameplay/playerEquipment";
+import type { playerEquipment } from "../schema/gameplay/characterEquipment";
 
 
 export type Session = typeof session.$inferSelect;

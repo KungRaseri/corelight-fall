@@ -1,5 +1,5 @@
 import { pgTable, integer, timestamp } from "drizzle-orm/pg-core";
-import { player } from "../core/player";
+import { player } from "../core/user";
 import { recipe } from "./recipe";
 
 export const playerRecipe = pgTable('player_recipe', {

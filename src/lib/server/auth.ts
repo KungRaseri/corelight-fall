@@ -5,7 +5,7 @@ import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
 import type { Player, Session } from './db/types';
 import { session } from './db/schema/core/session';
-import { player } from './db/schema/core/player';
+import { player } from './db/schema/core/user';
 import type { SafePlayer } from '$lib/types/safe';
 import { sanitizePlayerData } from '$lib/utils/sanitizer';
 

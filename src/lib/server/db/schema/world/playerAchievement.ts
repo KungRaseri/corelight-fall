@@ -1,5 +1,5 @@
 import { integer, pgTable, timestamp } from "drizzle-orm/pg-core";
-import { player } from "../core/player";
+import { player } from "../core/user";
 import { achievement } from "./achievement";
 
 export const playerAchievement = pgTable('player_achievement', {

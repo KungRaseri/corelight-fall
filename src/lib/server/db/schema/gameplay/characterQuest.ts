@@ -1,9 +1,8 @@
 import { pgTable, integer, timestamp, text } from "drizzle-orm/pg-core";
-import { player } from "../core/player";
 import { quest } from "./quest";
 
-export const playerQuest = pgTable('player_quest', {
-    playerId: integer('player_id').references(() => player.id),
+export const characterQuest = pgTable('character_quest', {
+    characterId: integer('character_id').references(() => character.id),
     questId: integer('quest_id').references(() => quest.id),
     status: text('status'),
     startedAt: timestamp('started_at').defaultNow(),
