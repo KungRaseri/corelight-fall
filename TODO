@@ -1,0 +1,100 @@
+Phase 1: Initial Setup (Detailed)
+1. Account Creation/Log In
+Flow:
+    Landing Screen:
+        Title: "The Corelight Fall"
+        Background: Faded image of a shattered divine machine, pulsating faintly.
+        Options:
+            Log In
+            Create Account
+            Guest Mode (optional)
+Scripting:
+    Log In Button:
+        Transitions to a simple form with:
+            Username
+            Password
+            Remember Me checkbox
+        Button: "Enter the Fractured Realm"
+    Create Account Button:
+        Transitions to registration form:
+            Username
+            Email
+            Password (confirm)
+            Checkbox for terms and privacy
+    Guest Mode Button:
+        Warning: "Progress will not be saved. Are you sure?"
+        Proceed to character creation.
+Technical Notes:
+    Implement a loading animation while authentication occurs (a rotating relic glyph).
+    Ensure error messages are minimal but clear:
+        "Invalid credentials. Please try again."
+        "Username already taken. Please choose another."
+2. Character Creation
+Flow:
+    Introduction:
+        Narration:
+        "As the last echoes of the divine machine faded, you emerged—marked, yet alive. A drifter in the ruins of a fallen world..."
+    Step 1: Name & Appearance:
+        Name Input:
+            Placeholder: "Enter your chosen name..."
+        Appearance Presets:
+            Dropdown for archetype (e.g., Worn Survivor, Tech-Scarred Drifter).
+            Customize with sliders (height, build, primary aesthetic feature).
+    Step 2: Faction Alignment:
+        Brief faction summaries displayed as cards:
+            Cinderlight Conclave: Ritual and Reawakening
+            Forgewalkers Union: Rebuild and Reclaim
+            Hollow Creed: Decay and Anarchy
+            Eidol Archive: Recover and Reconstruct
+        Selection triggers a faction-specific sound cue and visual effect.
+    Step 3: Core Attribute Allocation:
+        Attributes: Strength, Agility, Endurance, Intellect, Perception, Charisma, Sync
+        Point Allocation:
+            Starting points: 20 (distribute among attributes)
+            Hovering over each attribute shows a tooltip with its gameplay impact.
+        Preset Builds:
+            Brawler (Strength/Endurance)
+            Wanderer (Agility/Perception)
+            Scholar (Intellect/Charisma)
+            Relicborn (Sync-focused)
+    Finalize:
+        Button: "Step Into the Ruins"
+        Confirmation prompt:
+        "Your choices are final. Are you ready to venture into the Fractured Realm?"
+Technical Notes:
+    Use a data structure for character presets that allows flexibility.
+    Save character data upon confirmation.
+    Validate unique names (via the database).
+3. Brief Lore Introduction
+Flow:
+    Text Overlay:
+    "The Corelight—once a divine machine, now a fractured, dying heart. You, a Drifter, bear the marks of its last breath. Why you survived... no one knows."
+    Background:
+        Faded images of shattered structures.
+        Fractured light patterns resembling divine circuitry.
+Audio:
+    Subdued, rhythmic thumping, like a distant heartbeat.
+    Whispers layered with static, hinting at forgotten lore.
+Transition:
+    Screen fades to black.
+    Whispered line:
+    "The light... it never truly died..."
+    Begin the tutorial.
+4. Tutorial Toggle
+Flow:
+    Pop-up:
+    "Would you like to start with a guided tutorial?"
+        Yes (Recommended)
+        No (Skip)
+    Choice affects the initial gameplay experience but can be toggled in settings later.
+Technical Notes:
+    Tutorial choice is saved in player preferences.
+    Allow the player to revisit the tutorial from the settings page if skipped.
+User Experience Enhancements:
+    Dynamic Background Changes:
+        Shift colors and lighting to reflect the faction chosen.
+    Voiceover Option:
+        A gravelly voice narrates key lines in the lore introduction.
+    Accessibility:
+        Text-to-speech option for visually impaired players.
+        Adjustable text size and contrast for readability.
