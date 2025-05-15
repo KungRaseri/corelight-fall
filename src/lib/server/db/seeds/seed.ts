@@ -201,7 +201,7 @@ export async function seedTestData() {
         {
             name: "Iron Helm",
             description: "Iron Helmet and all that",
-            type: "head"
+            type: "helmet"
         }
     ]).onConflictDoNothing();
 
@@ -209,15 +209,15 @@ export async function seedTestData() {
 
     await db.insert(playerItem).values([
         {
-            playerId: 6,
+            playerId: 1,
             itemId: items[0].id,
             quantity: 1
         }
     ]).onConflictDoNothing()
 
     await db.insert(playerEquipment).values([{
-        playerId: 6,
+        playerId: 1,
         itemId: items[0].id,
-        slot: 'head'
+        slot: 'helmet'
     }]).onConflictDoNothing()
 }

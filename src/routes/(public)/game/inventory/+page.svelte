@@ -6,39 +6,22 @@
 
 	const { data } = $props();
 
-	// Reactive items and equipment states
-	let items = $state<PlayerItemWithDetails[]>([]);
-	let equipment = $state<Record<string, PlayerItemWithDetails | null>>({});
-
-	// Log changes to verify reactivity
-	playerItems.subscribe((value) => {
-		items = value;
-		console.log('Updated Items:', value);
-	});
-	playerEquipment.subscribe((value) => {
-		equipment = value;
-		console.log('Updated Equipment:', value);
-	});
-
 	// Handle Equip
 	async function handleEquip(itemId: number, slot: string) {
 		console.log(`Equipping item ${itemId} to slot ${slot}`);
 		const result = await equipItem(itemId, slot);
 
 		if (!result.error) {
-			// Update the playerEquipment store
 			playerEquipment.update((current) => {
-				const itemToEquip = items.find((item) => item.itemId === itemId);
+				const itemToEquip = $playerItems.find((item) => item.itemId === itemId);
 				if (itemToEquip) {
 					return { ...current, [slot]: itemToEquip };
 				}
 				return current;
 			});
-
-			// Update the playerItems store
-			playerItems.update((current) => {
-				return current.map((item) => (item.itemId === itemId ? { ...item, slot } : item));
-			});
+			playerItems.update((current) =>
+				current.filter((item) => item.itemId !== itemId)
+			);
 		} else {
 			console.error(`Failed to equip item ${itemId} to ${slot}`);
 		}
@@ -51,20 +34,15 @@
 
 		if (!result.error) {
 			const unequippedItem = $playerEquipment[slot];
-
-			// Update the playerEquipment store
 			playerEquipment.update((current) => ({
 				...current,
 				[slot]: null
 			}));
-
 			if (unequippedItem) {
-				playerItems.update((current) => {
-					return current.map((item) =>
-						item.itemId === unequippedItem.itemId ? { ...item, slot: null } : item
-					);
-				});
-				console.log(`Unequipped ${unequippedItem.name} from ${slot}`);
+				playerItems.update((current) => [
+					...current,
+					{ ...unequippedItem, slot: null }
+				]);
 			}
 		} else {
 			console.error(`Failed to unequip item from ${slot}`);
@@ -87,9 +65,6 @@
 
 			playerItems.set([...backpackItems]);
 			playerEquipment.set({ ...equippedItems });
-
-			console.log('Loaded Items:', backpackItems);
-			console.log('Loaded Equipment:', equippedItems);
 		}
 	});
 </script>
@@ -116,7 +91,7 @@
 		<div>
 			<h3 class="text-xl font-semibold">Backpack</h3>
 			<div class="grid grid-cols-4 gap-2">
-				{#each $playerItems as item (item.itemId)}
+				{#each $playerItems.filter(item => item.slot == null) as item (item.itemId)}
 					<InventoryItem {item} onEquip={() => handleEquip(item.itemId, item.type ?? 'unknown')} />
 				{/each}
 			</div>
