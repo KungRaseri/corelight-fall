@@ -18,7 +18,7 @@
 				type="text"
 				name="userId"
 				disabled
-				value={data.player.id}
+				value={data.user.id}
 			/>
 			<label class="text-gray-900-100 block text-sm/6 font-medium" for="username">Username</label>
 			<input
@@ -29,7 +29,7 @@
 				type="text"
 				name="username"
 				disabled
-				value={data.player.username}
+				value={data.user.username}
 			/>
 		</div>
 		<div class="px-4 py-5 sm:p-6">

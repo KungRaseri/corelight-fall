@@ -1,28 +1,28 @@
 import { db } from '$lib/server/db';
-import { faction, playerFaction, playerStat, stat } from '$lib/server/db/schema';
+import { faction, characterFaction, characterAttribute, attribute } from '$lib/server/db/schema';
 import { json, type RequestHandler } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
-    if (!locals.player) {
+    if (!locals.user) {
         return new Response('Unauthorized', { status: 401 });
     }
 
     const data = await request.json();
 
-    const stats = await db.select().from(stat);
+    const stats = await db.select().from(attribute);
     const factions = await db.select().from(faction);
 
-    stats.forEach(async (stat) => {
-        await db.insert(playerStat).values({
-            playerId: locals.player.id,
-            statId: stat.id,
-            value: data.attributes[stat.name] || 0
+    stats.forEach(async (attribute) => {
+        await db.insert(characterAttribute).values({
+            characterId: locals.character.id,
+            attributeId: attribute.id,
+            value: data.attributes[attribute.name] || 0
         });
     });
 
     factions.forEach(async (faction) => {
-        await db.insert(playerFaction).values({
-            playerId: locals.player.id,
+        await db.insert(characterFaction).values({
+            characterId: locals.character.id,
             factionId: data.factions[faction.name] || 0,
             reputation: 100
         });

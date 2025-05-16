@@ -1,15 +1,14 @@
 <script lang="ts">
 	import Recap from '$lib/components/Recap.svelte';
-	import PlayerStats from '$lib/components/CharacterAttributes.svelte';
-	import QuickLinks from '$lib/components/QuickLinks.svelte';
 	import CharacterAttributes from '$lib/components/CharacterAttributes.svelte';
+	import QuickLinks from '$lib/components/QuickLinks.svelte';
 	import { setCharacterAttributes } from '$lib/stores/characterAttributes';
 
 	const { data } = $props();
 
-	// Update player stats on load
+	// Update character stats on load
 	$effect(() => {
-		setCharacterAttributes(data.stats);
+		setCharacterAttributes(data.attributes);
 	});
 </script>
 
@@ -18,7 +17,7 @@
 		<!-- Recent Activities -->
 		<Recap />
 
-		<!-- Player Stats -->
+		<!-- Character Stats -->
 		<CharacterAttributes />
 
 		<!-- Quick Links -->

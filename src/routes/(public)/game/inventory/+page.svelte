@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { playerItems, playerEquipment, equipItem, unequipItem } from '$lib/stores/inventory';
+	import {
+		characterItems,
+		characterEquipment,
+		equipItem,
+		unequipItem
+	} from '$lib/stores/inventory';
 	import InventoryItem from '$lib/components/InventoryItem.svelte';
 	import EquipmentSlot from '$lib/components/EquipmentSlot.svelte';
 	import { onMount } from 'svelte';
@@ -12,16 +17,14 @@
 		const result = await equipItem(itemId, slot);
 
 		if (!result.error) {
-			playerEquipment.update((current) => {
-				const itemToEquip = $playerItems.find((item) => item.itemId === itemId);
+			characterEquipment.update((current) => {
+				const itemToEquip = $characterItems.find((item) => item.itemId === itemId);
 				if (itemToEquip) {
 					return { ...current, [slot]: itemToEquip };
 				}
 				return current;
 			});
-			playerItems.update((current) =>
-				current.filter((item) => item.itemId !== itemId)
-			);
+			characterItems.update((current) => current.filter((item) => item.itemId !== itemId));
 		} else {
 			console.error(`Failed to equip item ${itemId} to ${slot}`);
 		}
@@ -33,16 +36,13 @@
 		const result = await unequipItem(slot);
 
 		if (!result.error) {
-			const unequippedItem = $playerEquipment[slot];
-			playerEquipment.update((current) => ({
+			const unequippedItem = $characterEquipment[slot];
+			characterEquipment.update((current) => ({
 				...current,
 				[slot]: null
 			}));
 			if (unequippedItem) {
-				playerItems.update((current) => [
-					...current,
-					{ ...unequippedItem, slot: null }
-				]);
+				characterItems.update((current) => [...current, { ...unequippedItem, slot: null }]);
 			}
 		} else {
 			console.error(`Failed to unequip item from ${slot}`);
@@ -60,11 +60,11 @@
 						if (item.slot) acc[item.slot] = item;
 						return acc;
 					},
-					{} as Record<string, PlayerItemWithDetails | null>
+					{} as Record<string, CharacterItemWithDetails | null>
 				);
 
-			playerItems.set([...backpackItems]);
-			playerEquipment.set({ ...equippedItems });
+			characterItems.set([...backpackItems]);
+			characterEquipment.set({ ...equippedItems });
 		}
 	});
 </script>
@@ -80,7 +80,7 @@
 				{#each data.inventorySlots as slot}
 					<EquipmentSlot
 						{slot}
-						item={$playerEquipment[slot]}
+						item={$characterEquipment[slot]}
 						onUnequip={() => handleUnequip(slot)}
 					/>
 				{/each}
@@ -91,7 +91,7 @@
 		<div>
 			<h3 class="text-xl font-semibold">Backpack</h3>
 			<div class="grid grid-cols-4 gap-2">
-				{#each $playerItems.filter(item => item.slot == null) as item (item.itemId)}
+				{#each $characterItems.filter((item) => item.slot == null) as item (item.itemId)}
 					<InventoryItem {item} onEquip={() => handleEquip(item.itemId, item.type ?? 'unknown')} />
 				{/each}
 			</div>

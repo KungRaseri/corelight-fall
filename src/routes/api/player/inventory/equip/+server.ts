@@ -1,9 +1,9 @@
 import { json } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { playerEquipment } from '$lib/server/db/schema';
+import { characterEquipment } from '$lib/server/db/schema';
 
 export async function POST({ request, locals }) {
-    if (!locals.player) {
+    if (!locals.user) {
         return json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -15,9 +15,9 @@ export async function POST({ request, locals }) {
     }
 
     try {
-        // Update the player's equipment slot
-        await db.insert(playerEquipment).values({
-            playerId: locals.player.id,
+        // Update the character's equipment slot
+        await db.insert(characterEquipment).values({
+            characterId: locals.character.id,
             itemId,
             slot,
         }).onConflictDoNothing();
