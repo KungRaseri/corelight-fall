@@ -3,11 +3,11 @@ import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
-import type { Player, Session } from './db/types';
+import type { User, Session } from './db/types';
 import { session } from './db/schema/core/session';
-import { player } from './db/schema/core/user';
-import type { SafePlayer } from '$lib/types/safe';
-import { sanitizePlayerData } from '$lib/utils/sanitizer';
+import { user } from './db/schema/core/user';
+import type { SafeUser } from '$lib/types/SafeUser';
+import { sanitizeUserData } from '$lib/utils/sanitizer';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -19,11 +19,11 @@ export function generateSessionToken() {
 	return token;
 }
 
-export async function createSession(token: string, playerId: number) {
+export async function createSession(token: string, userId: number) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const sessionObject: Session = {
 		id: sessionId,
-		playerId,
+		userId,
 		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
 	};
 	await db.insert(session).values(sessionObject);
@@ -33,29 +33,29 @@ export async function createSession(token: string, playerId: number) {
 export async function validateSessionToken(token: string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
-	// Fetch session and player from the database
+	// Fetch session and user from the database
 	const [result] = await db
 		.select({
-			playerData: player, // Select all fields from the player table
+			userData: user, // Select all fields from the user table
 			sessionData: session // Select all fields from the session table
 		})
 		.from(session)
-		.innerJoin(player, eq(session.playerId, player.id))
+		.innerJoin(user, eq(session.userId, user.id))
 		.where(eq(session.id, sessionId));
 
 	// Return nulls if no valid result is found
 	if (!result) {
-		return { session: null, player: null, playerResource: null };
+		return { session: null, user: null, userResource: null };
 	}
 
 	// Destructure the result using distinct names
-	const { sessionData, playerData }: { sessionData: Session, playerData: Player } = result;
+	const { sessionData, userData }: { sessionData: Session, userData: User } = result;
 
 	// Check if the session is expired
 	const sessionExpired = Date.now() >= sessionData.expiresAt.getTime();
 	if (sessionExpired) {
 		await db.delete(session).where(eq(session.id, sessionData.id));
-		return { session: null, player: null, playerResource: null };
+		return { session: null, user: null, userResource: null };
 	}
 
 	// Renew session if close to expiration (15 days)
@@ -68,10 +68,10 @@ export async function validateSessionToken(token: string) {
 			.where(eq(session.id, sessionData.id));
 	}
 
-	const safePlayerData: SafePlayer = sanitizePlayerData(playerData);
+	const safeUserData: SafeUser = sanitizeUserData(userData);
 
-	// Return the session and player data
-	return { session: sessionData, player: safePlayerData };
+	// Return the session and user data
+	return { session: sessionData, user: safeUserData };
 }
 
 

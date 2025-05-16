@@ -13,7 +13,7 @@
 			Explore the ruins of a shattered world and uncover its secrets.
 		</p>
 		<div class="mt-8 flex justify-center gap-4">
-			{#if !page.data?.player}
+			{#if !page.data?.user}
 				<a href="/auth/login" class="btn btn-primary">Login</a>
 				<a href="/auth/register" class="btn btn-secondary">Register</a>
 			{:else}

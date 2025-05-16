@@ -2,17 +2,17 @@
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import LightSwitch from '$lib/components/LightSwitch.svelte';
-	import { player, clearPlayer } from '$lib/stores/player';
 	import { goto } from '$app/navigation';
 	import { slide } from 'svelte/transition';
-	import type { Player } from '$lib/server/db/types';
+	import type { User } from '$lib/server/db/types';
+	import { clearUser, user } from '$lib/stores/user';
 
 	let isUserMenuEnabled = $state(false);
-	let playerData = $state<Player | null>(null);
+	let userData = $state<User | null>(null);
 
 	$effect(() => {
-		const unsubscribe = player.subscribe((value) => {
-			playerData = value;
+		const unsubscribe = user.subscribe((value) => {
+			userData = value;
 		});
 
 		return unsubscribe;
@@ -20,7 +20,7 @@
 
 	async function handleLogout() {
 		await fetch('/auth/logout', { method: 'POST' });
-		clearPlayer();
+		clearUser();
 		goto('/');
 	}
 </script>
@@ -36,18 +36,18 @@
 	{/snippet}
 	{#snippet trail()}
 		<LightSwitch />
-		{#if playerData}
+		{#if userData}
 			<div class="relative">
 				<button
 					class="bg-surface-800 hover:bg-surface-700 flex items-center gap-2 rounded p-2"
 					onclick={() => (isUserMenuEnabled = !isUserMenuEnabled)}
 				>
 					<img
-						src={`https://picsum.photos/seed/${playerData.id}/120/120`}
+						src={`https://picsum.photos/seed/${userData.id}/120/120`}
 						alt="Profile"
 						class="size-8 rounded-full"
 					/>
-					<span>{playerData.username}</span>
+					<span>{userData.username}</span>
 					<ChevronDown />
 				</button>
 				{#if isUserMenuEnabled}

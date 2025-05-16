@@ -1,13 +1,13 @@
 import { db } from '../index';
-import { player, stat, playerStat, region, location, faction, role, permission, rolePermission, playerRole, item, playerItem, playerEquipment } from '../schema';
 import { hash } from '@node-rs/argon2';
 import type { RolePermission } from '../types';
 import { eq } from 'drizzle-orm';
+import { attribute, characterEquipment, characterItem, faction, item, location, permission, region, role, rolePermission, user, userRole } from '../schema';
 
 const roles = [
     { name: 'admin', description: 'Administrator with full access' },
     { name: 'moderator', description: 'Moderator with limite admin permissions' },
-    { name: 'player', description: 'Default player role' }
+    { name: 'user', description: 'Default user role' }
 ];
 
 const permissions = [
@@ -23,7 +23,7 @@ const rolePermissions = [
     { role: 'moderator', permission: 'view_admin' }  // Moderator -> View Admin
 ];
 
-const stats = [
+const attributes = [
     {
         name: 'Vigor',
         description: 'Physical endurance, health, and resistance to decay or exhaustion.',
@@ -125,7 +125,7 @@ export async function seedDatabase() {
         console.log('✅ Roles and permissions seeded.');
 
         // Seed Stats
-        await db.insert(stat).values(stats).onConflictDoNothing();
+        await db.insert(attribute).values(attributes).onConflictDoNothing();
         console.log('✅ Stats seeded');
 
         // Seed Regions
@@ -142,53 +142,42 @@ export async function seedDatabase() {
 
         // Seed Admin
         const adminPasswordHash = await hashPassword('corelight-fall123')
-        await db.insert(player).values({
+        await db.insert(user).values({
             username: 'admin',
             passwordHash: adminPasswordHash,
             createdAt: new Date()
         }).onConflictDoNothing();
-        const admin = await db.select().from(player).where(eq(player.username, 'admin'))
-        const adminId = admin[0].id;
+        const admin = (await db.select().from(user).where(eq(user.username, 'admin')))[0];
         console.log('✅ Admin seeded')
 
-        const dbStats = await db.select().from(stat);
-
-        // Seed Admin Details
-        const adminStats = dbStats.map((stat) => ({
-            playerId: adminId,
-            statId: stat.id,
-            value: stat.baseValue
-        }));
-        await db.insert(playerStat).values(adminStats).onConflictDoNothing()
-        console.log('✅ Admin stats seeded')
+        const dbAttributes = await db.select().from(attribute);
 
         const adminRole = dbRoles.find(r => r.name === 'admin');
+        const defaultRole = dbRoles.find(r => r.name === 'user');
 
         if (adminRole)
-            await db.insert(playerRole).values({
-                playerId: adminId,
+            await db.insert(userRole).values({
+                userId: admin.id,
                 roleId: adminRole.id
             })
 
-        // Seed Test Player
+        // Seed Test User
         const passwordHash = await hashPassword('password123');
-        await db.insert(player).values({
-            username: 'TestPlayer',
+        await db.insert(user).values({
+            username: 'TestUser',
             passwordHash,
             createdAt: new Date()
         }).onConflictDoNothing();
-        const newPlayer = await db.select().from(player).where(eq(player.username, 'TestPlayer'))
-        const playerId = newPlayer[0].id;
-        console.log('✅ Test player seeded');
+        const newUser = await db.select().from(user).where(eq(user.username, 'TestUser'))
 
-        // Seed Player Stats
-        const playerStats = dbStats.map((stat) => ({
-            playerId,
-            statId: stat.id,
-            value: stat.baseValue
-        }));
-        await db.insert(playerStat).values(playerStats).onConflictDoNothing();
-        console.log('✅ Player stats seeded');
+        if (defaultRole) {
+            await db.insert(userRole).values({
+                userId: newUser[0].id,
+                roleId: defaultRole.id
+            })
+        }
+
+        console.log('✅ Test user seeded');
 
         console.log('🌱 Seed complete!');
     } catch (error) {
@@ -207,16 +196,16 @@ export async function seedTestData() {
 
     const items = await db.select().from(item);
 
-    await db.insert(playerItem).values([
+    await db.insert(characterItem).values([
         {
-            playerId: 1,
+            characterId: 1,
             itemId: items[0].id,
             quantity: 1
         }
     ]).onConflictDoNothing()
 
-    await db.insert(playerEquipment).values([{
-        playerId: 1,
+    await db.insert(characterEquipment).values([{
+        characterId: 1,
         itemId: items[0].id,
         slot: 'helmet'
     }]).onConflictDoNothing()

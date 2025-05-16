@@ -4,10 +4,10 @@ import { eq } from 'drizzle-orm';
 import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import type { Actions, PageServerLoad } from './$types';
-import { player } from '$lib/server/db/schema/core/user';
+import { user } from '$lib/server/db/schema/core/user';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.player) {
+	if (locals.user) {
 		return redirect(302, '/game');
 	}
 
@@ -29,7 +29,7 @@ export const actions: Actions = {
 			return fail(400, { message: 'Invalid password (min 6, max 255 characters)' });
 		}
 
-		const results = await db.select().from(player).where(eq(player.username, username));
+		const results = await db.select().from(user).where(eq(user.username, username));
 
 		const existingUser = results.at(0);
 		if (!existingUser) {

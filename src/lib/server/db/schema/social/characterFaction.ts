@@ -1,9 +1,8 @@
 import { integer, pgTable } from "drizzle-orm/pg-core";
-import { player } from "../core/user";
 import { faction } from "./faction";
 
-export const playerFaction = pgTable('player_faction', {
-    playerId: integer('player_id').references(() => player.id),
+export const characterFaction = pgTable('character_faction', {
+    characterId: integer('character_id').references(() => character.id),
     factionId: integer('faction_id').references(() => faction.id),
     reputation: integer('reputation').default(0)
 });

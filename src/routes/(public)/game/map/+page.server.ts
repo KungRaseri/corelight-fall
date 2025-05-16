@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { eq } from 'drizzle-orm';
-import { playerLocation } from '$lib/server/db/schema/map/playerLocation';
+import { playerLocation } from '$lib/server/db/schema/map/characterLocation';
 import { location } from '$lib/server/db/schema/map/location';
 
 export const load: PageServerLoad = async ({ locals }) => {

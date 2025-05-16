@@ -1,6 +1,6 @@
-type PlayerItemWithDetails = {
+type CharacterItemWithDetails = {
     itemId: number,
-    playerId: number,
+    characterId: number,
     name: string,
     description: string | null,
     type: string | null,

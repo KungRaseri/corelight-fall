@@ -1,24 +1,24 @@
 import { db } from '$lib/server/db';
-import { player, playerRole, role } from '$lib/server/db/schema';
+import { role, user, userRole } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
     try {
-        const players = await db
+        const users = await db
             .select({
-                id: player.id,
-                username: player.username,
-                createdAt: player.createdAt,
+                id: user.id,
+                username: user.username,
+                createdAt: user.createdAt,
                 roleName: role.name
             })
-            .from(player)
-            .leftJoin(playerRole, eq(playerRole.playerId, player.id))
-            .leftJoin(role, eq(playerRole.roleId, role.id))
+            .from(user)
+            .leftJoin(userRole, eq(userRole.userId, user.id))
+            .leftJoin(role, eq(userRole.roleId, role.id))
 
-        return { players };
+        return { users };
     } catch (error) {
-        console.error('Error loading players:', error);
-        return { players: [] };
+        console.error('Error loading users:', error);
+        return { users: [] };
     }
 };

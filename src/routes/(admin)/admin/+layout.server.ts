@@ -1,24 +1,24 @@
 // src/routes/admin/+page.server.ts
-import { db } from '$lib/server/db/index.js';
-import { playerRole } from '$lib/server/db/schema/index.js';
+import { db } from '$lib/server/db/index';
+import { userRole } from '$lib/server/db/schema';
 import { hasPermission, hasRole } from '$lib/utils/permissions';
 import { redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
 export const load = async ({ locals }) => {
-    if (!locals.player) {
+    if (!locals.user) {
         throw redirect(302, '/auth/login');
     }
 
-    const hasAccess = await hasRole(locals.player.id, 'admin');
+    const hasAccess = await hasRole(locals.user.id, 'admin');
     if (!hasAccess) {
         throw redirect(302, '/');
     }
 
-    const roles = await db.select().from(playerRole).where(eq(playerRole.playerId, locals.player.id));
+    const roles = await db.select().from(userRole).where(eq(userRole.userId, locals.user.id));
 
     return {
-        player: locals.player,
+        user: locals.user,
         roles
     };
 };

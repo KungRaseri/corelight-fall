@@ -2,10 +2,11 @@
 declare global {
 	namespace App {
 		interface Locals {
-			player: import('$lib/server/auth').SessionValidationResult['player'];
+			user: import('$lib/server/auth').SessionValidationResult['user'];
+			character: import('$lib/server/auth').SessionValidationResult['character'];
 			session: import('$lib/server/auth').SessionValidationResult['session'];
 		}
 	}
 }
 
-export {};
+export { };

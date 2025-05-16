@@ -1,9 +1,9 @@
 import { integer, pgTable } from "drizzle-orm/pg-core";
-import { player } from "../core/user";
 import { facility } from "./facility";
+import { character } from "../gameplay/character";
 
-export const playerFacility = pgTable('player_facility', {
-    playerId: integer('player_id').references(() => player.id),
+export const characterFacility = pgTable('character_facility', {
+    characterId: integer('character_id').references(() => character.id),
     facilityId: integer('facility_id').references(() => facility.id),
     level: integer('level').notNull()
 });

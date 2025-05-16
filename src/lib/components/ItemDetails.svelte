@@ -1,7 +1,5 @@
 <script lang="ts">
-	import type { PlayerItemWithDetails } from '$lib/types/player';
-
-	export let selectedItem: PlayerItemWithDetails;
+	export let selectedItem: CharacterItemWithDetails;
 
 	function close() {
 		const event = new CustomEvent('close', { bubbles: true });

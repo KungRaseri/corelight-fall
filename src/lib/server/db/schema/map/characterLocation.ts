@@ -1,12 +1,12 @@
 import { pgTable, integer, serial } from 'drizzle-orm/pg-core';
-import { player } from '../core/user';
 import { location } from './location';
+import { character } from '../gameplay/character';
 
-export const playerLocation = pgTable('player_location', {
+export const characterLocation = pgTable('character_location', {
     id: serial('id').primaryKey(),
-    playerId: integer('player_id')
+    characterId: integer('character_id')
         .notNull()
-        .references(() => player.id),
+        .references(() => character.id),
     locationId: integer('location_id')
         .notNull()
         .references(() => location.id),

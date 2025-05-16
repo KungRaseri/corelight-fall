@@ -1,8 +1,8 @@
-import type { Player } from "$lib/server/db/types";
-import type { SafePlayer } from "$lib/types/safe";
+import type { User } from "$lib/server/db/types";
+import type { SafeUser } from "$lib/types/SafeUser";
 
-export function sanitizePlayerData(playerData: Player): SafePlayer {
-    const { passwordHash, ...safeData } = playerData
+export function sanitizeUserData(userData: User): SafeUser {
+    const { passwordHash, ...safeData } = userData
 
     return safeData
 }

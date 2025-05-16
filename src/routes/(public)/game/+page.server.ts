@@ -3,35 +3,34 @@ import { db } from '$lib/server/db';
 import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { redirect, type Actions, fail } from '@sveltejs/kit';
-import { stat } from '$lib/server/db/schema/gameplay/attribute';
-import { playerStat } from '$lib/server/db/schema/gameplay/characterAttribute';
+import { attribute, characterAttribute } from '$lib/server/db/schema';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals.player) {
+	if (!locals.user) {
 		throw redirect(302, '/auth/login');
 	}
 
-	const stats = await db
+	const attributes = await db
 		.select({
-			stat: {
-				id: stat.id,
-				name: stat.name,
-				description: stat.description,
-				category: stat.category,
-				baseValue: stat.baseValue,
-				scaling: stat.scaling,
+			attribute: {
+				id: attribute.id,
+				name: attribute.name,
+				description: attribute.description,
+				category: attribute.category,
+				baseValue: attribute.baseValue,
+				scaling: attribute.scaling,
 			},
-			playerStat: {
-				playerId: playerStat.playerId,
-				statId: playerStat.statId,
-				value: playerStat.value
+			characterAttribute: {
+				characterId: characterAttribute.characterId,
+				attributeId: characterAttribute.attributeId,
+				value: characterAttribute.value
 			}
 		})
-		.from(playerStat)
-		.innerJoin(stat, eq(playerStat.statId, stat.id))
-		.where(eq(playerStat.playerId, locals.player.id));
+		.from(characterAttribute)
+		.innerJoin(attribute, eq(characterAttribute.attributeId, attribute.id))
+		.where(eq(characterAttribute.characterId, locals.character.id));
 
-	return { player: locals.player, stats };
+	return { user: locals.user, attributes };
 };
 
 export const actions: Actions = {

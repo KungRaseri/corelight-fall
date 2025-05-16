@@ -1,11 +1,11 @@
 import { writable } from 'svelte/store';
 
-export const playerItems = writable<PlayerItemWithDetails[]>([]);
-export const playerEquipment = writable<Record<string, PlayerItemWithDetails | null>>({});
+export const characterItems = writable<CharacterItemWithDetails[]>([]);
+export const characterEquipment = writable<Record<string, CharacterItemWithDetails | null>>({});
 
 export async function equipItem(itemId: number, slot: string) {
     try {
-        const response = await fetch('/api/player/inventory/equip', {
+        const response = await fetch('/api/character/inventory/equip', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ itemId, slot })
@@ -20,7 +20,7 @@ export async function equipItem(itemId: number, slot: string) {
 
 export async function unequipItem(slot: string) {
     try {
-        const response = await fetch('/api/player/inventory/unequip', {
+        const response = await fetch('/api/character/inventory/unequip', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ slot })

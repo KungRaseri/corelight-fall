@@ -1,6 +1,6 @@
 import { integer, pgTable, timestamp } from "drizzle-orm/pg-core";
 import { statusEffect } from "./statusEffect";
-import { character } from "../core/character";
+import { character } from "./character";
 
 export const characterStatusEffect = pgTable('character_status_effect', {
     characterId: integer('character_id').references(() => character.id),

@@ -8,13 +8,13 @@
 	import ToastNotifications from '$lib/components/ToastNotifications.svelte';
 
 	import { sidebarExpanded } from '$lib/stores/sidebar';
-	import { setPlayer } from '$lib/stores/player';
+	import { setUser } from '$lib/stores/user';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		if (page.data?.player) {
-			setPlayer(page.data.player);
+		if (page.data?.user) {
+			setUser(page.data.user);
 		}
 	});
 

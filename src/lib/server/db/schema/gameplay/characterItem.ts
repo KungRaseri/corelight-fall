@@ -1,6 +1,6 @@
 import { pgTable, integer, primaryKey } from 'drizzle-orm/pg-core';
 import { item } from './item';
-import { character } from '../core/character';
+import { character } from './character';
 
 export const characterItem = pgTable('character_item', {
     characterId: integer('character_id').references(() => character.id).notNull(),

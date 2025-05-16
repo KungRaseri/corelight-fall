@@ -2,13 +2,12 @@
     import GameHeader from '$lib/components/GameHeader.svelte';
     import GameActions from '$lib/components/GameActions.svelte';
     import GameLog from '$lib/components/GameLog.svelte';
-    import { player } from '$lib/stores/player';
 
     let { children } = $props();
-    let playerData;
+    let characterData;
 
     $effect(() => {
-        player.subscribe(value => playerData = value);
+        character.subscribe(value => characterData = value);
     });
 </script>
 

@@ -1,14 +1,12 @@
 <script lang="ts">
-    import type { PlayerItemWithDetails } from '$lib/types/player';
+    export let inventory: CharacterItemWithDetails[];
 
-    export let inventory: PlayerItemWithDetails[];
-
-    function selectItem(item: PlayerItemWithDetails) {
+    function selectItem(item: CharacterItemWithDetails) {
         const event = new CustomEvent('itemSelected', { detail: item, bubbles: true });
         dispatchEvent(event);
     }
 
-    function handleKey(event: KeyboardEvent, item: PlayerItemWithDetails) {
+    function handleKey(event: KeyboardEvent, item: CharacterItemWithDetails) {
         if (event.key === 'Enter' || event.key === ' ') {
             selectItem(item);
         }

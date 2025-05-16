@@ -4,11 +4,12 @@ export * from './core/session';
 export * from './core/log';
 export * from './core/role';
 export * from './core/permission';
-export * from './core/playerRole';
+export * from './core/userRole';
 export * from './core/rolePermission';
 
 // Gameplay
 export * from './gameplay/item';
+export * from './gameplay/character'
 export * from './gameplay/characterItem';
 export * from './gameplay/characterEquipment';
 export * from './gameplay/resource';
@@ -24,12 +25,12 @@ export * from './gameplay/characterStatusEffect';
 
 // Map
 export * from './map/location';
-export * from './map/playerLocation';
+export * from './map/characterLocation';
 export * from './map/region';
 
 // Social
 export * from './social/faction';
-export * from './social/playerFaction';
+export * from './social/characterFaction';
 export * from './social/dialog';
 export * from './social/dialogOption';
 
@@ -37,7 +38,7 @@ export * from './social/dialogOption';
 export * from './world/facility';
 export * from './world/recipe';
 export * from './world/achievement';
-export * from './world/playerAchievement';
-export * from './world/playerFacility';
-export * from './world/playerRecipe';
+export * from './world/characterAchievement';
+export * from './world/characterFacility';
+export * from './world/characterRecipe';
 export * from './world/calendar';

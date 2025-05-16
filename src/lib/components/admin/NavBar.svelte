@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
-	import { player, clearPlayer } from '$lib/stores/player';
 	import { goto } from '$app/navigation';
 	import LightSwitch from '../LightSwitch.svelte';
+	import { clearUser } from '$lib/stores/user';
 
 	async function handleLogout() {
 		await fetch('/auth/logout', { method: 'POST' });
-		clearPlayer();
+		clearUser();
 		goto('/');
 	}
 </script>

@@ -5,7 +5,7 @@
 <div class="p-6">
 	<h1 class="text-primary-500 mb-6 text-3xl font-bold">User Management</h1>
 
-	{#if data.players.length > 0}
+	{#if data.users.length > 0}
 		<div class="border-surface-700 overflow-x-auto rounded-lg border shadow-md">
 			<table class="min-w-full table-auto border-collapse">
 				<thead class="bg-surface-800">
@@ -18,14 +18,14 @@
 					</tr>
 				</thead>
 				<tbody class="divide-surface-700 bg-surface-900 divide-y">
-					{#each data.players as player}
+					{#each data.users as user}
 						<tr class="hover:bg-surface-800">
-							<td class="text-surface-200 px-4 py-2 text-sm">{player.id}</td>
-							<td class="text-surface-200 px-4 py-2 text-sm">{player.username}</td>
+							<td class="text-surface-200 px-4 py-2 text-sm">{user.id}</td>
+							<td class="text-surface-200 px-4 py-2 text-sm">{user.username}</td>
 							<td class="text-surface-200 px-4 py-2 text-sm"
-								>{new Date(player.createdAt).toLocaleDateString()}</td
+								>{new Date(user.createdAt).toLocaleDateString()}</td
 							>
-							<td class="text-surface-200 px-4 py-2 text-sm">{player.roleName ?? 'None'}</td>
+							<td class="text-surface-200 px-4 py-2 text-sm">{user.roleName ?? 'None'}</td>
 							<td class="text-surface-200 space-x-2 px-4 py-2 text-sm">
 								<button class="btn btn-sm btn-primary">Edit</button>
 								<button class="btn btn-sm btn-error">Delete</button>

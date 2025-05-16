@@ -8,7 +8,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.player) {
+	if (locals.user) {
 		throw redirect(302, '/game');
 	}
 	return {};
@@ -29,7 +29,7 @@ export const actions: Actions = {
 		}
 
 		// Check for existing user
-		const existingUser = await db.select().from(table.player).where(eq(table.player.username, username));
+		const existingUser = await db.select().from(table.user).where(eq(table.user.username, username));
 		if (existingUser.length > 0) {
 			return fail(409, { message: 'Username already taken.' });
 		}
@@ -45,16 +45,16 @@ export const actions: Actions = {
 			parallelism: 1
 		});
 
-		// Insert new player into the database
+		// Insert new user into the database
 		try {
-			const player = await db.insert(table.player).values({ username, passwordHash }).returning();
-			if (!player || player.length === 0) {
+			const user = await db.insert(table.user).values({ username, passwordHash }).returning();
+			if (!user || user.length === 0) {
 				return fail(500, { message: 'Error creating user. Please try again later.' });
 			}
 
 			// Create session
 			const sessionToken = auth.generateSessionToken();
-			const session = await auth.createSession(sessionToken, player[0].id);
+			const session = await auth.createSession(sessionToken, user[0].id);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} catch (e) {
 			return fail(500, { message: 'An error has occurred' });

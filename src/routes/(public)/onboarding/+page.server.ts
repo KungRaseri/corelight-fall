@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
-    if (!locals.player) {
+    if (!locals.user) {
         return { status: 401, error: new Error('Unauthorized') };
     }
 
