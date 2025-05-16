@@ -2,6 +2,7 @@
     import GameHeader from '$lib/components/GameHeader.svelte';
     import GameActions from '$lib/components/GameActions.svelte';
     import GameLog from '$lib/components/GameLog.svelte';
+	import { character } from '$lib/stores/character';
 
     let { children } = $props();
     let characterData;

@@ -1,13 +1,16 @@
-import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import { eq } from 'drizzle-orm';
-import type { PageServerLoad } from './$types';
-import { redirect, type Actions, fail } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { attribute, characterAttribute } from '$lib/server/db/schema';
+import type { PageServerLoad } from '../$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
 		throw redirect(302, '/auth/login');
+	}
+
+	if (!locals.character) {
+		throw redirect(302, '/onboarding');
 	}
 
 	const attributes = await db
@@ -31,17 +34,4 @@ export const load: PageServerLoad = async ({ locals }) => {
 		.where(eq(characterAttribute.characterId, locals.character.id));
 
 	return { user: locals.user, attributes };
-};
-
-export const actions: Actions = {
-	logout: async (event) => {
-		if (!event.locals.session) {
-			return fail(401);
-		}
-
-		await auth.invalidateSession(event.locals.session.id);
-		auth.deleteSessionTokenCookie(event);
-
-		return redirect(302, '/auth/login');
-	}
 };

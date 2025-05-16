@@ -9,10 +9,10 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
     const data = await request.json();
 
-    const stats = await db.select().from(attribute);
+    const attributes = await db.select().from(attribute);
     const factions = await db.select().from(faction);
 
-    stats.forEach(async (attribute) => {
+    attributes.forEach(async (attribute) => {
         await db.insert(characterAttribute).values({
             characterId: locals.character.id,
             attributeId: attribute.id,

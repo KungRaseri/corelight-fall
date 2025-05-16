@@ -17,7 +17,7 @@
 		<!-- Recent Activities -->
 		<Recap />
 
-		<!-- Character Stats -->
+		<!-- Character Attributes -->
 		<CharacterAttributes />
 
 		<!-- Quick Links -->

@@ -1,9 +1,9 @@
 import { db } from '$lib/server/db';
-import { stat } from '$lib/server/db/schema';
+import { attribute } from '$lib/server/db/schema';
 import { json, type RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async () => {
-    const stats = await db.select().from(stat);
+    const attributes = await db.select().from(attribute);
 
-    return json(stats);
+    return json(attributes);
 };

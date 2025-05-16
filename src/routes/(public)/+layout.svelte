@@ -9,24 +9,25 @@
 
 	import { sidebarExpanded } from '$lib/stores/sidebar';
 	import { setUser } from '$lib/stores/user';
-	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
+	const { data, children } = $props();
+
 	onMount(() => {
-		if (page.data?.user) {
-			setUser(page.data.user);
+		if (data?.user) {
+			setUser(data.user);
 		}
 	});
 
 	let expanded = $state<boolean>(true);
+
 	$effect(() => {
 		const unsubscribe = sidebarExpanded.subscribe((value) => {
 			expanded = value;
 		});
+
 		return unsubscribe;
 	});
-
-	let { children } = $props();
 </script>
 
 <div class="bg-surface-950 text-surface-100 font-base min-h-screen transition-all">

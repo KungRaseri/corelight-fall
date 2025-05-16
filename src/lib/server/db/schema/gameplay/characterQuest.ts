@@ -1,5 +1,6 @@
 import { pgTable, integer, timestamp, text } from "drizzle-orm/pg-core";
 import { quest } from "./quest";
+import { character } from "./character";
 
 export const characterQuest = pgTable('character_quest', {
     characterId: integer('character_id').references(() => character.id),

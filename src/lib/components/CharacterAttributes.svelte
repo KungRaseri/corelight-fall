@@ -7,7 +7,7 @@
 </script>
 
 <div class="bg-surface-800 rounded-md p-4 shadow-md">
-	<h2 class="mb-2 text-xl font-semibold">Player Attributes</h2>
+	<h2 class="mb-2 text-xl font-semibold">Character Attributes</h2>
 	{#if attributes.length > 0}
 		<ul class="list-disc space-y-1 pl-6">
 			{#each attributes as { attribute, characterAttribute }}

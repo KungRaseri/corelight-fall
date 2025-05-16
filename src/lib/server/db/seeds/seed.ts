@@ -124,9 +124,9 @@ export async function seedDatabase() {
         await db.insert(rolePermission).values(dbRolePermissions).onConflictDoNothing();
         console.log('✅ Roles and permissions seeded.');
 
-        // Seed Stats
+        // Seed Attributes
         await db.insert(attribute).values(attributes).onConflictDoNothing();
-        console.log('✅ Stats seeded');
+        console.log('✅ Attributes seeded');
 
         // Seed Regions
         await db.insert(region).values(regions).onConflictDoNothing();

@@ -7,6 +7,7 @@
 	import { onboardingData } from '$lib/stores/onboarding';
 	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	const { data } = $props();
 
@@ -25,37 +26,22 @@
 
 	let currentStep = $state(0);
 
-	// Sync local state with onboardingData store
-	let name = $state(get(onboardingData).name ?? '');
-	let appearance = $state(get(onboardingData).appearance ?? '');
-	let factionValue = $state(get(onboardingData).faction ?? '');
-	let allocation = $state<Record<string, number>>(get(onboardingData).attributes ?? {});
-	let tutorial = $state(get(onboardingData).tutorial ?? '');
+	let name = $state('');
+	let appearance = $state('');
+	let factionValue = $state('');
+	let allocation = $state<Record<string, number>>({});
+	let tutorial = $state(false);
 
 	let totalPoints = 10;
 
-	// Initialize allocation with base values from data.attributes (only once)
-	$effect(() => {
-		if (data?.attributes && Object.keys(allocation).length === 0) {
-			const initial: Record<string, number> = {};
-			for (const attr of data.attributes) {
-				initial[attr.name] = attr.baseValue;
-			}
-			allocation = initial;
-			onboardingData.update((d) => ({ ...d, attributes: initial }));
-		}
-	});
-
-	// Keep onboardingData in sync with local state
-	$effect(() => {
-		onboardingData.update((d) => ({
-			...d,
-			name,
-			appearance,
-			faction: factionValue,
-			attributes: allocation,
-			tutorial
-		}));
+	// Initialize local state from the store only once
+	onMount(() => {
+		const current = get(onboardingData);
+		name = current.name ?? '';
+		appearance = current.appearance ?? '';
+		factionValue = current.faction ?? '';
+		allocation = current.attributes ?? {};
+		tutorial = current.tutorial ?? false;
 	});
 
 	const pointsUsed = $derived<number>(
@@ -84,22 +70,27 @@
 
 	function setName(v: string) {
 		name = v;
+		onboardingData.update((d) => ({ ...d, name: v }));
 	}
 	function setAppearance(v: string) {
 		appearance = v;
+		onboardingData.update((d) => ({ ...d, appearance: v }));
 	}
 	function setFaction(v: string) {
 		factionValue = v;
+		onboardingData.update((d) => ({ ...d, faction: v }));
 	}
-	function setAllocation(name: string, value: number) {
+	function setAllocation(attrName: string, value: number) {
 		const capped = Math.min(
 			15,
-			Math.max(value, data.attributes.find((a) => a.name === name)?.baseValue ?? 0)
+			Math.max(value, data.attributes.find((a) => a.name === attrName)?.baseValue ?? 0)
 		);
-		allocation = { ...allocation, [name]: capped };
+		allocation = { ...allocation, [attrName]: capped };
+		// onboardingData.update((d) => ({ ...d, attributes: allocation }));
 	}
 	function setTutorial(v: boolean) {
 		tutorial = v;
+		// onboardingData.update((d) => ({ ...d, tutorial: v }));
 	}
 </script>
 
@@ -235,10 +226,8 @@
 							body: JSON.stringify(get(onboardingData))
 						});
 						if (res.ok) {
-							// Optionally redirect or show a success message
 							console.log('Onboarding complete!');
-							// e.g., window.location.href = '/play';
-              goto('/game')
+							goto('/game');
 						} else {
 							alert('Failed to complete onboarding.');
 						}
