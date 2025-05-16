@@ -7,7 +7,7 @@ export async function POST({ request, locals }) {
         return json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { itemId, slot } = await request.json();
+    const { characterId, itemId, slot } = await request.json();
 
     console.log(itemId, slot);
     if (!itemId || !slot) {
@@ -17,7 +17,7 @@ export async function POST({ request, locals }) {
     try {
         // Update the character's equipment slot
         await db.insert(characterEquipment).values({
-            characterId: locals.character.id,
+            characterId: characterId,
             itemId,
             slot,
         }).onConflictDoNothing();

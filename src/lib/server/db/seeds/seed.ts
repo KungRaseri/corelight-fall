@@ -198,14 +198,14 @@ export async function seedTestData() {
 
     await db.insert(characterItem).values([
         {
-            characterId: 1,
+            characterId: 3,
             itemId: items[0].id,
             quantity: 1
         }
     ]).onConflictDoNothing()
 
     await db.insert(characterEquipment).values([{
-        characterId: 1,
+        characterId: 3,
         itemId: items[0].id,
         slot: 'helmet'
     }]).onConflictDoNothing()

@@ -17,7 +17,7 @@
 				min={attr.baseValue}
 				max={Math.min(15, allocation[attr.name] + pointsLeft)}
 				name={attr.name}
-				value={allocation[attr.name]}
+				value={allocation[attr.name] ?? attr.baseValue}
 				on:input={(e) => {
 					let val = +e.target.value;
 					if (val > 15) val = 15;

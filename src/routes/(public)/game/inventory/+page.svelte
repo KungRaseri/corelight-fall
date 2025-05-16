@@ -14,7 +14,7 @@
 	// Handle Equip
 	async function handleEquip(itemId: number, slot: string) {
 		console.log(`Equipping item ${itemId} to slot ${slot}`);
-		const result = await equipItem(itemId, slot);
+		const result = await equipItem(data.character.id, itemId, slot);
 
 		if (!result.error) {
 			characterEquipment.update((current) => {
@@ -33,7 +33,7 @@
 	// Handle Unequip
 	async function handleUnequip(slot: string) {
 		console.log(`Unequipping item from slot ${slot}`);
-		const result = await unequipItem(slot);
+		const result = await unequipItem(data.character.id, slot);
 
 		if (!result.error) {
 			const unequippedItem = $characterEquipment[slot];

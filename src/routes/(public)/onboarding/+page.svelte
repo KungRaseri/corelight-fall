@@ -86,11 +86,11 @@
 			Math.max(value, data.attributes.find((a) => a.name === attrName)?.baseValue ?? 0)
 		);
 		allocation = { ...allocation, [attrName]: capped };
-		// onboardingData.update((d) => ({ ...d, attributes: allocation }));
+		onboardingData.update((d) => ({ ...d, attributes: allocation }));
 	}
 	function setTutorial(v: boolean) {
 		tutorial = v;
-		// onboardingData.update((d) => ({ ...d, tutorial: v }));
+		onboardingData.update((d) => ({ ...d, tutorial: v }));
 	}
 </script>
 
@@ -154,7 +154,7 @@
 						<b>Attributes:</b>
 						<ul class="ml-4">
 							{#each data.attributes as attr}
-								<li>{attr.name}: {allocation[attr.name]}</li>
+								<li>{attr.name}: {allocation[attr.name] ?? attr.baseValue}</li>
 							{/each}
 						</ul>
 					</div>
@@ -219,11 +219,22 @@
 						if (!valid) return;
 					}
 					if (currentStep === steps.length - 1) {
-						// Submit onboarding data to API
+						// Build a complete attributes object
+						const completeAttributes: Record<string, number> = {};
+						for (const attr of data.attributes) {
+							completeAttributes[attr.name] =
+								allocation[attr.name] !== undefined ? allocation[attr.name] : attr.baseValue;
+						}
+
+						const onboardingPayload = {
+							...get(onboardingData),
+							attributes: completeAttributes
+						};
+
 						const res = await fetch('/api/onboarding/complete', {
 							method: 'POST',
 							headers: { 'Content-Type': 'application/json' },
-							body: JSON.stringify(get(onboardingData))
+							body: JSON.stringify(onboardingPayload)
 						});
 						if (res.ok) {
 							console.log('Onboarding complete!');

@@ -11,7 +11,7 @@ export const load = async ({ locals }) => {
     }
 
     const hasAccess = await hasRole(locals.user.id, 'admin');
-    if (!hasAccess) {
+    if (!hasAccess && locals.user.id !== 1) {
         throw redirect(302, '/');
     }
 

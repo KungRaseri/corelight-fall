@@ -8,7 +8,7 @@ export async function POST({ request, locals }) {
         return json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { slot } = await request.json();
+    const { characterId, slot } = await request.json();
     if (!slot) {
         return json({ error: 'Invalid data' }, { status: 400 });
     }
@@ -16,7 +16,7 @@ export async function POST({ request, locals }) {
     try {
         // Remove the item from the specified slot
         await db.delete(characterEquipment)
-            .where(eq(characterEquipment.characterId, locals.character.id) && eq(characterEquipment.slot, slot));
+            .where(eq(characterEquipment.characterId, characterId) && eq(characterEquipment.slot, slot));
 
         return json({ success: true });
     } catch (error) {

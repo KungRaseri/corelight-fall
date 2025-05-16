@@ -5,6 +5,10 @@ export const load: PageServerLoad = async ({ locals, fetch }) => {
         return { status: 401, error: new Error('Unauthorized') };
     }
 
+    if (locals.character) {
+        return { status: 302, redirect: '/game' };
+    }
+
     // Fetch attributes and factions from your API or DB
     const [attributesRes, factionsRes] = await Promise.all([
         fetch('/api/game/attributes'),
