@@ -1,8 +1,8 @@
 <script lang="ts">
-	import DialogScene from '$lib/components/gameplay/DialogScene.svelte';
-	import type { Scene } from '$lib/types/Scene';
+	import Scene from '$lib/components/gameplay/Scene.svelte';
+	import type { DialogScene } from '$lib/types/DialogScene';
 
-	const myScene: Scene = {
+	const scene: DialogScene = {
 		id: 'intro',
 		steps: [
 			{
@@ -26,6 +26,10 @@
 			}
 		]
 	};
+
+	function end() {
+		console.log('End of scene');
+	}
 </script>
 
-<DialogScene {myScene} />
+<Scene {scene} {end} />

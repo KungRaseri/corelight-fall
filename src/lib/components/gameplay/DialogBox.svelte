@@ -52,13 +52,13 @@
 		{#if displayed === text && choices.length > 0}
 			<div class="mt-4 flex flex-col gap-2">
 				{#each choices as choice}
-					<button class="btn preset-tonal w-full" on:click={() => onChoice(choice.value)}>
+					<button class="btn preset-tonal w-full" onclick={() => onChoice(choice.value)}>
 						{choice.label}
 					</button>
 				{/each}
 			</div>
 		{:else if displayed === text}
-			<button class="btn mt-4" on:click={() => onChoice('next')}>Continue</button>
+			<button class="btn mt-4" onclick={() => onChoice('next')}>Continue</button>
 		{/if}
 	</div>
 </div>
