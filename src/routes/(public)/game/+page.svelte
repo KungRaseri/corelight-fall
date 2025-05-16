@@ -14,13 +14,13 @@
 
 <div class="space-y-8 p-8">
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-		<!-- Recent Activities -->
-		<Recap />
-
 		<!-- Character Attributes -->
 		<CharacterAttributes />
 
 		<!-- Quick Links -->
 		<QuickLinks />
+
+		<!-- Recent Activities -->
+		<Recap />
 	</div>
 </div>

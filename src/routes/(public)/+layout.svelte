@@ -42,11 +42,10 @@
 		<AppBar />
 
 		<!-- Main content -->
-		<main class="py-10">
-			<div class="px-4 sm:px-6 lg:px-8">
-				{@render children()}
-			</div>
+		<main class="p-4 lg:pr-4 lg:pl-6">
+			{@render children()}
 		</main>
+
 		<!-- Footer -->
 		<Footer />
 	</div>

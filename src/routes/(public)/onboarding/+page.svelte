@@ -118,11 +118,13 @@
 		<!-- Step 0: Introduction -->
 		{#if isCurrentStep(0)}
 			<div class="card bg-surface-100-900 mx-auto max-w-xl space-y-4 p-10 text-center">
-				<h2 class="h3 mb-2">{steps[0].label}</h2>
-				<p>{steps[0].description}</p>
+				<h2 class="h3 mb-2">Welcome to The Corelight Fall!</h2>
 				<p>
 					The world is fractured, and you are called to shape its fate.<br />
-					Begin your journey by forging your identity.
+					Your journey begins now. Choose your path, forge your identity, and prepare to explore a world full of mystery and adventure.
+				</p>
+				<p>
+					<b>Ready to begin?</b>
 				</p>
 			</div>
 		{/if}
