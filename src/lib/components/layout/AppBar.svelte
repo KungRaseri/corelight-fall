@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import LightSwitch from '$lib/components/LightSwitch.svelte';
 	import { goto } from '$app/navigation';
 	import { slide } from 'svelte/transition';
 	import type { User } from '$lib/server/db/types';
 	import { clearUser, user } from '$lib/stores/user';
+	import LightSwitch from '../ui/LightSwitch.svelte';
 
 	let isUserMenuEnabled = $state(false);
 	let userData = $state<User | null>(null);

@@ -1,7 +1,7 @@
 <script lang="ts">
-    import MapHeader from '$lib/components/MapHeader.svelte';
-    import MapDisplay from '$lib/components/MapDisplay.svelte';
-    import LocationDetails from '$lib/components/LocationDetails.svelte';
+    import MapHeader from '$lib/components/layout/MapHeader.svelte';
+    import MapDisplay from '$lib/components/gameplay/MapDisplay.svelte';
+    import LocationDetails from '$lib/components/gameplay/LocationDetails.svelte';
     import { onMount } from 'svelte';
     import { page } from '$app/state';
 

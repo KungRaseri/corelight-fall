@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import { goto } from '$app/navigation';
-	import LightSwitch from '../LightSwitch.svelte';
+	import LightSwitch from '../ui/LightSwitch.svelte';
 	import { clearUser } from '$lib/stores/user';
 
 	async function handleLogout() {

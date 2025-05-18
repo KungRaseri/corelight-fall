@@ -2,13 +2,13 @@
 	import { Navigation } from '@skeletonlabs/skeleton-svelte';
 	import IconDashboard from '@lucide/svelte/icons/layout-dashboard';
 	import IconGames from '@lucide/svelte/icons/gamepad';
-	import IconInventory from '@lucide/svelte/icons/boxes'
-	import IconMap from '@lucide/svelte/icons/globe'
+	import IconInventory from '@lucide/svelte/icons/boxes';
+	import IconMap from '@lucide/svelte/icons/globe';
 	import IconMenu from '@lucide/svelte/icons/menu';
 	import IconSettings from '@lucide/svelte/icons/settings';
 	import { sidebarExpanded, toggleSidebar } from '$lib/stores/sidebar';
 
-	let expanded: boolean;
+	let expanded = $state(true);
 	sidebarExpanded.subscribe((value) => (expanded = value));
 </script>
 

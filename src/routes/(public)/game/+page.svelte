@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Recap from '$lib/components/Recap.svelte';
-	import CharacterAttributes from '$lib/components/CharacterAttributes.svelte';
+	import CharacterAttributes from '$lib/components/gameplay/CharacterAttributes.svelte';
 	import QuickLinks from '$lib/components/QuickLinks.svelte';
 	import { setCharacterAttributes } from '$lib/stores/characterAttributes';
 

@@ -5,8 +5,8 @@
 		equipItem,
 		unequipItem
 	} from '$lib/stores/inventory';
-	import InventoryItem from '$lib/components/InventoryItem.svelte';
-	import EquipmentSlot from '$lib/components/EquipmentSlot.svelte';
+	import InventoryItem from '$lib/components/gameplay/InventoryItem.svelte';
+	import EquipmentSlot from '$lib/components/gameplay/EquipmentSlot.svelte';
 	import { onMount } from 'svelte';
 
 	const { data } = $props();
