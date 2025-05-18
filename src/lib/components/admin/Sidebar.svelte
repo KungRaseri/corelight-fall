@@ -4,6 +4,7 @@
     import IconUsers from '@lucide/svelte/icons/users';
     import IconStats from '@lucide/svelte/icons/bar-chart';
     import IconLogs from '@lucide/svelte/icons/clipboard-list';
+    import IconNotebookPen from '@lucide/svelte/icons/notebook-pen';
     import IconSettings from '@lucide/svelte/icons/settings';
     import IconSeed from '@lucide/svelte/icons/database';
 </script>
@@ -16,6 +17,9 @@
             </Navigation.Tile>
         {/snippet}
         {#snippet tiles()}
+            <Navigation.Tile labelExpanded="Blog" href="/admin/blog">
+                <IconNotebookPen />
+            </Navigation.Tile>
             <Navigation.Tile labelExpanded="Users" href="/admin/users">
                 <IconUsers />
             </Navigation.Tile>

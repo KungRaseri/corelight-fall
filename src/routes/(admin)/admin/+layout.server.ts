@@ -6,11 +6,11 @@ import { redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
 export const load = async ({ locals }) => {
-    if (!locals.user) {
+    if (!locals.user || !locals.role) {
         throw redirect(302, '/auth/login');
     }
 
-    const hasAccess = await hasRole(locals.user.id, 'admin');
+    const hasAccess = await hasRole(locals.role, 'admin');
     if (!hasAccess && locals.user.id !== 1) {
         throw redirect(302, '/');
     }

@@ -1,16 +1,11 @@
 import { db } from "$lib/server/db";
 import { permission, role, rolePermission, userRole } from "$lib/server/db/schema";
+import type { Role } from "$lib/server/db/types";
 import { eq } from "drizzle-orm";
 
-export async function hasRole(userId: number, roleName: string): Promise<boolean> {
-    const roles = await db
-        .select({ name: role.name })
-        .from(userRole)
-        .innerJoin(role, eq(role.id, userRole.roleId))
-        .where(eq(userRole.userId, userId));
-
-    return roles.some((r) => r.name === roleName);
-} ``
+export async function hasRole(userRole: Role, roleName: string): Promise<boolean> {
+    return userRole.name === roleName;
+}
 
 export async function hasPermission(userId: number, permissionName: string): Promise<boolean> {
     const permissions = await db

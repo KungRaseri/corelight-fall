@@ -8,7 +8,7 @@
 	let posts = $state<BlogPostFormData[]>([]);
 	let showForm = $state(false);
 	let editingPost = $state<BlogPostFormData | null>(null);
-	let loading = $state(false);
+	let loading = $state(true);
 	let error = $state('');
 
 	function addNew() {
@@ -50,7 +50,16 @@
 
 	onMount(async () => {
 		posts = [...posts, ...data.posts];
+		loading = false;
 	});
+
+	function viewPost(post: BlogPostFormData) {
+		window.open(`/blog/${post.slug}`, '_blank');
+	}
+
+	function deletePost(post: BlogPostFormData) {
+		// Implement delete logic
+	}
 </script>
 
 <h1 class="mb-4 text-2xl font-bold">Blog Admin</h1>
@@ -80,31 +89,33 @@
 	{#if loading}
 		<p>Loading...</p>
 	{:else}
-		<table class="w-full table-auto border">
+		<table class="w-full table-auto border-collapse bg-surface-800 rounded shadow">
 			<thead>
 				<tr>
-					<th class="border px-2 py-1">Title</th>
-					<th class="border px-2 py-1">Slug</th>
-					<th class="border px-2 py-1">Date</th>
-					<th class="border px-2 py-1">Published</th>
-					<th class="border px-2 py-1">Actions</th>
+					<th class="px-3 py-2 text-left">Title</th>
+					<th class="px-3 py-2 text-left">Author</th>
+					<th class="px-3 py-2 text-left">Date</th>
+					<th class="px-3 py-2 text-left">Published</th>
+					<th class="px-3 py-2 text-left">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each posts as post}
-					<tr>
-						<td class="border px-2 py-1">{post.title}</td>
-						<td class="border px-2 py-1">{post.slug}</td>
-						<td class="border px-2 py-1">
+					<tr class="border-t border-surface-700 hover:bg-surface-700 transition">
+						<td class="px-3 py-2">{post.title}</td>
+						<td class="px-3 py-2">{post.author}</td>
+						<td class="px-3 py-2">
 							{new Date(post.date).toLocaleDateString('en-US', {
 								year: 'numeric',
 								month: 'short',
 								day: '2-digit'
 							})}
 						</td>
-						<td class="border px-2 py-1">{post.published ? 'Yes' : 'No'}</td>
-						<td class="border px-2 py-1">
-							<button class="btn btn-xs" onclick={() => editPost(post)}>Edit</button>
+						<td class="px-3 py-2">{post.published ? 'Yes' : 'No'}</td>
+						<td class="px-3 py-2 flex gap-2">
+							<button class="btn btn-xs btn-primary" onclick={() => editPost(post)}>Edit</button>
+							<button class="btn btn-xs btn-secondary" onclick={() => viewPost(post)}>View</button>
+							<button class="btn btn-xs btn-error" onclick={() => deletePost(post)}>Delete</button>
 						</td>
 					</tr>
 				{/each}

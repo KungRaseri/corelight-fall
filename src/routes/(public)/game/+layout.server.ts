@@ -38,5 +38,5 @@ export const load: LayoutServerLoad = async ({ locals }) => {
         .innerJoin(attribute, eq(characterAttribute.attributeId, attribute.id))
         .where(eq(characterAttribute.characterId, characterData.id));
 
-    return { user: locals.user, character: characterData, attributes };
+    return { user: locals.user, character: characterData, attributes, scene: {} };
 }

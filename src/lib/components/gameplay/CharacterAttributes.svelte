@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { characterAttributes } from '$lib/stores/characterAttributes';
+	import { characterAttributes } from '$lib/stores/character';
 	import type { CharacterAttribute, Attribute } from '$lib/server/db/types';
 	import Info from '@lucide/svelte/icons/info';
 

@@ -3,11 +3,12 @@ import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
-import type { User, Session } from './db/types';
+import type { User, Session, Role } from './db/types';
 import { session } from './db/schema/core/session';
 import { user } from './db/schema/core/user';
 import type { SafeUser } from '$lib/types/SafeUser';
 import { sanitizeUserData } from '$lib/utils/sanitizer';
+import { role, userRole } from './db/schema';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -36,26 +37,29 @@ export async function validateSessionToken(token: string) {
 	// Fetch session and user from the database
 	const [result] = await db
 		.select({
-			userData: user, // Select all fields from the user table
+			userData: user,
+			roleData: role, // Select all fields from the user table
 			sessionData: session // Select all fields from the session table
 		})
 		.from(session)
 		.innerJoin(user, eq(session.userId, user.id))
+		.innerJoin(userRole, eq(userRole.userId, user.id))
+		.innerJoin(role, eq(userRole.roleId, role.id))
 		.where(eq(session.id, sessionId));
 
 	// Return nulls if no valid result is found
 	if (!result) {
-		return { session: null, user: null, userResource: null };
+		return { session: null, user: null, role: null };
 	}
 
 	// Destructure the result using distinct names
-	const { sessionData, userData }: { sessionData: Session, userData: User } = result;
+	const { sessionData, userData, roleData }: { sessionData: Session, userData: User, roleData: Role } = result;
 
 	// Check if the session is expired
 	const sessionExpired = Date.now() >= sessionData.expiresAt.getTime();
 	if (sessionExpired) {
 		await db.delete(session).where(eq(session.id, sessionData.id));
-		return { session: null, user: null, userResource: null };
+		return { session: null, user: null, role: null };
 	}
 
 	// Renew session if close to expiration (15 days)
@@ -71,7 +75,7 @@ export async function validateSessionToken(token: string) {
 	const safeUserData: SafeUser = sanitizeUserData(userData);
 
 	// Return the session and user data
-	return { session: sessionData, user: safeUserData };
+	return { session: sessionData, user: safeUserData, role: roleData };
 }
 
 
