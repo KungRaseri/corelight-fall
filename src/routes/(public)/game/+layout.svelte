@@ -1,6 +1,6 @@
 <script lang="ts">
 	import GameHeader from '$lib/components/layout/GameHeader.svelte';
-	import Sidebar from '$lib/components/gameplay/Sidebar.svelte';
+	import Sidebar from '$lib/components/layout/Sidebar.svelte';
 	import MobileNav from '$lib/components/layout/MobileNav.svelte';
 
 	let { data, children } = $props();
