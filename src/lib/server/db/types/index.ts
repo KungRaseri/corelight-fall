@@ -36,6 +36,7 @@ import type { worldState } from "../schema/world/worldState";
 import type { role } from "../schema/core/role";
 import type { permission } from "../schema/core/permission";
 import type { rolePermission } from "../schema/core/rolePermission";
+import type { blogPost } from "../schema/blog/blogPost";
 
 export type User = typeof user.$inferSelect;
 export type Character = typeof character.$inferSelect;
@@ -75,3 +76,4 @@ export type Location = typeof location.$inferSelect;
 export type Role = typeof role.$inferSelect;
 export type Permission = typeof permission.$inferSelect;
 export type RolePermission = typeof rolePermission.$inferSelect;
+export type BlogPost = typeof blogPost.$inferSelect;

@@ -1,21 +1,22 @@
 // src/routes/(public)/blog/[slug]/+page.server.ts
 import { db } from '$lib/server/db';
-import fs from 'fs/promises';
-import path from 'path';
+import { blogPost } from '$lib/server/db/schema';
+import { error } from '@sveltejs/kit';
 import { compile } from 'mdsvex';
+import { eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
-    const post = await db.query.blogPost.findFirst({ where: { slug: params.slug } });
+    const post = (await db.select().from(blogPost).where(eq(blogPost.slug, params.slug)))[0];
     if (!post) throw error(404, 'Not found');
 
-    const mdPath = path.resolve('src/posts', post.markdownPath);
-    const mdContent = await fs.readFile(mdPath, 'utf-8');
-    const { code } = await compile(mdContent);
+    // Compile markdown to HTML
+    const compiled = await compile(post.markdown);
+    const code = compiled?.code ?? '';
 
     return {
         post: {
             ...post,
-            content: code
+            html: code
         }
     };
 };
