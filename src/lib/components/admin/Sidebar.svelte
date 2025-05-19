@@ -7,6 +7,7 @@
 	import IconNotebookPen from '@lucide/svelte/icons/notebook-pen';
 	import IconSettings from '@lucide/svelte/icons/settings';
 	import IconSeed from '@lucide/svelte/icons/database';
+	import IconBookCheck from '@lucide/svelte/icons/book-check';
 	import IconBookOpen from '@lucide/svelte/icons/book-open';
 	import IconSwords from '@lucide/svelte/icons/swords';
 	import IconFlag from '@lucide/svelte/icons/flag';
@@ -30,11 +31,14 @@
 			<Navigation.Tile labelExpanded="Story" href="/admin/story">
 				<IconBookOpen />
 			</Navigation.Tile>
+			<Navigation.Tile labelExpanded="Quests" href="/admin/quest">
+				<IconFlag />
+			</Navigation.Tile>
 			<Navigation.Tile labelExpanded="Encounters" href="/admin/encounter">
 				<IconSwords />
 			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Quests" href="/admin/quest">
-				<IconFlag />
+			<Navigation.Tile labelExpanded="Choices" href="/admin/choice">
+				<IconBookCheck />
 			</Navigation.Tile>
 			<div class="w-full">
 				<span class="px-2 text-2xl"> Management </span>

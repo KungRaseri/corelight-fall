@@ -4,8 +4,8 @@ import { text, boolean, serial, timestamp, pgTable } from 'drizzle-orm/pg-core';
 export const storyline = pgTable('storyline', {
     id: serial('id').primaryKey(),
     title: text('title').notNull(),
-    description: text('description'),
-    isMain: boolean('is_main').default(false),
-    createdAt: timestamp('created_at').defaultNow(),
-    updatedAt: timestamp('updated_at').defaultNow()
+    description: text('description').notNull(),
+    isMain: boolean('is_main').default(false).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull()
 });
