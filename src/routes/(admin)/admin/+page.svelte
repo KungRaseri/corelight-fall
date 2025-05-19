@@ -1,5 +1,18 @@
 <script lang="ts">
-	let { data } = $props();
+	import { onMount } from 'svelte';
+
+	const { data } = $props();
+	let statsData = $state({
+		blogPosts: 0,
+		storylines: 0,
+		quests: 0,
+		encounters: 0,
+		users: 0
+	});
+
+	onMount(() => {
+		statsData = { ...data.statsData };
+	});
 </script>
 
 <div class="space-y-8 p-8">
@@ -8,23 +21,23 @@
 	<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Total Blog Posts</h2>
-			<p class="text-3xl font-extrabold">{data.statsData.blogPosts}</p>
+			<p class="text-3xl font-extrabold">{statsData.blogPosts}</p>
 		</div>
 		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Storylines</h2>
-			<p class="text-3xl font-extrabold">{data.statsData.storylines}</p>
+			<p class="text-3xl font-extrabold">{statsData.storylines}</p>
 		</div>
 		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Quests</h2>
-			<p class="text-3xl font-extrabold">{data.statsData.quests}</p>
+			<p class="text-3xl font-extrabold">{statsData.quests}</p>
 		</div>
 		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Encounters</h2>
-			<p class="text-3xl font-extrabold">{data.statsData.encounters}</p>
+			<p class="text-3xl font-extrabold">{statsData.encounters}</p>
 		</div>
 		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Registered Users</h2>
-			<p class="text-3xl font-extrabold">{data.statsData.users}</p>
+			<p class="text-3xl font-extrabold">{statsData.users}</p>
 		</div>
 	</div>
 
