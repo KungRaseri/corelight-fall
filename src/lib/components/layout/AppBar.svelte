@@ -27,7 +27,7 @@
 
 <AppBar>
 	{#snippet lead()}
-		<div class="text-primary-400">
+		<div class="text-primary-600-400">
 			<a href="/" class="btn btn-link">Home</a>
 			<a href="/about" class="btn btn-link">About</a>
 			<a href="/features" class="btn btn-link">Features</a>
@@ -39,7 +39,7 @@
 		{#if userData}
 			<div class="relative">
 				<button
-					class="bg-surface-800 hover:bg-surface-700 flex items-center gap-2 rounded p-2"
+					class="bg-surface-400-600 hover:bg-surface-700 flex items-center gap-2 rounded p-2"
 					onclick={() => (isUserMenuEnabled = !isUserMenuEnabled)}
 				>
 					<img
@@ -52,7 +52,7 @@
 				</button>
 				{#if isUserMenuEnabled}
 					<div
-						class="bg-surface-800 absolute right-0 mt-2 w-48 rounded-md shadow-lg"
+						class="bg-surface-200-800 text-surface-900-100 absolute right-0 mt-2 w-48 rounded-md shadow-lg"
 						transition:slide
 					>
 						<a href="/game/profile" class="block px-4 py-2">Profile</a>
@@ -66,7 +66,7 @@
 		{/if}
 	{/snippet}
 	{#snippet headline()}
-		<div class="text-primary-400 ml-5 text-2xl font-bold">
+		<div class="text-primary-600-400 ml-5 text-2xl font-bold">
 			<a href="/">The Corelight Fall</a>
 		</div>
 	{/snippet}
