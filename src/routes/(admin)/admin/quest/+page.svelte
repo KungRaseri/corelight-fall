@@ -66,8 +66,8 @@
 		}}
 		{loading}
 		onSave={handleSave}
+		onCancel={() => (showForm = false)}
 	/>
-	<button class="btn btn-secondary" onclick={() => (showForm = false)}>Cancel</button>
 {:else}
 	<button class="btn btn-primary mb-4" onclick={addQuest}>Add New Quest</button>
 	{#if loading}

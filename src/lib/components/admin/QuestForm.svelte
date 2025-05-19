@@ -2,7 +2,7 @@
 	import type { QuestFormData } from '$lib/types/QuestFormData';
 	import { onMount } from 'svelte';
 
-	const { quest, loading, onSave } = $props();
+	const { quest, loading, onSave, onCancel } = $props();
 
 	let questData = $state<QuestFormData>({
 		id: null,
@@ -67,5 +67,6 @@
 		<button class="btn btn-primary" type="submit" disabled={loading}>
 			{loading ? 'Saving...' : 'Save Quest'}
 		</button>
+		<button class="btn btn-secondary" onclick={onCancel}>Cancel</button>
 	</div>
 </form>

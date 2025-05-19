@@ -2,7 +2,7 @@
 	import type { StorylineFormData } from '$lib/types/StorylineFormData';
 	import { onMount } from 'svelte';
 
-	const { storyline, loading, onSave } = $props();
+	const { storyline, loading, onSave, onCancel } = $props();
 
 	let storylineData = $state<StorylineFormData>({
 		id: null,
@@ -55,5 +55,7 @@
 		<button class="btn btn-primary" type="submit" disabled={loading}>
 			{loading ? 'Saving...' : 'Save Storyline'}
 		</button>
+	<button class="btn btn-secondary" onclick={onCancel}>Cancel</button>
+
 	</div>
 </form>

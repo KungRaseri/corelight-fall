@@ -82,8 +82,8 @@
 		}}
 		{loading}
 		onSave={savePost}
+		onCancel={() => (showForm = false)}
 	/>
-	<button class="btn mt-4" onclick={() => (showForm = false)}>Cancel</button>
 {:else}
 	<button class="btn btn-primary mb-4" onclick={addPost}>Add New Post</button>
 	{#if loading}
