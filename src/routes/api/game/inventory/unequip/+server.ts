@@ -2,11 +2,10 @@ import { json } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { characterEquipment } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
+import { requireSession } from '$lib/utils/requireSession';
 
 export async function POST({ request, locals }) {
-    if (!locals.user) {
-        return json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    requireSession(locals);
 
     const { characterId, slot } = await request.json();
     if (!slot) {

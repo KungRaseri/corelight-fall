@@ -1,17 +1,16 @@
 import { db } from '$lib/server/db';
 import { faction, characterFaction, characterAttribute, attribute, character } from '$lib/server/db/schema';
+import { requireSession } from '$lib/utils/requireSession';
 import { json, type RequestHandler } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
-    if (!locals.user) {
-        return new Response('Unauthorized', { status: 401 });
-    }
+    requireSession(locals);
 
     const data = await request.json();
 
     const newCharacter = (await db.insert(character).values({
         name: data.name,
-        userId: locals.user.id,
+        userId: locals.user?.id ?? -1,
         appearance: data.appearance,
         onboarding: true,
         tutorial: data.tutorial,

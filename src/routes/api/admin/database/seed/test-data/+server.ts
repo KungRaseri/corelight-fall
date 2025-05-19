@@ -1,7 +1,9 @@
 import { seedTestData } from '$lib/server/db/seeds/seed';
+import { requireAdmin } from '$lib/utils/requireAdmin';
 import { json, type RequestHandler } from '@sveltejs/kit';
 
-export const POST: RequestHandler = async ({ url }) => {
+export const POST: RequestHandler = async ({ locals }) => {
+    requireAdmin(locals);
     try {
         await seedTestData();
         return json({ message: 'Database seeded successfully.' });

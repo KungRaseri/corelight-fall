@@ -1,7 +1,7 @@
 // src/routes/admin/+page.server.ts
 import { db } from '$lib/server/db/index';
 import { blogPost, choice, encounter, quest, storyline, user, userRole } from '$lib/server/db/schema';
-import { hasPermission, hasRole } from '$lib/utils/permissions';
+import { requireAdmin } from '$lib/utils/requireAdmin';
 import { redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
@@ -10,8 +10,7 @@ export const load = async ({ locals }) => {
         throw redirect(302, '/auth/login');
     }
 
-    const hasAccess = await hasRole(locals.role, 'admin');
-    if (!hasAccess && locals.user.id !== 1) {
+    if (!requireAdmin(locals)) {
         throw redirect(302, '/');
     }
 

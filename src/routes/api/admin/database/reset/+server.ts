@@ -1,7 +1,9 @@
 import { resetDatabase } from '$lib/server/db/seeds/reset';
+import { requireAdmin } from '$lib/utils/requireAdmin';
 import { json, type RequestHandler } from '@sveltejs/kit';
 
-export const POST: RequestHandler = async ({ url }) => {
+export const POST: RequestHandler = async ({ locals }) => {
+    requireAdmin(locals);
     try {
         await resetDatabase();
         return json({ message: 'Database reset successfully.' });

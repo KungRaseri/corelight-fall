@@ -1,19 +1,18 @@
 import { db } from '$lib/server/db';
 import { playerGameState } from '$lib/server/db/schema/gameplay/playerGameState';
+import { requireSession } from '$lib/utils/requireSession';
 import { json } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
 export const GET = async ({ locals }) => {
-    const userId = locals.user?.id;
-    if (!userId) return json({ error: 'Not authenticated' }, { status: 401 });
+    requireSession(locals);
 
-    const state = await db.select().from(playerGameState).where(eq(playerGameState.userId, userId)).limit(1);
+    const state = await db.select().from(playerGameState).where(eq(playerGameState.userId, locals.user?.id ?? -1)).limit(1);
     return json(state[0] ?? null);
 };
 
 export const POST = async ({ request, locals }) => {
-    const userId = locals.user?.id;
-    if (!userId) return json({ error: 'Not authenticated' }, { status: 401 });
+    requireSession(locals);
 
     const data = await request.json();
     const now = Date.now();
@@ -21,7 +20,7 @@ export const POST = async ({ request, locals }) => {
     // Upsert logic (simplified)
     await db
         .insert(playerGameState)
-        .values({ ...data, userId, updatedAt: now })
+        .values({ ...data, userId: locals.user?.id ?? -1, updatedAt: now })
         .onConflictDoUpdate({
             target: playerGameState.userId,
             set: { ...data, updatedAt: now }

@@ -1,14 +1,17 @@
 import { db } from '$lib/server/db';
 import { encounter } from '$lib/server/db/schema/story/encounter';
+import { requireAdmin } from '$lib/utils/requireAdmin';
 import { json } from '@sveltejs/kit';
 import { eq, desc } from 'drizzle-orm';
 
-export const GET = async () => {
+export const GET = async ({ locals }) => {
+    requireAdmin(locals);
     const encounters = await db.select().from(encounter).orderBy(desc(encounter.id));
     return json(encounters);
 };
 
-export const POST = async ({ request }) => {
+export const POST = async ({ locals, request }) => {
+    requireAdmin(locals);
     const data = await request.json();
     delete data.id;
 
@@ -19,7 +22,8 @@ export const POST = async ({ request }) => {
     return json({ success: true, encounter: result[0] });
 };
 
-export const PUT = async ({ request }) => {
+export const PUT = async ({ locals, request }) => {
+    requireAdmin(locals);
     const data = await request.json();
     data.updatedAt = new Date();
 
