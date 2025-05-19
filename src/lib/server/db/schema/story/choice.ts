@@ -8,8 +8,8 @@ export const choice = pgTable('choice', {
     encounterId: integer('encounter_id').references(() => encounter.id).notNull(),
     text: text('text').notNull(), // The choice text shown to the player
     nextEncounterId: integer('next_encounter_id').references(() => encounter.id), // null if end
-    outcome: text('outcome'), // Optional: summary of what happens
-    order: integer('order'), // for ordering choices
-    createdAt: timestamp('created_at').defaultNow(),
-    updatedAt: timestamp('updated_at').defaultNow()
+    outcome: text('outcome').notNull(), // Optional: summary of what happens
+    order: integer('order').notNull(), // for ordering choices
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull()
 });

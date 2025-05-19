@@ -15,7 +15,12 @@
 	let error = $state('');
 
 	function addStoryline() {
-		editingStoryline = null;
+		editingStoryline = {
+			id: null,
+			title: '',
+			description: '',
+			isMain: false
+		};
 		showForm = true;
 	}
 
@@ -66,12 +71,7 @@
 
 {#if showForm}
 	<StorylineForm
-		storyline={editingStoryline ?? {
-			id: null,
-			title: '',
-			description: '',
-			isMain: false
-		}}
+		storyline={editingStoryline}
 		{loading}
 		onSave={handleSave}
 		onCancel={() => (showForm = false)}

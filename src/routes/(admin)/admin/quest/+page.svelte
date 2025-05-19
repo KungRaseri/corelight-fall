@@ -12,7 +12,14 @@
 	let loading = $state(true);
 
 	function addQuest() {
-		editingQuest = null;
+		editingQuest = {
+			id: null,
+			storylineId: 0,
+			title: '',
+			description: '',
+			order: 0,
+			isMainQuest: false
+		};
 		showForm = true;
 	}
 
@@ -56,14 +63,7 @@
 <h1 class="mb-4 text-2xl font-bold">Quests</h1>
 {#if showForm}
 	<QuestForm
-		quest={editingQuest ?? {
-			id: null,
-			storylineId: 0,
-			title: '',
-			description: '',
-			order: 0,
-			isMainQuest: false
-		}}
+		quest={editingQuest}
 		{loading}
 		onSave={handleSave}
 		onCancel={() => (showForm = false)}

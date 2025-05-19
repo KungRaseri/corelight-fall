@@ -13,7 +13,20 @@
 	let error = $state('');
 
 	function addPost() {
-		editingPost = null;
+		editingPost = {
+			id: null,
+			title: '',
+			slug: '',
+			summary: '',
+			date: '',
+			author: '',
+			markdown: '',
+			tags: '',
+			published: true,
+			coverImage: '',
+			createdAt: '',
+			updatedAt: ''
+		};
 		showForm = true;
 	}
 
@@ -66,20 +79,7 @@
 
 {#if showForm}
 	<BlogPostForm
-		post={editingPost ?? {
-			id: null,
-			title: '',
-			slug: '',
-			summary: '',
-			date: '',
-			author: '',
-			markdown: '',
-			tags: '',
-			published: true,
-			coverImage: '',
-			createdAt: '',
-			updatedAt: ''
-		}}
+		post={editingPost}
 		{loading}
 		onSave={savePost}
 		onCancel={() => (showForm = false)}

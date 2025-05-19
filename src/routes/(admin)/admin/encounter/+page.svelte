@@ -15,7 +15,14 @@
 	let error = $state('');
 
 	function addEncounter() {
-		editingEncounter = null;
+		editingEncounter = {
+			id: null,
+			questId: 0,
+			title: '',
+			type: 'combat',
+			order: 0,
+			description: ''
+		};
 		showForm = true;
 	}
 
@@ -64,14 +71,7 @@
 
 {#if showForm}
 	<EncounterForm
-		encounter={editingEncounter ?? {
-			id: null,
-			questId: 0,
-			title: '',
-			type: 'combat',
-			order: 0,
-			description: ''
-		}}
+		encounter={editingEncounter}
 		{quests}
 		{loading}
 		onSave={handleSave}

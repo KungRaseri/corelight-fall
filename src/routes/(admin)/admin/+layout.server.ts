@@ -1,6 +1,6 @@
 // src/routes/admin/+page.server.ts
 import { db } from '$lib/server/db/index';
-import { userRole } from '$lib/server/db/schema';
+import { blogPost, choice, encounter, quest, storyline, user, userRole } from '$lib/server/db/schema';
 import { hasPermission, hasRole } from '$lib/utils/permissions';
 import { redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
@@ -17,8 +17,23 @@ export const load = async ({ locals }) => {
 
     const roles = await db.select().from(userRole).where(eq(userRole.userId, locals.user.id));
 
+    const storylines = await db.$count(storyline);
+    const quests = await db.$count(quest);
+    const encounters = await db.$count(encounter);
+    const choices = await db.$count(choice);
+    const users = await db.$count(user);
+    const blogPosts = await db.$count(blogPost);
+
     return {
         user: locals.user,
-        roles
+        roles,
+        statsData: {
+            storylines,
+            quests,
+            encounters,
+            choices,
+            blogPosts,
+            users
+        }
     };
 };

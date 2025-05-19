@@ -24,8 +24,6 @@
 	onMount(() => {
 		encounterData = { ...encounter };
 		questsData = [...quests];
-
-		console.log(quests, questsData);
 	});
 </script>
 
