@@ -20,8 +20,6 @@ export const POST = async ({ locals, request }) => {
 
     if (data.nextEncounterId === '') delete data.nextEncounterId;
 
-    console.log('data', data);
-
     const result = await db.insert(choice).values(data).returning();
     return json({ success: true, choice: result[0] });
 };

@@ -11,7 +11,9 @@
 		text: '',
 		nextEncounterId: null,
 		outcome: '',
-		order: 0
+		order: 0,
+		createdAt: new Date(),
+		updatedAt: new Date()
 	});
 
 	let encountersData = $state<EncounterFormData[]>([]);

@@ -7,10 +7,8 @@
 	import IconNotebookPen from '@lucide/svelte/icons/notebook-pen';
 	import IconSettings from '@lucide/svelte/icons/settings';
 	import IconSeed from '@lucide/svelte/icons/database';
-	import IconBookCheck from '@lucide/svelte/icons/book-check';
 	import IconBookOpen from '@lucide/svelte/icons/book-open';
-	import IconSwords from '@lucide/svelte/icons/swords';
-	import IconFlag from '@lucide/svelte/icons/flag';
+	import IconBoxes from '@lucide/svelte/icons/boxes';
 </script>
 
 <div class="bg-surface-900 h-full w-60">
@@ -28,17 +26,11 @@
 			<Navigation.Tile labelExpanded="Blog" href="/admin/blog">
 				<IconNotebookPen />
 			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Story" href="/admin/story">
+			<Navigation.Tile labelExpanded="Story Builder" href="/admin/story-builder">
 				<IconBookOpen />
 			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Quests" href="/admin/quest">
-				<IconFlag />
-			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Encounters" href="/admin/encounter">
-				<IconSwords />
-			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Choices" href="/admin/choice">
-				<IconBookCheck />
+			<Navigation.Tile labelExpanded="Items" href="/admin/item">
+				<IconBoxes />
 			</Navigation.Tile>
 			<div class="w-full">
 				<span class="px-2 text-2xl"> Management </span>

@@ -1,14 +1,5 @@
-export type BlogPostFormData = {
-    id: number | null,
-    title: string,
-    slug: string,
-    summary: string,
-    date: string,
-    author: string,
-    markdown: string,
-    tags: string | null,
-    published: boolean,
-    coverImage: string | null,
-    createdAt: string,
-    updatedAt: string
-};
+import type { BlogPost } from "$lib/server/db/types";
+
+export type BlogPostFormData = Omit<BlogPost, 'id'> & {
+    id: number | null;
+}

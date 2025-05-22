@@ -10,7 +10,9 @@
 		title: '',
 		description: '',
 		order: 0,
-		isMainQuest: false
+		isMainQuest: false,
+		createdAt: new Date(),
+		updatedAt: new Date()
 	});
 
 	function handleSubmit(e: Event) {
@@ -59,6 +61,7 @@
 				class="input w-full"
 				bind:value={questData.storylineId}
 				required
+				disabled={questData.storylineId !== 0 || questData.storylineId !== null}
 			/>
 			<!-- Replace with a select dropdown if you want to show storyline titles -->
 		</div>
