@@ -31,7 +31,6 @@
 	class="bg-surface-200-800 text-surface-900-100 mx-auto max-w-2xl space-y-6 rounded-lg p-8 shadow-lg"
 	onsubmit={handleSubmit}
 >
-	<h2 class="mb-4 text-2xl font-bold">{encounterData.id ? 'Edit Encounter' : 'New Encounter'}</h2>
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<div>
 			<label class="mb-1 block font-semibold" for="title">Title</label>

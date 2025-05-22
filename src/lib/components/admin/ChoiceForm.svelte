@@ -33,7 +33,6 @@
 	class="bg-surface-800 text-surface-100 mx-auto max-w-2xl space-y-6 rounded-lg p-8 shadow-lg"
 	onsubmit={handleSubmit}
 >
-	<h2 class="mb-4 text-2xl font-bold">{choiceData.id ? 'Edit Choice' : 'New Choice'}</h2>
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<div>
 			<label class="mb-1 block font-semibold" for="text">Text</label>

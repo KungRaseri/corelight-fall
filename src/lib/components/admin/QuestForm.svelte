@@ -29,7 +29,6 @@
 	class="bg-surface-800 text-surface-100 mx-auto max-w-2xl space-y-6 rounded-lg p-8 shadow-lg"
 	onsubmit={handleSubmit}
 >
-	<h2 class="mb-4 text-2xl font-bold">{questData.id ? 'Edit Quest' : 'New Quest'}</h2>
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<div class="md:col-span-2">
 			<label class="mb-1 block font-semibold" for="title">Title</label>

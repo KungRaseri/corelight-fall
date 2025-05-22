@@ -300,9 +300,9 @@
 							<li class="mb-4">
 								<div class="flex items-center gap-2">
 									<!-- Quest icon and main quest star -->
-									<IconFlag size={16} class="text-primary-600" />
+									<span title="Quest"><IconFlag size={16} class="text-rose-500" /></span>
 									{#if quest.isMainQuest}
-										<IconStar size={14} class="text-amber-500" title="Main Quest" />
+										<span title="Main Quest"><IconStar size={14} class="text-amber-500" /></span>
 									{/if}
 									<span class="font-semibold">{quest.title}</span>
 									<button
@@ -341,9 +341,15 @@
 										{@const IconEncounter = getEncounterIcon(encounter.type)}
 										<li class="mb-2">
 											<div class="flex items-center gap-2">
-												<IconEncounter size={15} class="text-blue-600" />
-
 												<!-- Encounter icon based on type -->
+												<span
+													title={encounter.type
+														? `${encounter.type.charAt(0).toUpperCase() + encounter.type.slice(1)} Encounter`
+														: 'Encounter'}
+												>
+													<IconEncounter size={15} class="text-sky-500" />
+												</span>
+
 												<span>{encounter.title}</span>
 												<button
 													class="btn btn-xs btn-secondary flex items-center"
@@ -379,7 +385,9 @@
 												{#each encounter.choices ?? [] as choice}
 													<li class="mb-1 flex items-center gap-2">
 														<!-- Choice icon -->
-														<IconGitBranch size={14} class="text-green-700" />
+														<span title="Choice"
+															><IconGitBranch size={14} class="text-emerald-500" /></span
+														>
 														<span>{choice.text}</span>
 														<button
 															class="btn btn-xs btn-secondary flex items-center"
@@ -406,12 +414,12 @@
 					{#if editingQuest}
 						{#key editingQuest?.id ?? 'new'}
 							<div class="mb-4 flex items-center gap-2 border-b pb-2">
-								<span class="text-primary-700 font-bold tracking-wide uppercase">Quest</span>
 								{#if editingQuest.id}
 									<span class="text-surface-500 text-xs">Editing</span>
 								{:else}
 									<span class="text-surface-500 text-xs">New</span>
 								{/if}
+								<span class="font-bold tracking-wide text-rose-500 uppercase">Quest</span>
 							</div>
 							<QuestForm
 								loading={false}
@@ -423,14 +431,14 @@
 					{:else if editingEncounter}
 						{#key editingEncounter?.id ?? 'new'}
 							<div class="mb-4 flex items-center gap-2 border-b pb-2">
-								<span class="font-bold tracking-wide text-blue-700 uppercase">Encounter</span>
 								{#if editingEncounter.id}
 									<span class="text-surface-500 text-xs">Editing</span>
 								{:else}
 									<span class="text-surface-500 text-xs">New</span>
 								{/if}
+								<span class="font-bold tracking-wide text-sky-500 uppercase">Encounter</span>
 								{#if editingEncounter.questId}
-									<span class="text-surface-400 ml-2 text-xs"
+									<span class="text-surface-400 text-xs"
 										>for Quest ID {editingEncounter.questId}</span
 									>
 								{/if}
@@ -446,14 +454,14 @@
 					{:else if editingChoice}
 						{#key editingChoice?.id ?? 'new'}
 							<div class="mb-4 flex items-center gap-2 border-b pb-2">
-								<span class="font-bold tracking-wide text-green-700 uppercase">Choice</span>
 								{#if editingChoice.id}
 									<span class="text-surface-500 text-xs">Editing</span>
 								{:else}
 									<span class="text-surface-500 text-xs">New</span>
 								{/if}
+								<span class="font-bold tracking-wide text-emerald-500 uppercase">Choice</span>
 								{#if editingChoice.encounterId}
-									<span class="text-surface-400 ml-2 text-xs"
+									<span class="text-surface-400 text-xs"
 										>for Encounter ID {editingChoice.encounterId}</span
 									>
 								{/if}
