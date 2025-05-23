@@ -1,7 +1,8 @@
 import { db } from "$lib/server/db";
-import { attribute, character, characterAttribute } from "$lib/server/db/schema";
+import { attribute, character, characterAttribute, choice, encounter, playerStoryProgress, quest, storyline } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import type { LayoutServerLoad } from "../$types";
+import type { ChoiceFormData } from "$lib/types/ChoiceFormData";
 
 
 export const load: LayoutServerLoad = async ({ locals }) => {
@@ -38,5 +39,41 @@ export const load: LayoutServerLoad = async ({ locals }) => {
         .innerJoin(attribute, eq(characterAttribute.attributeId, attribute.id))
         .where(eq(characterAttribute.characterId, characterData.id));
 
-    return { user: locals.user, character: characterData, attributes, scene: {} };
+    // 1. Fetch all storylines
+    const storylines = await db.select().from(storyline);
+
+    // 2. Fetch player progress
+    const progress = (await db
+        .select()
+        .from(playerStoryProgress)
+        .where(eq(playerStoryProgress.userId, locals.user.id))
+        .limit(1))[0];
+
+    let currentStoryline, currentQuest, currentEncounter, availableChoices: ChoiceFormData[] = [];
+
+    if (progress) {
+        // 3. Fetch current quest, encounter, choices
+        currentStoryline = (await db.select().from(storyline).where(eq(storyline.id, progress.storylineId)))[0];
+        currentQuest = (await db.select().from(quest).where(eq(quest.id, progress.questId)))[0];
+        currentEncounter = (await db.select().from(encounter).where(eq(encounter.id, progress.encounterId)))[0];
+        availableChoices = await db.select().from(choice).where(eq(choice.encounterId, progress.encounterId));
+    } else if (storylines.length) {
+        // 4. Default: first storyline, first quest, first encounter
+        currentStoryline = storylines[0];
+        currentQuest = (await db.select().from(quest).where(eq(quest.storylineId, currentStoryline.id)).orderBy(quest.order).limit(1))[0];
+        currentEncounter = (await db.select().from(encounter).where(eq(encounter.questId, currentQuest.id)).orderBy(encounter.order).limit(1))[0];
+        availableChoices = await db.select().from(choice).where(eq(choice.encounterId, currentEncounter.id));
+    }
+
+    return {
+        user: locals.user,
+        character: characterData,
+        attributes,
+        scene: {},
+        storylines,
+        currentStoryline,
+        currentQuest,
+        currentEncounter,
+        availableChoices
+    };
 }

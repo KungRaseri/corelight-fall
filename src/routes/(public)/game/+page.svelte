@@ -1,8 +1,10 @@
 <script lang="ts">
 	import Recap from '$lib/components/Recap.svelte';
 	import CharacterAttributes from '$lib/components/gameplay/CharacterAttributes.svelte';
+	import PlayerStoryView from '$lib/components/gameplay/PlayerStoryView.svelte';
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import { character, setCharacterAttributes } from '$lib/stores/character';
+	import type { ChoiceFormData } from '$lib/types/ChoiceFormData.js';
 	import { onMount } from 'svelte';
 
 	let showCharacter = $state(false);
@@ -11,6 +13,11 @@
 	let showLog = $state(false);
 
 	const { data } = $props();
+
+	function handleChoice(choice: ChoiceFormData) {
+		// Handle the player's choice here
+		console.log('Player chose:', choice);
+	}
 
 	onMount(() => {
 		if (data.character) {
@@ -52,8 +59,28 @@
 	>
 		<h2 class="mb-2 text-2xl font-bold">Current Scene</h2>
 		<p class="text-lg">
-			{data.scene?.description ??
-				'You are standing at the entrance of a mysterious forest. What will you do next?'}
+			{#if !data.currentStoryline}
+				<div class="mx-auto max-w-xl p-6">
+					<h2 class="mb-4 text-xl font-bold">Choose Your Story</h2>
+					<ul class="space-y-2">
+						{#each data.storylines as s}
+							<li>
+								<button class="btn btn-primary w-full" onclick={chooseStory(s.id)}>
+									{s.title}
+								</button>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{:else}
+				<PlayerStoryView
+					storyline={data.currentStoryline}
+					currentQuest={data.currentQuest}
+					currentEncounter={data.currentEncounter}
+					availableChoices={data.availableChoices}
+					onChoose={handleChoice}
+				/>
+			{/if}
 		</p>
 		<!-- Add scene actions, choices, or visuals here -->
 	</div>

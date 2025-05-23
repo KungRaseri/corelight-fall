@@ -11,7 +11,9 @@
 		title: '',
 		description: '',
 		type: '',
-		order: 0
+		order: 0,
+		createdAt: new Date(),
+		updatedAt: new Date()
 	});
 
 	let questsData = $state<QuestFormData[]>([]);
