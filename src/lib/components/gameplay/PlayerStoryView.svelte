@@ -1,7 +1,7 @@
 <script lang="ts">
 	const { storyline, currentQuest, currentEncounter, availableChoices, onChoose } = $props();
 
-	import IconFlag from '@lucide/svelte/icons/flag';
+	import IconQuest from '@lucide/svelte/icons/flag';
 	import IconStar from '@lucide/svelte/icons/star';
 	import IconSword from '@lucide/svelte/icons/sword';
 	import IconUsers from '@lucide/svelte/icons/users';
@@ -25,9 +25,9 @@
 	}
 </script>
 
-<div class="mx-auto max-w-2xl p-6">
+<div class="">
 	<h1 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-		<IconFlag size={20} class="text-rose-500" />
+		<IconQuest size={20} class="text-emerald-500" />
 		{storyline.title}
 	</h1>
 	<p class="text-surface-500 mb-4">{storyline.description}</p>

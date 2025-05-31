@@ -58,12 +58,12 @@
 		class="bg-surface-400-600 text-surface-900-100 flex min-h-[300px] flex-col items-center justify-center rounded-lg p-6 shadow-lg"
 	>
 		<h2 class="mb-2 text-2xl font-bold">Current Scene</h2>
-		<p class="text-lg">
+		<div class="text-lg">
 			{#if !data.currentStoryline}
 				<div class="mx-auto max-w-xl p-6">
 					<h2 class="mb-4 text-xl font-bold">Choose Your Story</h2>
 					<ul class="space-y-2">
-						{#each data.storylines as s}
+						{#each data.storylines ?? [] as s}
 							<li>
 								<button class="btn btn-primary w-full" onclick={chooseStory(s.id)}>
 									{s.title}
@@ -81,7 +81,7 @@
 					onChoose={handleChoice}
 				/>
 			{/if}
-		</p>
+			</div>
 		<!-- Add scene actions, choices, or visuals here -->
 	</div>
 

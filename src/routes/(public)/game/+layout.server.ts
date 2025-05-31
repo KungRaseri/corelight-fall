@@ -54,9 +54,9 @@ export const load: LayoutServerLoad = async ({ locals }) => {
     if (progress) {
         // 3. Fetch current quest, encounter, choices
         currentStoryline = (await db.select().from(storyline).where(eq(storyline.id, progress.storylineId)))[0];
-        currentQuest = (await db.select().from(quest).where(eq(quest.id, progress.questId)))[0];
-        currentEncounter = (await db.select().from(encounter).where(eq(encounter.id, progress.encounterId)))[0];
-        availableChoices = await db.select().from(choice).where(eq(choice.encounterId, progress.encounterId));
+        currentQuest = (await db.select().from(quest).where(eq(quest.id, progress.questId ?? -1)))[0];
+        currentEncounter = (await db.select().from(encounter).where(eq(encounter.id, progress.encounterId ?? -1)))[0];
+        availableChoices = await db.select().from(choice).where(eq(choice.encounterId, progress.encounterId ?? -1));
     } else if (storylines.length) {
         // 4. Default: first storyline, first quest, first encounter
         currentStoryline = storylines[0];

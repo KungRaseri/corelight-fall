@@ -19,6 +19,7 @@
 	import IconUsers from '@lucide/svelte/icons/users';
 	import IconBookOpen from '@lucide/svelte/icons/book-open';
 	import IconPuzzle from '@lucide/svelte/icons/puzzle';
+	import IconTrash from '@lucide/svelte/icons/trash';
 
 	const { data } = $props();
 
@@ -146,7 +147,7 @@
 	async function handleChoiceSave(data: ChoiceFormData) {
 		const res = await fetch('/api/admin/choice', {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+		 headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data)
 		});
 
@@ -204,6 +205,55 @@
 				return IconMap;
 		}
 	}
+
+	// Example delete handlers (implement API calls as needed)
+	async function deleteStoryline(id: number | null) {
+		if (!id) return;
+		if (!confirm('Delete this storyline?')) return;
+		await fetch(`/api/admin/storyline/${id}`, { method: 'DELETE' });
+		storylines.update((list) => list.filter((s) => s.id !== id));
+		if ($selectedStorylineId === id) {
+			selectedStorylineId.set(null);
+			selectedStoryLine.set(null);
+		}
+	}
+
+	async function deleteQuest(id: number | null) {
+		if (!id) return;
+		if (!confirm('Delete this quest?')) return;
+		await fetch(`/api/admin/quest/${id}`, { method: 'DELETE' });
+		selectedStoryLine.update((tree) => {
+			if (!tree) return tree;
+			tree.quests = tree.quests?.filter((q) => q.id !== id) ?? [];
+			return { ...tree };
+		});
+	}
+
+	async function deleteEncounter(questId: number | null, encounterId: number | null) {
+		if (!questId || !encounterId) return;
+		if (!confirm('Delete this encounter?')) return;
+		await fetch(`/api/admin/encounter/${encounterId}`, { method: 'DELETE' });
+		selectedStoryLine.update((tree) => {
+			if (!tree) return tree;
+			const quest = tree.quests?.find((q) => q.id === questId);
+			if (quest) quest.encounters = quest.encounters?.filter((e) => e.id !== encounterId) ?? [];
+			return { ...tree };
+		});
+	}
+
+	async function deleteChoice(encounterId: number | null, choiceId: number | null) {
+		if (!encounterId || !choiceId) return;
+		if (!confirm('Delete this choice?')) return;
+		await fetch(`/api/admin/choice/${choiceId}`, { method: 'DELETE' });
+		selectedStoryLine.update((tree) => {
+			if (!tree) return tree;
+			for (const quest of tree.quests ?? []) {
+				const encounter = quest.encounters?.find((e) => e.id === encounterId);
+				if (encounter) encounter.choices = encounter.choices?.filter((c) => c.id !== choiceId) ?? [];
+			}
+			return { ...tree };
+		});
+	}
 </script>
 
 <div class="mx-auto flex max-w-7xl flex-col gap-6 p-4 md:flex-row">
@@ -215,6 +265,7 @@
 				class="btn btn-xs btn-success flex items-center gap-1"
 				onclick={() => {
 					clearInlineEditing();
+					selectedStorylineId.set(null); // Clear the selected storyline
 					creating = true;
 				}}
 				title="Add Storyline"
@@ -224,7 +275,7 @@
 		</div>
 		<ul class="flex-1 space-y-1 overflow-y-auto">
 			{#each $storylines as s}
-				<li>
+				<li class="flex items-center gap-2">
 					<button
 						class="hover:bg-primary-100/30 w-full rounded px-2 py-1 text-left transition
                             {$selectedStorylineId === s.id ? 'bg-primary-100 font-semibold' : ''}"
@@ -235,9 +286,16 @@
 						{/if}
 						<span>{s.title}</span>
 					</button>
+					<button class="btn btn-xs btn-error" title="Delete Storyline" onclick={() => deleteStoryline(s.id)}>
+						<IconTrash size={14} />
+					</button>
 				</li>
 			{/each}
 		</ul>
+	</aside>
+
+	<!-- Main Panel -->
+	<main class="flex flex-1 flex-col gap-4">
 		{#if creating}
 			<div class="mt-2">
 				<StorylineForm
@@ -248,10 +306,6 @@
 				/>
 			</div>
 		{/if}
-	</aside>
-
-	<!-- Main Panel -->
-	<main class="flex flex-1 flex-col gap-4">
 		{#if !$selectedStorylineId}
 			<div class="text-surface-500 mt-16 text-center">
 				<p>Select a storyline to begin editing.</p>
@@ -300,7 +354,7 @@
 							<li class="mb-4">
 								<div class="flex items-center gap-2">
 									<!-- Quest icon and main quest star -->
-									<span title="Quest"><IconFlag size={16} class="text-rose-500" /></span>
+									<span title="Quest"><IconFlag size={16} class="text-emerald-500" /></span>
 									{#if quest.isMainQuest}
 										<span title="Main Quest"><IconStar size={14} class="text-amber-500" /></span>
 									{/if}
@@ -314,6 +368,13 @@
 										title="Edit Quest"
 									>
 										<IconEdit size={16} />
+									</button>
+									<button
+										class="btn btn-xs btn-error flex items-center"
+										title="Delete Quest"
+										onclick={() => deleteQuest(quest.id)}
+									>
+										<IconTrash size={16} />
 									</button>
 									<button
 										class="btn btn-xs btn-primary flex items-center"
@@ -362,6 +423,13 @@
 													<IconEdit size={16} />
 												</button>
 												<button
+													class="btn btn-xs btn-error flex items-center"
+													title="Delete Encounter"
+													onclick={() => deleteEncounter(quest.id, encounter.id)}
+												>
+													<IconTrash size={16} />
+												</button>
+												<button
 													class="btn btn-xs btn-primary flex items-center"
 													onclick={() => {
 														clearInlineEditing();
@@ -386,7 +454,7 @@
 													<li class="mb-1 flex items-center gap-2">
 														<!-- Choice icon -->
 														<span title="Choice"
-															><IconGitBranch size={14} class="text-emerald-500" /></span
+															><IconGitBranch size={14} class="text-amber-500" /></span
 														>
 														<span>{choice.text}</span>
 														<button
@@ -398,6 +466,13 @@
 															title="Edit Choice"
 														>
 															<IconEdit size={16} />
+														</button>
+														<button
+															class="btn btn-xs btn-error flex items-center"
+															title="Delete Choice"
+															onclick={() => deleteChoice(encounter.id, choice.id)}
+														>
+															<IconTrash size={16} />
 														</button>
 													</li>
 												{/each}
@@ -419,7 +494,7 @@
 								{:else}
 									<span class="text-surface-500 text-xs">New</span>
 								{/if}
-								<span class="font-bold tracking-wide text-rose-500 uppercase">Quest</span>
+								<span class="font-bold tracking-wide text-emerald-500 uppercase">Quest</span>
 							</div>
 							<QuestForm
 								loading={false}
