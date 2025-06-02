@@ -10,7 +10,7 @@ const config = {
 	extensions: ['.svelte', '.svx', '.md'],
 	compilerOptions: {
 		runes: true,
-	},
+	}
 };
 
 export default config;

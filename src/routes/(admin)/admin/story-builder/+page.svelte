@@ -4,6 +4,8 @@
 	import QuestForm from '$lib/components/admin/QuestForm.svelte';
 	import EncounterForm from '$lib/components/admin/EncounterForm.svelte';
 	import ChoiceForm from '$lib/components/admin/ChoiceForm.svelte';
+	import ActForm from '$lib/components/admin/ActForm.svelte';
+	import PhaseForm from '$lib/components/admin/PhaseForm.svelte';
 	import type { StorylineFormData } from '$lib/types/StorylineFormData';
 	import type { QuestFormData } from '$lib/types/QuestFormData';
 	import type { EncounterFormData } from '$lib/types/EncounterFormData.js';
@@ -21,11 +23,15 @@
 	import IconPuzzle from '@lucide/svelte/icons/puzzle';
 	import IconTrash from '@lucide/svelte/icons/trash';
 
+	import { Modal } from '@skeletonlabs/skeleton-svelte';
+	import type { ActFormData } from '$lib/types/ActFormData.js';
+	import type { PhaseFormData } from '$lib/types/PhaseFormData.js';
+
 	const { data } = $props();
 
 	// Initialize store with server data
 	storylines.set(data.storylines);
-
+	let acts = []
 	let creating = $state(false);
 	let loadingTree = $state(false);
 	let error = $state('');
@@ -33,6 +39,9 @@
 	let editingQuest: QuestFormData | null = $state(null);
 	let editingEncounter: EncounterFormData | null = $state(null);
 	let editingChoice: ChoiceFormData | null = $state(null);
+
+	let showActDialog = $state(false);
+	let showPhaseDialog = $state(false);
 
 	function clearInlineEditing() {
 		creating = false;
@@ -147,7 +156,7 @@
 	async function handleChoiceSave(data: ChoiceFormData) {
 		const res = await fetch('/api/admin/choice', {
 			method: 'POST',
-		 headers: { 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data)
 		});
 
@@ -191,7 +200,7 @@
 	}
 
 	// Helper to pick icon based on encounter type
-	function getEncounterIcon(type: string | undefined) {
+	function getEncounterIcon(type: string | undefined | null) {
 		switch (type) {
 			case 'combat':
 				return IconSword;
@@ -249,10 +258,26 @@
 			if (!tree) return tree;
 			for (const quest of tree.quests ?? []) {
 				const encounter = quest.encounters?.find((e) => e.id === encounterId);
-				if (encounter) encounter.choices = encounter.choices?.filter((c) => c.id !== choiceId) ?? [];
+				if (encounter)
+					encounter.choices = encounter.choices?.filter((c) => c.id !== choiceId) ?? [];
 			}
 			return { ...tree };
 		});
+	}
+
+	function handleAddAct() {
+		showActDialog = true;
+	}
+	function handleAddPhase() {
+		showPhaseDialog = true;
+	}
+	function handleActSave(newAct: ActFormData) {
+		// Add act to acts array, close dialog, etc.
+		showActDialog = false;
+	}
+	function handlePhaseSave(newPhase: PhaseFormData) {
+		// Add phase to phases array, close dialog, etc.
+		showPhaseDialog = false;
 	}
 </script>
 
@@ -286,7 +311,11 @@
 						{/if}
 						<span>{s.title}</span>
 					</button>
-					<button class="btn btn-xs btn-error" title="Delete Storyline" onclick={() => deleteStoryline(s.id)}>
+					<button
+						class="btn btn-xs btn-error"
+						title="Delete Storyline"
+						onclick={() => deleteStoryline(s.id)}
+					>
 						<IconTrash size={14} />
 					</button>
 				</li>
@@ -301,6 +330,10 @@
 				<StorylineForm
 					storyline={null}
 					loading={false}
+					acts={data.acts}
+					phases={data.phases}
+					onAddAct={handleAddAct}
+					onAddPhase={handleAddPhase}
 					onSave={handleStorylineCreated}
 					onCancel={clearInlineEditing}
 				/>
@@ -310,7 +343,8 @@
 			<div class="text-surface-500 mt-16 text-center">
 				<p>Select a storyline to begin editing.</p>
 			</div>
-		{:else if loadingTree}
+		{/if}
+		{#if loadingTree}
 			<div class="flex h-32 items-center justify-center">
 				<p>Loading...</p>
 			</div>
@@ -333,10 +367,16 @@
 								title: '',
 								description: '',
 								order: $selectedStoryLine.quests?.length ?? 0,
-								isMainQuest: false,
+								isMain: false,
 								encounters: [],
 								createdAt: new Date(),
-								updatedAt: new Date()
+								updatedAt: new Date(),
+								factions: '',
+								isActive: false,
+								summary: '',
+								goals: '',
+								tags: '',
+								tone: ''
 							};
 						}}
 						title="Add Quest"
@@ -355,7 +395,7 @@
 								<div class="flex items-center gap-2">
 									<!-- Quest icon and main quest star -->
 									<span title="Quest"><IconFlag size={16} class="text-emerald-500" /></span>
-									{#if quest.isMainQuest}
+									{#if quest.isMain}
 										<span title="Main Quest"><IconStar size={14} class="text-amber-500" /></span>
 									{/if}
 									<span class="font-semibold">{quest.title}</span>
@@ -389,7 +429,12 @@
 												order: quest.encounters?.length ?? 0,
 												choices: [],
 												createdAt: new Date(),
-												updatedAt: new Date()
+												updatedAt: new Date(),
+												factions: '',
+												isActive: false,
+												summary: '',
+												tags: '',
+												tone: ''
 											};
 										}}
 										title="Add Encounter"
@@ -557,3 +602,37 @@
 		{/if}
 	</main>
 </div>
+
+{#if showActDialog}
+	<Modal
+		open
+		closeOnEscape
+		closeOnInteractOutside
+		onOpenChange={(e) => {
+			if (!e.open) {
+				showActDialog = false;
+			}
+		}}
+	>
+		{#snippet content()}
+			<ActForm onSave={handleActSave} onCancel={() => (showActDialog = false)} />
+		{/snippet}
+	</Modal>
+{/if}
+
+{#if showPhaseDialog}
+	<Modal
+		open
+		closeOnEscape
+		closeOnInteractOutside
+		onOpenChange={(e) => {
+			if (!e.open) {
+				showPhaseDialog = false;
+			}
+		}}
+	>
+		{#snippet content()}
+			<PhaseForm {acts} onSave={handlePhaseSave} onCancel={() => (showPhaseDialog = false)} />
+		{/snippet}
+	</Modal>
+{/if}
