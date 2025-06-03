@@ -9,6 +9,7 @@
 		onCancel,
 		acts = [],
 		phases = [],
+		onSelectAct,
 		onAddAct,
 		onAddPhase
 	} = $props();
@@ -39,6 +40,13 @@
 	const filteredPhases = $derived(
 		selectedActId ? phases.filter((p) => p.actId === selectedActId) : phases
 	);
+
+	$effect(() => {
+		if (selectedActId) {
+			console.log(selectedActId)
+			onSelectAct(selectedActId);
+		}
+	});
 
 	function handleSubmit(e: Event) {
 		e.preventDefault();
@@ -91,7 +99,14 @@
 						<option value={phase.id}>{phase.title}</option>
 					{/each}
 				</select>
-				<button type="button" class="btn btn-xs btn-primary" onclick={onAddPhase}> + Phase </button>
+				<button
+					type="button"
+					class="btn btn-xs btn-primary"
+					disabled={selectedActId == null}
+					onclick={onAddPhase}
+				>
+					+ Phase
+				</button>
 			</div>
 		</div>
 		<div class="md:col-span-2">

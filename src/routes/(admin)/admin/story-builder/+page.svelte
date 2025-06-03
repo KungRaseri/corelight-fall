@@ -6,10 +6,14 @@
 	import ChoiceForm from '$lib/components/admin/ChoiceForm.svelte';
 	import ActForm from '$lib/components/admin/ActForm.svelte';
 	import PhaseForm from '$lib/components/admin/PhaseForm.svelte';
+
+	import { Modal } from '@skeletonlabs/skeleton-svelte';
+	import type { ActFormData } from '$lib/types/ActFormData';
+	import type { PhaseFormData } from '$lib/types/PhaseFormData';
 	import type { StorylineFormData } from '$lib/types/StorylineFormData';
 	import type { QuestFormData } from '$lib/types/QuestFormData';
-	import type { EncounterFormData } from '$lib/types/EncounterFormData.js';
-	import type { ChoiceFormData } from '$lib/types/ChoiceFormData.js';
+	import type { EncounterFormData } from '$lib/types/EncounterFormData';
+	import type { ChoiceFormData } from '$lib/types/ChoiceFormData';
 
 	import IconStar from '@lucide/svelte/icons/star';
 	import IconPlus from '@lucide/svelte/icons/plus';
@@ -23,18 +27,15 @@
 	import IconPuzzle from '@lucide/svelte/icons/puzzle';
 	import IconTrash from '@lucide/svelte/icons/trash';
 
-	import { Modal } from '@skeletonlabs/skeleton-svelte';
-	import type { ActFormData } from '$lib/types/ActFormData.js';
-	import type { PhaseFormData } from '$lib/types/PhaseFormData.js';
-
 	const { data } = $props();
 
 	// Initialize store with server data
 	storylines.set(data.storylines);
-	let acts = []
+
 	let creating = $state(false);
 	let loadingTree = $state(false);
 	let error = $state('');
+	let selectedActId = $state<number | null>(null);
 
 	let editingQuest: QuestFormData | null = $state(null);
 	let editingEncounter: EncounterFormData | null = $state(null);
@@ -332,6 +333,9 @@
 					loading={false}
 					acts={data.acts}
 					phases={data.phases}
+					onSelectAct={(actId: number | null) => {
+						selectedActId = actId;
+					}}
 					onAddAct={handleAddAct}
 					onAddPhase={handleAddPhase}
 					onSave={handleStorylineCreated}
@@ -615,7 +619,19 @@
 		}}
 	>
 		{#snippet content()}
-			<ActForm onSave={handleActSave} onCancel={() => (showActDialog = false)} />
+			<ActForm
+				act={{
+					id: null,
+					title: '',
+					description: '',
+					order: 0,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				}}
+				loading={false}
+				onSave={handleActSave}
+				onCancel={() => (showActDialog = false)}
+			/>
 		{/snippet}
 	</Modal>
 {/if}
@@ -632,7 +648,20 @@
 		}}
 	>
 		{#snippet content()}
-			<PhaseForm {acts} onSave={handlePhaseSave} onCancel={() => (showPhaseDialog = false)} />
+			<PhaseForm
+				phase={{
+					id: null,
+					title: '',
+					description: '',
+					order: 0,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				}}
+				loading={false}
+				act={data.acts.find(act => act.id == selectedActId)}
+				onSave={handlePhaseSave}
+				onCancel={() => (showPhaseDialog = false)}
+			/>
 		{/snippet}
 	</Modal>
 {/if}
