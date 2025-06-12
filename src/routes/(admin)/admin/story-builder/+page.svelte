@@ -345,8 +345,10 @@
 			{#each $storylines as s}
 				<li class="flex items-center gap-2">
 					<button
-						class="hover:bg-primary-100/30 w-full rounded px-2 py-1 text-left transition
-                            {$selectedStorylineId === s.id ? 'bg-primary-100 font-semibold' : ''}"
+						class="w-full rounded px-2 py-1 text-left transition
+							{$selectedStorylineId === s.id
+							? 'bg-surface-200-800 text-surface-900-100 font-semibold'
+							: 'hover:bg-surface-200-800 hover:text-surface-900-100 text-surface-900-100'}"
 						onclick={() => selectStoryline(s.id)}
 					>
 						{#if s.isMain}
@@ -576,24 +578,7 @@
 				</div>
 				<!-- Form Panel -->
 				<div class="w-full md:w-1/2">
-					{#if editingQuest}
-						{#key editingQuest?.id ?? 'new'}
-							<div class="mb-4 flex items-center gap-2 border-b pb-2">
-								{#if editingQuest.id}
-									<span class="text-surface-500 text-xs">Editing</span>
-								{:else}
-									<span class="text-surface-500 text-xs">New</span>
-								{/if}
-								<span class="font-bold tracking-wide text-emerald-500 uppercase">Quest</span>
-							</div>
-							<QuestForm
-								loading={false}
-								quest={editingQuest}
-								onSave={handleQuestSave}
-								onCancel={() => (editingQuest = null)}
-							/>
-						{/key}
-					{:else if editingEncounter}
+					{#if editingEncounter}
 						{#key editingEncounter?.id ?? 'new'}
 							<div class="mb-4 flex items-center gap-2 border-b pb-2">
 								{#if editingEncounter.id}
@@ -715,6 +700,28 @@
 				act={data.acts.find((act) => act.id == selectedActId)}
 				onSave={handlePhaseSave}
 				onCancel={() => (showPhaseDialog = false)}
+			/>
+		{/snippet}
+	</Modal>
+{/if}
+
+{#if editingQuest}
+	<Modal
+		open
+		closeOnEscape
+		closeOnInteractOutside
+		onOpenChange={(e) => {
+			if (!e.open) {
+				editingQuest = null;
+			}
+		}}
+	>
+		{#snippet content()}
+			<QuestForm
+				loading={false}
+				quest={editingQuest}
+				onSave={handleQuestSave}
+				onCancel={() => (editingQuest = null)}
 			/>
 		{/snippet}
 	</Modal>
