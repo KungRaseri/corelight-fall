@@ -6,6 +6,7 @@
 	import ChoiceForm from '$lib/components/admin/ChoiceForm.svelte';
 	import ActForm from '$lib/components/admin/ActForm.svelte';
 	import PhaseForm from '$lib/components/admin/PhaseForm.svelte';
+	import StoryBranchingGraph from '$lib/components/admin/StoryBranchingGraph.svelte';
 
 	import { Modal } from '@skeletonlabs/skeleton-svelte';
 	import type { ActFormData } from '$lib/types/ActFormData';
@@ -36,19 +37,47 @@
 	let loadingTree = $state(false);
 	let error = $state('');
 	let selectedActId = $state<number | null>(null);
-
 	let editingQuest: QuestFormData | null = $state(null);
 	let editingEncounter: EncounterFormData | null = $state(null);
 	let editingChoice: ChoiceFormData | null = $state(null);
-
 	let showActDialog = $state(false);
 	let showPhaseDialog = $state(false);
+	let phases = $state<PhaseFormData[]>(data.phases ?? []);
+	let acts = $state<ActFormData[]>(data.acts ?? []);
+	let filteredPhases = $state<PhaseFormData[]>([]);
+
+	function updateFilteredPhases() {
+		if (Array.isArray(phases) && selectedActId != null) {
+			filteredPhases = phases.filter((p) => p.actId === selectedActId);
+		} else {
+			filteredPhases = [];
+		}
+	}
+
+	function setPhases(newPhases: PhaseFormData[]) {
+		phases = newPhases;
+		updateFilteredPhases();
+	}
+
+	function setSelectedActId(actId: number | null) {
+		selectedActId = actId;
+		updateFilteredPhases();
+	}
 
 	function clearInlineEditing() {
 		creating = false;
 		editingQuest = null;
 		editingEncounter = null;
 		editingChoice = null;
+	}
+
+	// When creating a new storyline, reset selectedActId and filteredPhases
+	function startCreatingStoryline() {
+		clearInlineEditing();
+		selectedStorylineId.set(null);
+		selectedActId = null;
+		filteredPhases = [];
+		creating = true;
 	}
 
 	// Fetch the full tree for a storyline
@@ -276,8 +305,25 @@
 		// Add act to acts array, close dialog, etc.
 		showActDialog = false;
 	}
-	function handlePhaseSave(newPhase: PhaseFormData) {
-		// Add phase to phases array, close dialog, etc.
+	async function handlePhaseSave(newPhase: PhaseFormData) {
+		if (!selectedActId) {
+			error = 'Phase must be associated with an act';
+			return;
+		}
+
+		newPhase.actId = selectedActId;
+		const res = await fetch('/api/admin/phase', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(newPhase)
+		});
+		if (res.ok) {
+			const phasesRes = await fetch('/api/admin/phase');
+			if (phasesRes.ok) {
+				const { phases: newPhases } = await phasesRes.json();
+				setPhases(newPhases);
+			}
+		}
 		showPhaseDialog = false;
 	}
 </script>
@@ -289,11 +335,7 @@
 			<h2 class="text-lg font-bold">Storylines</h2>
 			<button
 				class="btn btn-xs btn-success flex items-center gap-1"
-				onclick={() => {
-					clearInlineEditing();
-					selectedStorylineId.set(null); // Clear the selected storyline
-					creating = true;
-				}}
+				onclick={startCreatingStoryline}
 				title="Add Storyline"
 			>
 				<IconPlus size={16} />
@@ -331,11 +373,10 @@
 				<StorylineForm
 					storyline={null}
 					loading={false}
-					acts={data.acts}
-					phases={data.phases}
-					onSelectAct={(actId: number | null) => {
-						selectedActId = actId;
-					}}
+					{acts}
+					{phases}
+					{filteredPhases}
+					onSelectAct={setSelectedActId}
 					onAddAct={handleAddAct}
 					onAddPhase={handleAddPhase}
 					onSave={handleStorylineCreated}
@@ -603,6 +644,19 @@
 					{/if}
 				</div>
 			</div>
+
+			<!-- Branching Graph Visualization -->
+			<div class="my-6">
+				<StoryBranchingGraph
+					acts={data.acts}
+					phases={data.phases}
+					quests={$selectedStoryLine.quests ?? []}
+					encounters={$selectedStoryLine.quests?.flatMap((q) => q.encounters ?? []) ?? []}
+					choices={$selectedStoryLine.quests?.flatMap(
+						(q) => q.encounters?.flatMap((e) => e.choices ?? []) ?? []
+					) ?? []}
+				/>
+			</div>
 		{/if}
 	</main>
 </div>
@@ -658,7 +712,7 @@
 					updatedAt: new Date()
 				}}
 				loading={false}
-				act={data.acts.find(act => act.id == selectedActId)}
+				act={data.acts.find((act) => act.id == selectedActId)}
 				onSave={handlePhaseSave}
 				onCancel={() => (showPhaseDialog = false)}
 			/>

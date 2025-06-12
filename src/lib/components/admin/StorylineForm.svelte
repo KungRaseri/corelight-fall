@@ -9,6 +9,7 @@
 		onCancel,
 		acts = [],
 		phases = [],
+		filteredPhases = [], // Use filteredPhases prop
 		onSelectAct,
 		onAddAct,
 		onAddPhase
@@ -36,14 +37,8 @@
 	let selectedActId = $state<number | null>(null);
 	let selectedPhaseId = $state<number | null>(null);
 
-	// Filter phases based on selected act
-	const filteredPhases = $derived(
-		selectedActId ? phases.filter((p) => p.actId === selectedActId) : phases
-	);
-
 	$effect(() => {
 		if (selectedActId) {
-			console.log(selectedActId)
 			onSelectAct(selectedActId);
 		}
 	});
@@ -93,6 +88,7 @@
 					class="input input-bordered bg-surface-200-800 text-surface-900-100 w-full"
 					bind:value={storylineData.phaseId}
 					required
+					disabled={selectedActId == null}
 				>
 					<option value="" disabled selected>Select phase</option>
 					{#each filteredPhases as phase}

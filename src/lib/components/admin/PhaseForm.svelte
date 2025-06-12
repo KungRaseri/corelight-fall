@@ -1,7 +1,7 @@
 <script lang="ts">
 	const { phase, act, onSave, onCancel, loading } = $props();
 
-	let phaseData = { ...phase };
+	let phaseData = $state({ ...phase });
 
 	function handleSubmit(e: Event) {
 		e.preventDefault();
