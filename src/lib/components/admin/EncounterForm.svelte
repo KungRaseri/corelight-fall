@@ -12,6 +12,12 @@
 		description: '',
 		type: '',
 		order: 0,
+		tone: '',
+		summary: '',
+		tags: '',
+		factions: '',
+		isActive: true,
+		choices: [],
 		createdAt: new Date(),
 		updatedAt: new Date()
 	});
@@ -82,6 +88,26 @@
 					<option value={quest.id}>{quest.title}</option>
 				{/each}
 			</select>
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="tone">Tone</label>
+			<input id="tone" type="text" class="input w-full" bind:value={encounterData.tone} />
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="summary">Summary</label>
+			<textarea id="summary" class="input w-full" bind:value={encounterData.summary} rows="2"></textarea>
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="tags">Tags</label>
+			<input id="tags" type="text" class="input w-full" bind:value={encounterData.tags} placeholder="comma,separated" />
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="factions">Factions</label>
+			<input id="factions" type="text" class="input w-full" bind:value={encounterData.factions} placeholder="comma,separated" />
+		</div>
+		<div class="flex items-center gap-3">
+			<input id="isActive" type="checkbox" class="checkbox" bind:checked={encounterData.isActive} />
+			<label for="isActive" class="font-semibold">Active</label>
 		</div>
 		<div class="md:col-span-2">
 			<label class="mb-1 block font-semibold" for="description">Description</label>

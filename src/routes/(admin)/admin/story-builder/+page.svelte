@@ -579,51 +579,47 @@
 				<!-- Form Panel -->
 				<div class="w-full md:w-1/2">
 					{#if editingEncounter}
-						{#key editingEncounter?.id ?? 'new'}
-							<div class="mb-4 flex items-center gap-2 border-b pb-2">
-								{#if editingEncounter.id}
-									<span class="text-surface-500 text-xs">Editing</span>
-								{:else}
-									<span class="text-surface-500 text-xs">New</span>
-								{/if}
-								<span class="font-bold tracking-wide text-sky-500 uppercase">Encounter</span>
-								{#if editingEncounter.questId}
-									<span class="text-surface-400 text-xs"
-										>for Quest ID {editingEncounter.questId}</span
-									>
-								{/if}
-							</div>
-							<EncounterForm
-								loading={false}
-								encounter={editingEncounter}
-								quests={$selectedStoryLine.quests ?? []}
-								onSave={handleEncounterSave}
-								onCancel={() => (editingEncounter = null)}
-							/>
-						{/key}
+						<Modal
+							open
+							closeOnEscape
+							closeOnInteractOutside
+							onOpenChange={(e) => {
+								if (!e.open) {
+									editingEncounter = null;
+								}
+							}}
+						>
+							{#snippet content()}
+								<EncounterForm
+									loading={false}
+									encounter={editingEncounter}
+									quests={$selectedStoryLine.quests ?? []}
+									onSave={handleEncounterSave}
+									onCancel={() => (editingEncounter = null)}
+								/>
+							{/snippet}
+						</Modal>
 					{:else if editingChoice}
-						{#key editingChoice?.id ?? 'new'}
-							<div class="mb-4 flex items-center gap-2 border-b pb-2">
-								{#if editingChoice.id}
-									<span class="text-surface-500 text-xs">Editing</span>
-								{:else}
-									<span class="text-surface-500 text-xs">New</span>
-								{/if}
-								<span class="font-bold tracking-wide text-emerald-500 uppercase">Choice</span>
-								{#if editingChoice.encounterId}
-									<span class="text-surface-400 text-xs"
-										>for Encounter ID {editingChoice.encounterId}</span
-									>
-								{/if}
-							</div>
-							<ChoiceForm
-								loading={false}
-								choice={editingChoice}
-								encounters={$selectedStoryLine.quests?.flatMap((q) => q.encounters ?? []) ?? []}
-								onSave={handleChoiceSave}
-								onCancel={() => (editingChoice = null)}
-							/>
-						{/key}
+						<Modal
+							open
+							closeOnEscape
+							closeOnInteractOutside
+							onOpenChange={(e) => {
+								if (!e.open) {
+									editingChoice = null;
+								}
+							}}
+						>
+							{#snippet content()}
+								<ChoiceForm
+									loading={false}
+									choice={editingChoice}
+									encounters={$selectedStoryLine.quests?.flatMap((q) => q.encounters ?? []) ?? []}
+									onSave={handleChoiceSave}
+									onCancel={() => (editingChoice = null)}
+								/>
+							{/snippet}
+						</Modal>
 					{:else}
 						<div class="text-surface-400 mt-8 text-center">Select or add an item to edit.</div>
 					{/if}
