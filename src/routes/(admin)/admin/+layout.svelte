@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '@xyflow/svelte/dist/style.css';
 	import '../../../app.css';
 
 	import Sidebar from '$lib/components/admin/Sidebar.svelte';
