@@ -1,10 +1,15 @@
 <script lang="ts">
+	import type { Location } from '$lib/types/Location';
 	import { onMount } from 'svelte';
 
-	export let locations = [];
-	export let currentLocation = { name: 'Unknown', x: 0, y: 0 };
+	export let locations: Location[] = [];
+	export let currentLocation: { name: string; x: number; y: number } = {
+		name: 'Unknown',
+		x: 0,
+		y: 0
+	};
 
-	function selectLocation(location) {
+	function selectLocation(location: Location) {
 		const event = new CustomEvent('locationSelected', { detail: location, bubbles: true });
 		dispatchEvent(event);
 	}

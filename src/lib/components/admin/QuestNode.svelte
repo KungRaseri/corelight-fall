@@ -1,14 +1,14 @@
 <script lang="ts">
 	import IconFlag from '@lucide/svelte/icons/flag';
 	import IconStar from '@lucide/svelte/icons/star';
-	import { Handle } from '@xyflow/svelte';
+	import { Handle, Position } from '@xyflow/svelte';
 	export let data: any;
 </script>
 
 <div
 	class="text-surface-900-100 dark:text-surface-100-900 min-w-[120px] rounded-lg border-2 border-emerald-300 bg-gradient-to-br from-emerald-400/80 to-emerald-700/80 px-4 py-2 text-center shadow"
 >
-	<Handle type="target" position="left" />
+	<Handle type="target" position={Position.Left} />
 	<div class="flex items-center justify-center gap-2 text-lg font-bold">
 		<span>
 			{#if data.isMain}
@@ -22,5 +22,5 @@
 	{#if data.isMain}
 		<div class="text-xs font-semibold text-amber-400">Main Quest</div>
 	{/if}
-	<Handle type="source" position="right" />
+	<Handle type="source" position={Position.Right} />
 </div>

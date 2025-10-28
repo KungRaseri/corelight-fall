@@ -1,20 +1,21 @@
 <script lang="ts">
+	import type { Location } from '$lib/types/Location';
 	import MapHeader from '$lib/components/layout/MapHeader.svelte';
 	import MapDisplay from '$lib/components/gameplay/MapDisplay.svelte';
 	import LocationDetails from '$lib/components/gameplay/LocationDetails.svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 
-	let locations = [];
-	let currentLocation = { name: 'Unknown', x: 0, y: 0 };
-	let selectedLocation = null;
+	let locations: Location[] = [];
+	let currentLocation: { name: string; x: number; y: number } = { name: 'Unknown', x: 0, y: 0 };
+	let selectedLocation: Location | null = null;
 
 	onMount(() => {
 		locations = page.data?.locations || [];
 		currentLocation = page.data?.currentLocation || currentLocation;
 	});
 
-	function handleSelect(event) {
+	function handleSelect(event: CustomEvent<Location>) {
 		selectedLocation = event.detail;
 	}
 

@@ -3,12 +3,12 @@
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import { goto } from '$app/navigation';
 	import { slide } from 'svelte/transition';
-	import type { User } from '$lib/server/db/types';
+	import type { SafeUser } from '$lib/types/SafeUser';
 	import { clearUser, user } from '$lib/stores/user';
 	import LightSwitch from '../ui/LightSwitch.svelte';
 
 	let isUserMenuEnabled = $state(false);
-	let userData = $state<User | null>(null);
+	let userData = $state<SafeUser | null>(null);
 
 	$effect(() => {
 		const unsubscribe = user.subscribe((value) => {

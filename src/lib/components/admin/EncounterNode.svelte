@@ -4,14 +4,14 @@
 	import IconBookOpen from '@lucide/svelte/icons/book-open';
 	import IconPuzzle from '@lucide/svelte/icons/puzzle';
 	import IconMap from '@lucide/svelte/icons/map';
-	import { Handle } from '@xyflow/svelte';
+	import { Handle, Position } from '@xyflow/svelte';
 	export let data: any;
 </script>
 
 <div
 	class="text-surface-900-100 dark:text-surface-100-900 min-w-[120px] rounded-lg border-2 border-sky-300 bg-gradient-to-br from-sky-400/80 to-sky-700/80 px-4 py-2 text-center shadow"
 >
-	<Handle type="target" position="left" />
+	<Handle type="target" position={Position.Left} />
 	<div class="flex items-center justify-center gap-2 text-base font-bold">
 		<span>
 			{#if data.type === 'combat'}
@@ -28,5 +28,5 @@
 		</span>
 		{data.label}
 	</div>
-	<Handle type="source" position="right" />
+	<Handle type="source" position={Position.Right} />
 </div>
