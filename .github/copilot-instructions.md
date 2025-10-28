@@ -9,7 +9,6 @@ This is a SvelteKit 2.x RPG web application with:
 - **Styling**: Tailwind CSS 4.0 + Skeleton UI components
 - **Database**: PostgreSQL with Drizzle ORM
 - **Auth**: Lucia auth (custom implementation)
-- **i18n**: Paraglide (inlang)
 - **Testing**: Vitest + Playwright + Storybook
 - **Package Manager**: npm
 
@@ -94,14 +93,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Run tests before committing: `npm test`
 - Maintain test coverage for critical paths
 
-### 10. Internationalization
-
-- Messages in `messages/{locale}.json`
-- Use Paraglide for translations
-- Import from `$lib/paraglide/messages`
-- Always support both `en` and `es` locales
-
-### 11. Code Quality
+### 10. Code Quality
 
 - Run `npm run format` before committing (Prettier)
 - Run `npm run lint` to check ESLint rules
@@ -109,7 +101,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Use `npm run check` for type checking
 - Write descriptive commit messages
 
-### 12. Performance Best Practices
+### 11. Performance Best Practices
 
 - Lazy load components when appropriate
 - Use `$derived` for computed values (not functions)
