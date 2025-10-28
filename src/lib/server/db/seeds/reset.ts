@@ -1,4 +1,4 @@
-import { db } from '../index';
+import { db } from '../index.js';
 import {
 	user,
 	attribute,
@@ -20,7 +20,7 @@ import {
 	permission,
 	rolePermission,
 	character
-} from '../schema';
+} from '../schema/index.js';
 
 export async function resetDatabase() {
 	console.log('🔄 Resetting database...');

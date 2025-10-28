@@ -13,7 +13,7 @@ export const character = pgTable('character', {
 	id: serial('id').primaryKey(),
 	userId: integer('user_id')
 		.notNull()
-		.references(() => user.id),
+		.references(() => user.id, { onDelete: 'cascade' }),
 	name: text('name').notNull(),
 	appearance: text('appearance'),
 	tutorial: boolean('tutorial').default(false),

@@ -1,6 +1,8 @@
-import { db } from '../index';
+import 'dotenv/config';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 import { hash } from '@node-rs/argon2';
-import type { RolePermission } from '../types';
+import type { RolePermission } from '../types/index.js';
 import { eq } from 'drizzle-orm';
 import {
 	attribute,
@@ -15,7 +17,13 @@ import {
 	rolePermission,
 	user,
 	userRole
-} from '../schema';
+} from '../schema/index.js';
+import * as schema from '../schema/index.js';
+
+// Create database connection for seeding
+if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
+const client = postgres(process.env.DATABASE_URL);
+const db = drizzle(client, { schema });
 
 const roles = [
 	{ name: 'admin', description: 'Administrator with full access' },
@@ -41,21 +49,21 @@ const attributes = [
 		name: 'Vigor',
 		description: 'Physical endurance, health, and resistance to decay or exhaustion.',
 		category: 'primary',
-		baseValue: 10,
+		baseValue: 5,
 		scaling: 3
 	},
 	{
 		name: 'Nerve',
 		description: 'Willpower, mental resilience, and resistance to fear or corruption.',
 		category: 'primary',
-		baseValue: 7,
+		baseValue: 5,
 		scaling: 2
 	},
 	{
 		name: 'Finesse',
 		description: 'Precision, agility, and control, useful in both combat and delicate tasks.',
 		category: 'primary',
-		baseValue: 6,
+		baseValue: 5,
 		scaling: 2
 	},
 	{
@@ -76,7 +84,7 @@ const attributes = [
 		name: 'Guile',
 		description: 'Cunning, stealth, and the ability to deceive or manipulate situations.',
 		category: 'primary',
-		baseValue: 4,
+		baseValue: 5,
 		scaling: 2
 	},
 	{
@@ -248,3 +256,16 @@ export async function seedTestData() {
 		])
 		.onConflictDoNothing();
 }
+
+// Run the seed function
+seedDatabase()
+	.then(() => {
+		console.log('✅ Database seeding completed successfully');
+		client.end();
+		process.exit(0);
+	})
+	.catch((error) => {
+		console.error('❌ Database seeding failed:', error);
+		client.end();
+		process.exit(1);
+	});

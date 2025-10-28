@@ -10,12 +10,13 @@ import {
 	storyline
 } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
+import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from '../$types';
 import type { ChoiceFormData } from '$lib/types/ChoiceFormData';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
 	if (!locals.user) {
-		return { status: 401, error: new Error('Unauthorized') };
+		throw redirect(302, '/auth/login');
 	}
 
 	const characterData = (
@@ -23,7 +24,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	)[0];
 
 	if (!characterData) {
-		return { status: 302, redirect: '/onboarding' };
+		throw redirect(302, '/onboarding');
 	}
 
 	const attributes = await db
