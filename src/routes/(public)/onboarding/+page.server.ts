@@ -1,21 +1,21 @@
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
-    if (!locals.user) {
-        return { status: 401, error: new Error('Unauthorized') };
-    }
+	if (!locals.user) {
+		return { status: 401, error: new Error('Unauthorized') };
+	}
 
-    if (locals.character) {
-        return { status: 302, redirect: '/game' };
-    }
+	if (locals.character) {
+		return { status: 302, redirect: '/game' };
+	}
 
-    // Fetch attributes and factions from your API or DB
-    const [attributesRes, factionsRes] = await Promise.all([
-        fetch('/api/game/attributes'),
-        fetch('/api/game/factions')
-    ]);
-    const attributes = await attributesRes.json();
-    const factions = await factionsRes.json();
+	// Fetch attributes and factions from your API or DB
+	const [attributesRes, factionsRes] = await Promise.all([
+		fetch('/api/game/attributes'),
+		fetch('/api/game/factions')
+	]);
+	const attributes = await attributesRes.json();
+	const factions = await factionsRes.json();
 
-    return { attributes, factions };
+	return { attributes, factions };
 };

@@ -22,14 +22,19 @@ export const actions: Actions = {
 
 		// Validate input
 		if (!validateUsername(username)) {
-			return fail(400, { message: 'Username must be 3-31 characters (alphanumeric, hyphen, underscore).' });
+			return fail(400, {
+				message: 'Username must be 3-31 characters (alphanumeric, hyphen, underscore).'
+			});
 		}
 		if (!validatePassword(password)) {
 			return fail(400, { message: 'Password must be 6-255 characters.' });
 		}
 
 		// Check for existing user
-		const existingUser = await db.select().from(table.user).where(eq(table.user.username, username));
+		const existingUser = await db
+			.select()
+			.from(table.user)
+			.where(eq(table.user.username, username));
 		if (existingUser.length > 0) {
 			return fail(409, { message: 'Username already taken.' });
 		}

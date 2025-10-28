@@ -1,18 +1,18 @@
 <script lang="ts">
-    export let selectedLocation: { name: string; description: string };
+	export let selectedLocation: { name: string; description: string };
 
-    function close() {
-        const event = new CustomEvent('close', { bubbles: true });
-        dispatchEvent(event);
-    }
+	function close() {
+		const event = new CustomEvent('close', { bubbles: true });
+		dispatchEvent(event);
+	}
 </script>
 
-<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-surface-800 p-4 text-surface-100 rounded w-80">
-        <h2 class="text-xl font-bold">{selectedLocation.name}</h2>
-        <p>{selectedLocation.description}</p>
-        <div class="mt-4">
-            <button class="btn btn-primary" on:click={close}>Close</button>
-        </div>
-    </div>
+<div class="bg-opacity-50 fixed inset-0 flex items-center justify-center bg-black">
+	<div class="bg-surface-800 text-surface-100 w-80 rounded p-4">
+		<h2 class="text-xl font-bold">{selectedLocation.name}</h2>
+		<p>{selectedLocation.description}</p>
+		<div class="mt-4">
+			<button class="btn btn-primary" on:click={close}>Close</button>
+		</div>
+	</div>
 </div>

@@ -9,7 +9,7 @@
 	}
 </script>
 
-<div class="card bg-surface-200-800 text-surface-900-100 shadow-lg max-w-md mx-auto">
+<div class="card bg-surface-200-800 text-surface-900-100 mx-auto max-w-md shadow-lg">
 	<form class="space-y-6 p-6" onsubmit={handleSubmit}>
 		<h2 class="text-xl font-bold">{actData.id ? 'Edit Act' : 'New Act'}</h2>
 		<div>

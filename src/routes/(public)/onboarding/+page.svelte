@@ -83,7 +83,11 @@
 	function setAllocation(attrName: string, value: number) {
 		const capped = Math.min(
 			15,
-			Math.max(value, data.attributes.find((a) => a.name === attrName)?.baseValue ?? 0)
+			Math.max(
+				value,
+				data.attributes.find((a: { name: string; baseValue: number }) => a.name === attrName)
+					?.baseValue ?? 0
+			)
 		);
 		allocation = { ...allocation, [attrName]: capped };
 		onboardingData.update((d) => ({ ...d, attributes: allocation }));
@@ -121,7 +125,8 @@
 				<h2 class="h3 mb-2">Welcome to The Corelight Fall!</h2>
 				<p>
 					The world is fractured, and you are called to shape its fate.<br />
-					Your journey begins now. Choose your path, forge your identity, and prepare to explore a world full of mystery and adventure.
+					Your journey begins now. Choose your path, forge your identity, and prepare to explore a world
+					full of mystery and adventure.
 				</p>
 				<p>
 					<b>Ready to begin?</b>

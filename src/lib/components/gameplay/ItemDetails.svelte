@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { CharacterItemWithDetails } from '$lib/types/CharacterItemWithDetails';
+
 	export let selectedItem: CharacterItemWithDetails;
 
 	function close() {

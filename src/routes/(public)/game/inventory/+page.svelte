@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { CharacterItemWithDetails } from '$lib/types/CharacterItemWithDetails';
 	import {
 		characterItems,
 		characterEquipment,
@@ -13,6 +14,7 @@
 
 	// Handle Equip
 	async function handleEquip(itemId: number, slot: string) {
+		if (!data.character) return;
 		console.log(`Equipping item ${itemId} to slot ${slot}`);
 		const result = await equipItem(data.character.id, itemId, slot);
 
@@ -32,6 +34,7 @@
 
 	// Handle Unequip
 	async function handleUnequip(slot: string) {
+		if (!data.character) return;
 		console.log(`Unequipping item from slot ${slot}`);
 		const result = await unequipItem(data.character.id, slot);
 
@@ -77,11 +80,11 @@
 		<div>
 			<h3 class="text-xl font-semibold">Equipped Items</h3>
 			<div class="grid grid-cols-4 gap-4">
-				{#each data.inventorySlots as slot}
+				{#each data.inventorySlots ?? [] as slot}
 					<EquipmentSlot
 						{slot}
-						item={$characterEquipment[slot]}
-						onUnequip={() => handleUnequip(slot)}
+						item={$characterEquipment[slot as string]}
+						onUnequip={() => handleUnequip(slot as string)}
 					/>
 				{/each}
 			</div>

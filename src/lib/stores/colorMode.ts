@@ -1,7 +1,8 @@
 import { writable } from 'svelte/store';
 
 // Initialize with current mode from localStorage or default to 'light'
-const initialMode = typeof localStorage !== 'undefined' ? (localStorage.getItem('mode') || 'light') : 'light';
+const initialMode =
+	typeof localStorage !== 'undefined' ? localStorage.getItem('mode') || 'light' : 'light';
 
 export const colorMode = writable(initialMode);
 

@@ -1,31 +1,53 @@
-import { db } from '../index'
-import { user, attribute, region, location, faction, userRole, characterAttribute, characterAchievement, characterFacility, characterRecipe, characterFaction, characterItem, characterLocation, characterQuest, characterResource, characterStatusEffect, session, role, permission, rolePermission, character } from '../schema'
+import { db } from '../index';
+import {
+	user,
+	attribute,
+	region,
+	location,
+	faction,
+	userRole,
+	characterAttribute,
+	characterAchievement,
+	characterFacility,
+	characterRecipe,
+	characterFaction,
+	characterItem,
+	characterLocation,
+	characterQuest,
+	characterResource,
+	characterStatusEffect,
+	session,
+	role,
+	permission,
+	rolePermission,
+	character
+} from '../schema';
 
 export async function resetDatabase() {
-    console.log('🔄 Resetting database...')
-    await db.delete(characterAchievement)
-    await db.delete(characterFacility)
-    await db.delete(characterFaction)
-    await db.delete(characterItem)
-    await db.delete(characterLocation)
-    await db.delete(characterQuest)
-    await db.delete(characterRecipe)
-    await db.delete(characterResource)
-    await db.delete(characterAttribute)
-    await db.delete(characterStatusEffect)
-    await db.delete(character)
+	console.log('🔄 Resetting database...');
+	await db.delete(characterAchievement);
+	await db.delete(characterFacility);
+	await db.delete(characterFaction);
+	await db.delete(characterItem);
+	await db.delete(characterLocation);
+	await db.delete(characterQuest);
+	await db.delete(characterRecipe);
+	await db.delete(characterResource);
+	await db.delete(characterAttribute);
+	await db.delete(characterStatusEffect);
+	await db.delete(character);
 
-    await db.delete(userRole)
-    await db.delete(rolePermission)
+	await db.delete(userRole);
+	await db.delete(rolePermission);
 
-    await db.delete(permission)
-    await db.delete(role)
-    await db.delete(attribute)
-    await db.delete(region)
-    await db.delete(location)
-    await db.delete(faction)
-    await db.delete(session)
+	await db.delete(permission);
+	await db.delete(role);
+	await db.delete(attribute);
+	await db.delete(region);
+	await db.delete(location);
+	await db.delete(faction);
+	await db.delete(session);
 
-    await db.delete(user)
-    console.log('✅ Database reset.')
+	await db.delete(user);
+	console.log('✅ Database reset.');
 }

@@ -19,7 +19,8 @@
 				name={attr.name}
 				value={allocation[attr.name] ?? attr.baseValue}
 				on:input={(e) => {
-					let val = +e.target.value;
+					const target = e.target as HTMLInputElement;
+					let val = +target.value;
 					if (val > 15) val = 15;
 					if (val < attr.baseValue) val = attr.baseValue;
 					setAllocation(attr.name, val);

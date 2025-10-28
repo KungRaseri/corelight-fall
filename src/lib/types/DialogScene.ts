@@ -1,7 +1,6 @@
-import type { DialogStep } from "./DialogStep";
-
+import type { DialogStep } from './DialogStep';
 
 export type DialogScene = {
-    id: string;
-    steps: DialogStep[];
+	id: string;
+	steps: DialogStep[];
 };

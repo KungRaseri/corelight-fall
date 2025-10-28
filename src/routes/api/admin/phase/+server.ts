@@ -4,8 +4,8 @@ import { phase } from '$lib/server/db/schema/story/phase';
 
 export async function POST({ request }) {
 	const data = await request.json();
-    delete data.id;
-    
+	delete data.id;
+
 	const inserted = await db.insert(phase).values(data).returning();
 	return json({ phase: inserted[0] });
 }

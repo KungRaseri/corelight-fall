@@ -97,16 +97,19 @@
 					<div class="text-surface-800-200 mb-4 text-base">{data.currentEncounter.description}</div>
 					{#if data.availableChoices && data.availableChoices.length > 0}
 						{#if outcome && awaitingContinue}
-							<div class="mt-4 p-4 rounded bg-surface-200-800 text-surface-900-100 text-center font-semibold shadow">
+							<div
+								class="bg-surface-200-800 text-surface-900-100 mt-4 rounded p-4 text-center font-semibold shadow"
+							>
 								{outcome}
 							</div>
-							<button class="mt-4 btn btn-primary mx-auto" onclick={handleContinue}>Continue</button>
+							<button class="btn btn-primary mx-auto mt-4" onclick={handleContinue}>Continue</button
+							>
 						{:else}
 							<div class="mt-4 flex flex-col gap-2">
 								{#each data.availableChoices as choice}
 									<button
 										onclick={() => handleChoice(choice)}
-										class="bg-amber-400-600 border-amber-300-700 hover:bg-amber-500 hover:border-amber-400 text-surface-900-100 rounded border-2 px-4 py-2 font-semibold shadow transition"
+										class="bg-amber-400-600 border-amber-300-700 text-surface-900-100 rounded border-2 px-4 py-2 font-semibold shadow transition hover:border-amber-400 hover:bg-amber-500"
 									>
 										{choice.text}
 									</button>

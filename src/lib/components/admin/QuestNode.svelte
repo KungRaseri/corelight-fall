@@ -5,9 +5,11 @@
 	export let data: any;
 </script>
 
-<div class="rounded-lg shadow bg-gradient-to-br from-emerald-400/80 to-emerald-700/80 border-2 border-emerald-300 px-4 py-2 min-w-[120px] text-center text-surface-900-100 dark:text-surface-100-900">
+<div
+	class="text-surface-900-100 dark:text-surface-100-900 min-w-[120px] rounded-lg border-2 border-emerald-300 bg-gradient-to-br from-emerald-400/80 to-emerald-700/80 px-4 py-2 text-center shadow"
+>
 	<Handle type="target" position="left" />
-	<div class="font-bold text-lg flex items-center justify-center gap-2">
+	<div class="flex items-center justify-center gap-2 text-lg font-bold">
 		<span>
 			{#if data.isMain}
 				<IconStar size={18} class="text-amber-300" />
@@ -18,7 +20,7 @@
 		{data.label}
 	</div>
 	{#if data.isMain}
-		<div class="text-xs text-amber-400 font-semibold">Main Quest</div>
+		<div class="text-xs font-semibold text-amber-400">Main Quest</div>
 	{/if}
 	<Handle type="source" position="right" />
 </div>

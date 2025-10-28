@@ -35,7 +35,7 @@
 			<div class="mb-3 flex flex-wrap gap-2">
 				{#each post.tags
 					.split(',')
-					.map((t) => t.trim())
+					.map((t: string) => t.trim())
 					.filter(Boolean) as tag}
 					<a
 						href={`/blog/tag/${encodeURIComponent(tag)}`}

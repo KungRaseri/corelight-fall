@@ -53,7 +53,11 @@ export async function validateSessionToken(token: string) {
 	}
 
 	// Destructure the result using distinct names
-	const { sessionData, userData, roleData }: { sessionData: Session, userData: User, roleData: Role } = result;
+	const {
+		sessionData,
+		userData,
+		roleData
+	}: { sessionData: Session; userData: User; roleData: Role } = result;
 
 	// Check if the session is expired
 	const sessionExpired = Date.now() >= sessionData.expiresAt.getTime();
@@ -77,7 +81,6 @@ export async function validateSessionToken(token: string) {
 	// Return the session and user data
 	return { session: sessionData, user: safeUserData, role: roleData };
 }
-
 
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
 

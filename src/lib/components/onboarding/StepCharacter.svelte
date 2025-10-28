@@ -12,7 +12,7 @@
 		<input
 			class="input w-full"
 			value={name}
-			on:input={(e) => setName(e.target.value)}
+			on:input={(e) => setName((e.target as HTMLInputElement).value)}
 			required
 			maxlength="24"
 			placeholder="Your character's name"
@@ -23,7 +23,7 @@
 		<input
 			class="input w-full"
 			value={appearance}
-			on:input={(e) => setAppearance(e.target.value)}
+			on:input={(e) => setAppearance((e.target as HTMLInputElement).value)}
 			maxlength="64"
 			placeholder="Short description or keywords"
 		/>

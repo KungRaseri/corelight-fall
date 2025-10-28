@@ -9,7 +9,5 @@ export const characterResource = pgTable('character_resource', {
 	resourceId: integer('resource_id')
 		.notNull()
 		.references(() => resource.id),
-	quantity: integer('quantity')
-		.notNull()
-		.default(0)
+	quantity: integer('quantity').notNull().default(0)
 });

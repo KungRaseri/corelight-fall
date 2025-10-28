@@ -1,7 +1,9 @@
 # GitHub Copilot Instructions - Corelight Fall RPG
 
 ## Project Overview
+
 This is a SvelteKit 2.x RPG web application with:
+
 - **Framework**: SvelteKit 2.16+ with Svelte 5 (Runes mode enabled)
 - **Language**: TypeScript (strict mode)
 - **Styling**: Tailwind CSS 4.0 + Skeleton UI components
@@ -14,6 +16,7 @@ This is a SvelteKit 2.x RPG web application with:
 ## Code Standards & Best Practices
 
 ### 1. SvelteKit & Svelte 5 Runes
+
 - **ALWAYS** use Svelte 5 runes syntax (`$state`, `$derived`, `$effect`, `$props`)
 - **NEVER** use legacy stores for component state (no `writable`, `readable`, `derived`)
 - Use `$lib` alias for imports from `src/lib`
@@ -22,6 +25,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Implement proper load functions with type safety
 
 ### 2. TypeScript Standards
+
 - Enable strict mode (already configured)
 - Define types in `src/lib/types/` directory
 - Use proper type annotations for function parameters and returns
@@ -29,6 +33,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Export types alongside implementations when needed
 
 ### 3. File Organization
+
 - **Components**: `src/lib/components/{feature}/ComponentName.svelte`
 - **Types**: `src/lib/types/TypeName.ts`
 - **Stores** (global only): `src/lib/stores/storeName.ts`
@@ -38,6 +43,7 @@ This is a SvelteKit 2.x RPG web application with:
 - **Pages**: `src/routes/(group)/page-name/+page.svelte`
 
 ### 4. Component Standards
+
 - Use PascalCase for component filenames
 - Use lowercase with hyphens for route folders
 - Keep components focused and single-purpose
@@ -46,6 +52,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Props should use `$props()` rune with TypeScript interface
 
 ### 5. Database (Drizzle ORM)
+
 - Schema files in `src/lib/server/db/schema/`
 - Use barrelsby for schema exports (run `npm run generate:barrels`)
 - Always use prepared statements for queries
@@ -54,6 +61,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Types should be inferred from schema using Drizzle's typing
 
 ### 6. Authentication & Authorization
+
 - Auth logic in `src/lib/server/auth.ts`
 - Use `requireSession` util for protected routes
 - Use `requireAdmin` util for admin-only routes
@@ -61,6 +69,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Check permissions with `src/lib/utils/permissions.ts`
 
 ### 7. API Routes
+
 - Group by feature: `/api/{feature}/{action}/+server.ts`
 - Return proper HTTP status codes
 - Use `json()` helper from SvelteKit
@@ -69,6 +78,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Handle errors gracefully with try-catch
 
 ### 8. Styling
+
 - Use Tailwind CSS utility classes
 - Follow Skeleton UI theming system
 - Custom theme: `src/lib/themes/corelight-fall.css`
@@ -77,6 +87,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Use CSS variables for theme customization
 
 ### 9. Testing
+
 - Unit tests: `.spec.ts` or `.test.ts` files alongside components
 - E2E tests: `e2e/*.test.ts` (Playwright)
 - Component stories: `src/stories/*.stories.svelte` (Storybook)
@@ -84,12 +95,14 @@ This is a SvelteKit 2.x RPG web application with:
 - Maintain test coverage for critical paths
 
 ### 10. Internationalization
+
 - Messages in `messages/{locale}.json`
 - Use Paraglide for translations
 - Import from `$lib/paraglide/messages`
 - Always support both `en` and `es` locales
 
 ### 11. Code Quality
+
 - Run `npm run format` before committing (Prettier)
 - Run `npm run lint` to check ESLint rules
 - Follow ESLint configuration (no `any`, proper typing)
@@ -97,6 +110,7 @@ This is a SvelteKit 2.x RPG web application with:
 - Write descriptive commit messages
 
 ### 12. Performance Best Practices
+
 - Lazy load components when appropriate
 - Use `$derived` for computed values (not functions)
 - Avoid unnecessary reactivity
@@ -107,19 +121,21 @@ This is a SvelteKit 2.x RPG web application with:
 ## Common Patterns
 
 ### Component with Props (Svelte 5)
+
 ```svelte
 <script lang="ts">
 	interface Props {
 		title: string;
 		count?: number;
 	}
-	
+
 	let { title, count = 0 }: Props = $props();
 	let doubled = $derived(count * 2);
 </script>
 ```
 
 ### Form Action
+
 ```typescript
 // +page.server.ts
 export const actions = {
@@ -133,6 +149,7 @@ export const actions = {
 ```
 
 ### API Route
+
 ```typescript
 // +server.ts
 import { json } from '@sveltejs/kit';
@@ -151,6 +168,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 ```
 
 ## Commands Reference
+
 - `npm run dev` - Start dev server
 - `npm run build` - Production build
 - `npm run check` - Type check
@@ -163,6 +181,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 - `npm run storybook` - Start Storybook
 
 ## Critical Reminders
+
 1. **ALWAYS** use Svelte 5 runes - no legacy reactive statements
 2. **NEVER** expose sensitive data from server to client
 3. **ALWAYS** validate and sanitize user input

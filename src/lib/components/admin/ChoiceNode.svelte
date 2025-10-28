@@ -4,9 +4,11 @@
 	export let data: any;
 </script>
 
-<div class="rounded-lg shadow bg-gradient-to-br from-amber-400/80 to-amber-700/80 border-2 border-amber-300 px-4 py-2 min-w-[120px] text-center text-surface-900-100 dark:text-surface-100-900">
+<div
+	class="text-surface-900-100 dark:text-surface-100-900 min-w-[120px] rounded-lg border-2 border-amber-300 bg-gradient-to-br from-amber-400/80 to-amber-700/80 px-4 py-2 text-center shadow"
+>
 	<Handle type="target" position="left" />
-	<div class="font-semibold text-base flex items-center justify-center gap-2">
+	<div class="flex items-center justify-center gap-2 text-base font-semibold">
 		<span>
 			<IconGitBranch size={16} class="text-amber-300" />
 		</span>
