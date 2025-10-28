@@ -18,14 +18,14 @@
 			title: '',
 			slug: '',
 			summary: '',
-			date: '',
+			date: new Date(),
 			author: '',
 			markdown: '',
 			tags: '',
 			published: true,
 			coverImage: '',
-			createdAt: '',
-			updatedAt: ''
+			createdAt: new Date(),
+			updatedAt: new Date()
 		};
 		showForm = true;
 	}
@@ -62,7 +62,16 @@
 	}
 
 	onMount(async () => {
-		posts = [...posts, ...data.posts];
+		// Convert string dates to Date objects
+		posts = [
+			...posts,
+			...data.posts.map((p) => ({
+				...p,
+				date: new Date(p.date),
+				createdAt: new Date(p.createdAt),
+				updatedAt: new Date(p.updatedAt)
+			}))
+		];
 		loading = false;
 	});
 

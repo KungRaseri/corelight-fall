@@ -23,7 +23,7 @@
 							<td class="text-surface-200 px-4 py-2 text-sm">{user.id}</td>
 							<td class="text-surface-200 px-4 py-2 text-sm">{user.username}</td>
 							<td class="text-surface-200 px-4 py-2 text-sm"
-								>{new Date(user.createdAt).toLocaleDateString()}</td
+								>{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</td
 							>
 							<td class="text-surface-200 px-4 py-2 text-sm">{user.roleName ?? 'None'}</td>
 							<td class="text-surface-200 space-x-2 px-4 py-2 text-sm">

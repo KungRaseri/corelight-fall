@@ -21,7 +21,9 @@
 			text: '',
 			nextEncounterId: null,
 			outcome: '',
-			order: 0
+			order: 0,
+			createdAt: new Date(),
+			updatedAt: new Date()
 		};
 		showForm = true;
 	}
@@ -95,8 +97,8 @@
 		<div class="mb-4">
 			<span class="font-semibold">Encounter:</span>
 			<span class="ml-2">
-				{#if encounters.length}
-					{#each encounters.filter((e) => e.id === viewingChoice.encounterId) as encounter}
+				{#if encounters.length && viewingChoice}
+					{#each encounters.filter((e) => e.id === viewingChoice!.encounterId) as encounter}
 						{encounter.title}
 					{:else}
 						Unknown
@@ -109,8 +111,8 @@
 		<div class="mb-4">
 			<span class="font-semibold">Next Encounter:</span>
 			<span class="ml-2">
-				{#if encounters.length && viewingChoice.nextEncounterId}
-					{#each encounters.filter((e) => e.id === viewingChoice.nextEncounterId) as encounter}
+				{#if encounters.length && viewingChoice && viewingChoice.nextEncounterId}
+					{#each encounters.filter((e) => e.id === viewingChoice!.nextEncounterId) as encounter}
 						{encounter.title}
 					{:else}
 						None

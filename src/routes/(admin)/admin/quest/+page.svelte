@@ -18,7 +18,15 @@
 			title: '',
 			description: '',
 			order: 0,
-			isMainQuest: false
+			isMain: false,
+			tone: '',
+			goals: '',
+			summary: '',
+			tags: '',
+			factions: '',
+			isActive: true,
+			createdAt: new Date(),
+			updatedAt: new Date()
 		};
 		showForm = true;
 	}
@@ -89,7 +97,7 @@
 					<tr class="border-surface-700 hover:bg-surface-700 border-t transition">
 						<td class="px-3 py-2">{quest.title}</td>
 						<td class="px-3 py-2">{quest.storylineId}</td>
-						<td class="px-3 py-2">{quest.isMainQuest ? 'Yes' : 'No'}</td>
+						<td class="px-3 py-2">{quest.isMain ? 'Yes' : 'No'}</td>
 						<td class="px-3 py-2">{quest.order}</td>
 						<td class="px-3 py-2">{quest.description}</td>
 						<td class="flex gap-2 px-3 py-2">

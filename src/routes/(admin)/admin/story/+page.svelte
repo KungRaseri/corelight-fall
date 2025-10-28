@@ -19,7 +19,18 @@
 			id: null,
 			title: '',
 			description: '',
-			isMain: false
+			phaseId: null,
+			tone: '',
+			goals: '',
+			summary: '',
+			tags: '',
+			factions: '',
+			order: 0,
+			isMain: false,
+			isActive: true,
+			coverImage: '',
+			createdAt: new Date(),
+			updatedAt: new Date()
 		};
 		showForm = true;
 	}
@@ -75,6 +86,9 @@
 		{loading}
 		onSave={handleSave}
 		onCancel={() => (showForm = false)}
+		onSelectAct={() => {}}
+		onAddAct={() => {}}
+		onAddPhase={() => {}}
 	/>
 {:else if viewingStoryline}
 	<div class="bg-surface-800 text-surface-100 mx-auto max-w-xl space-y-6 rounded-lg p-8 shadow-lg">

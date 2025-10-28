@@ -4,7 +4,7 @@ import { user } from './user';
 
 export const userRole = pgTable('user_role', {
 	userId: integer('user_id')
-		.references(() => user.id)
+		.references(() => user.id, { onDelete: 'cascade' })
 		.notNull(),
 	roleId: integer('role_id')
 		.references(() => role.id)

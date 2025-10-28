@@ -30,6 +30,17 @@
 		console.log('Continue to next encounter!');
 	}
 
+	async function chooseStory(storylineId: number) {
+		const res = await fetch('/api/game/select-storyline', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ storylineId })
+		});
+		if (res.ok) {
+			window.location.reload();
+		}
+	}
+
 	onMount(() => {
 		if (data.character) {
 			character.set(data.character);

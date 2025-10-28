@@ -21,7 +21,14 @@
 			title: '',
 			type: 'combat',
 			order: 0,
-			description: ''
+			description: '',
+			summary: '',
+			tags: '',
+			tone: '',
+			factions: '',
+			isActive: true,
+			createdAt: new Date(),
+			updatedAt: new Date()
 		};
 		showForm = true;
 	}

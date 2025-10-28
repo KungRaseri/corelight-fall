@@ -13,7 +13,6 @@ import {
 	characterFaction,
 	characterItem,
 	characterLocation,
-	characterQuest,
 	characterResource,
 	characterStatusEffect,
 	session,
@@ -30,7 +29,6 @@ export async function resetDatabase() {
 	await db.delete(characterFaction);
 	await db.delete(characterItem);
 	await db.delete(characterLocation);
-	await db.delete(characterQuest);
 	await db.delete(characterRecipe);
 	await db.delete(characterResource);
 	await db.delete(characterAttribute);
