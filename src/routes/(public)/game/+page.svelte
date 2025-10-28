@@ -13,10 +13,21 @@
 	let showLog = $state(false);
 
 	const { data } = $props();
+	let outcome = $state<string | null>(null);
+	let awaitingContinue = $state(false);
 
 	function handleChoice(choice: ChoiceFormData) {
-		// Handle the player's choice here
-		console.log('Player chose:', choice);
+		// Simulate showing the outcome for the selected choice
+		outcome = choice.outcome ?? 'You made a choice.';
+		awaitingContinue = true;
+		// In a real app, you would also update the quest/encounter state here
+	}
+
+	function handleContinue() {
+		outcome = null;
+		awaitingContinue = false;
+		// In a real app, fetch the next encounter/quest here
+		console.log('Continue to next encounter!');
 	}
 
 	onMount(() => {
@@ -65,23 +76,51 @@
 					<ul class="space-y-2">
 						{#each data.storylines ?? [] as s}
 							<li>
-								<button class="btn btn-primary w-full" onclick={chooseStory(s.id)}>
+								<button class="btn btn-primary w-full" onclick={() => chooseStory(s.id)}>
 									{s.title}
 								</button>
 							</li>
 						{/each}
 					</ul>
 				</div>
+			{:else if data.currentQuest && data.currentEncounter}
+				<div
+					class="bg-surface-100-900 border-surface-200-800 mx-auto max-w-xl rounded-xl border p-6 shadow"
+				>
+					<div class="text-surface-500-400 mb-2 text-xs tracking-wider uppercase">Quest</div>
+					<div class="text-surface-900-100 mb-1 text-2xl font-bold">{data.currentQuest.title}</div>
+					<div class="text-surface-800-200 mb-4 text-base">{data.currentQuest.description}</div>
+					<div class="text-surface-500-400 mb-2 text-xs tracking-wider uppercase">Encounter</div>
+					<div class="text-surface-900-100 mb-2 text-lg font-semibold">
+						{data.currentEncounter.title}
+					</div>
+					<div class="text-surface-800-200 mb-4 text-base">{data.currentEncounter.description}</div>
+					{#if data.availableChoices && data.availableChoices.length > 0}
+						{#if outcome && awaitingContinue}
+							<div class="mt-4 p-4 rounded bg-surface-200-800 text-surface-900-100 text-center font-semibold shadow">
+								{outcome}
+							</div>
+							<button class="mt-4 btn btn-primary mx-auto" onclick={handleContinue}>Continue</button>
+						{:else}
+							<div class="mt-4 flex flex-col gap-2">
+								{#each data.availableChoices as choice}
+									<button
+										onclick={() => handleChoice(choice)}
+										class="bg-amber-400-600 border-amber-300-700 hover:bg-amber-500 hover:border-amber-400 text-surface-900-100 rounded border-2 px-4 py-2 font-semibold shadow transition"
+									>
+										{choice.text}
+									</button>
+								{/each}
+							</div>
+						{/if}
+					{:else}
+						<div class="text-green-700-300 mt-4 font-semibold">Encounter complete!</div>
+					{/if}
+				</div>
 			{:else}
-				<PlayerStoryView
-					storyline={data.currentStoryline}
-					currentQuest={data.currentQuest}
-					currentEncounter={data.currentEncounter}
-					availableChoices={data.availableChoices}
-					onChoose={handleChoice}
-				/>
+				<div class="text-surface-500-400 text-center text-lg">No active quest.</div>
 			{/if}
-			</div>
+		</div>
 		<!-- Add scene actions, choices, or visuals here -->
 	</div>
 

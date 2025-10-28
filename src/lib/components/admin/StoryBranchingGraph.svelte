@@ -6,6 +6,7 @@
 	import QuestNode from './QuestNode.svelte';
 	import EncounterNode from './EncounterNode.svelte';
 	import ChoiceNode from './ChoiceNode.svelte';
+	import ColoredEdge from './ColoredEdge.svelte';
 
 	const { acts, phases, quests, encounters, choices } = $props();
 
@@ -17,6 +18,9 @@
 		quest: QuestNode,
 		encounter: EncounterNode,
 		choice: ChoiceNode
+	};
+	const edgeTypes = {
+		colored: ColoredEdge as any // workaround for SvelteFlow/xyflow type mismatch in runes mode
 	};
 
 	$effect(() => {
@@ -68,9 +72,21 @@
 
 			// --- Second pass: build all edges, only if both nodes exist ---
 			const newEdges: any[] = [];
+			function getEdgeColor(sourceId: string) {
+				if (sourceId.startsWith('quest-')) return '#34d399'; // emerald-400
+				if (sourceId.startsWith('encounter-')) return '#38bdf8'; // sky-400
+				if (sourceId.startsWith('choice-')) return '#fbbf24'; // amber-400
+				return '#a3a3a3'; // neutral fallback
+			}
 			function safePushEdge(edge: any, sourceId: string, targetId: string) {
 				if (nodeIds.has(sourceId) && nodeIds.has(targetId)) {
-					newEdges.push({ ...edge, sourceHandle: null, targetHandle: null });
+					newEdges.push({
+						...edge,
+						type: 'colored',
+						sourceHandle: null,
+						targetHandle: null,
+						style: { stroke: getEdgeColor(sourceId), strokeWidth: 2 }
+					});
 				} else {
 					console.warn(
 						`[StoryBranchingGraph] Skipping edge ${edge.id} because source or target node is missing. Source: ${sourceId}, Target: ${targetId}`
@@ -88,8 +104,7 @@
 								{
 									id: `edge-quest-${q.id}-encounter-${e.id}`,
 									source: questNodeId,
-									target: encounterNodeId,
-									type: 'default'
+									target: encounterNodeId
 								},
 								questNodeId,
 								encounterNodeId
@@ -103,8 +118,7 @@
 								{
 									id: `edge-encounter-${prev.id}-to-${e.id}`,
 									source: prevId,
-									target: encounterNodeId,
-									type: 'default'
+									target: encounterNodeId
 								},
 								prevId,
 								encounterNodeId
@@ -119,8 +133,7 @@
 									{
 										id: `edge-encounter-${e.id}-choice-${c.id}`,
 										source: encounterNodeId,
-										target: choiceNodeId,
-										type: 'default'
+										target: choiceNodeId
 									},
 									encounterNodeId,
 									choiceNodeId
@@ -132,8 +145,7 @@
 										{
 											id: `edge-choice-${c.id}-to-encounter-${c.nextEncounterId}`,
 											source: choiceNodeId,
-											target: nextEncounterNodeId,
-											type: 'default'
+											target: nextEncounterNodeId
 										},
 										choiceNodeId,
 										nextEncounterNodeId
@@ -152,8 +164,7 @@
 					{
 						id: `edge-quest-${sortedQuests[i].id}-to-${sortedQuests[i + 1].id}`,
 						source: sourceId,
-						target: targetId,
-						type: 'default'
+						target: targetId
 					},
 					sourceId,
 					targetId
@@ -174,7 +185,15 @@
 </script>
 
 <div class="bg-surface-200-800 h-[600px] w-full rounded border">
-	<SvelteFlow {colorMode} {nodes} {edges} {nodeTypes} fitView style="height:100%;width:100%">
+	<SvelteFlow
+		{colorMode}
+		{nodes}
+		{edges}
+		{nodeTypes}
+		{edgeTypes}
+		fitView
+		style="height:100%;width:100%"
+	>
 		<Background />
 		<Controls />
 	</SvelteFlow>
