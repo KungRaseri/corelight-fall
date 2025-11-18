@@ -15,8 +15,8 @@
 		currentLocation = page.data?.currentLocation || currentLocation;
 	});
 
-	function handleSelect(event: CustomEvent<Location>) {
-		selectedLocation = event.detail;
+	function handleSelect(location: Location) {
+		selectedLocation = location;
 	}
 
 	function closeDetails() {
@@ -26,9 +26,9 @@
 
 <div class="p-6">
 	<MapHeader {currentLocation} />
-	<MapDisplay {locations} {currentLocation} on:locationSelected={handleSelect} />
+	<MapDisplay {locations} {currentLocation} onlocationselected={handleSelect} />
 	{#if selectedLocation}
-		<LocationDetails {selectedLocation} on:close={closeDetails} />
+		<LocationDetails {selectedLocation} onclose={closeDetails} />
 	{/if}
 </div>
 

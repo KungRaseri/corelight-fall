@@ -1,13 +1,13 @@
 <script lang="ts">
 	interface Props {
 		selectedLocation: { name: string; description?: string | null };
+		onclose?: () => void;
 	}
 
-	let { selectedLocation }: Props = $props();
+	let { selectedLocation, onclose }: Props = $props();
 
 	function close() {
-		const event = new CustomEvent('close', { bubbles: true });
-		dispatchEvent(event);
+		onclose?.();
 	}
 </script>
 

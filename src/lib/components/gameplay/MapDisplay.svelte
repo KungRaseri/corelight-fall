@@ -5,13 +5,13 @@
 	interface Props {
 		locations: Location[];
 		currentLocation: { name: string; x: number; y: number };
+		onlocationselected?: (location: Location) => void;
 	}
 
-	let { locations = [], currentLocation = { name: 'Unknown', x: 0, y: 0 } }: Props = $props();
+	let { locations = [], currentLocation = { name: 'Unknown', x: 0, y: 0 }, onlocationselected }: Props = $props();
 
 	function selectLocation(location: Location) {
-		const event = new CustomEvent('locationSelected', { detail: location, bubbles: true });
-		dispatchEvent(event);
+		onlocationselected?.(location);
 	}
 
 	onMount(() => {
