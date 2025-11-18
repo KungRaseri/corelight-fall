@@ -13,65 +13,147 @@
 
 /* Button Styling following Skeleton and Tailwind conventions */
 .btn {
-	@apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 font-medium transition-all;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-2);
+	border-radius: var(--radius-md);
+	padding: var(--spacing-2) var(--spacing-4);
+	font-weight: 500;
+	transition: all 0.2s;
 }
 
 .btn-primary {
-	@apply bg-primary-600 hover:bg-primary-700 dark:bg-primary-400 dark:hover:bg-primary-500 focus:ring-primary-500 dark:focus:ring-primary-300 text-white focus:ring;
+	background-color: var(--color-primary-600);
+	color: white;
+	&:hover {
+		background-color: var(--color-primary-700);
+	}
+	&:focus {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--color-primary-500);
+	}
+	@variant dark {
+		background-color: var(--color-primary-400);
+		&:hover {
+			background-color: var(--color-primary-500);
+		}
+		&:focus {
+			box-shadow: 0 0 0 3px var(--color-primary-300);
+		}
+	}
 }
 
 .btn-secondary {
-	@apply bg-secondary-600 hover:bg-secondary-700 dark:bg-secondary-400 dark:hover:bg-secondary-500 focus:ring-secondary-500 dark:focus:ring-secondary-300 text-white focus:ring;
+	background-color: var(--color-secondary-600);
+	color: white;
+	&:hover {
+		background-color: var(--color-secondary-700);
+	}
+	&:focus {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--color-secondary-500);
+	}
+	@variant dark {
+		background-color: var(--color-secondary-400);
+		&:hover {
+			background-color: var(--color-secondary-500);
+		}
+		&:focus {
+			box-shadow: 0 0 0 3px var(--color-secondary-300);
+		}
+	}
 }
 
 .btn-outline {
-	@apply border-surface-700 text-surface-900 hover:bg-surface-200 dark:border-surface-300 dark:text-surface-100 dark:hover:bg-surface-700 border;
+	border: 1px solid var(--color-surface-700);
+	color: var(--color-surface-900);
+	&:hover {
+		background-color: var(--color-surface-200);
+	}
+	@variant dark {
+		border-color: var(--color-surface-300);
+		color: var(--color-surface-100);
+		&:hover {
+			background-color: var(--color-surface-700);
+		}
+	}
 }
 
 .btn:hover {
-	@apply transform shadow-md hover:scale-105;
+	transform: scale(1.05);
+	box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 .btn:focus {
-	@apply ring-2 ring-offset-2 outline-none;
+	outline: none;
+	box-shadow: 0 0 0 2px var(--color-surface-50), 0 0 0 4px var(--color-primary-500);
 }
 
 .btn:active {
-	@apply scale-95;
+	transform: scale(0.95);
 }
 
 .btn:disabled {
-	@apply cursor-not-allowed opacity-50;
+	cursor: not-allowed;
+	opacity: 0.5;
 }
 
 /* Additional Utility Classes */
 .btn-sm {
-	@apply px-3 py-1 text-sm;
+	padding: var(--spacing-1) var(--spacing-3);
+	font-size: 0.875rem;
 }
 
 .btn-lg {
-	@apply px-5 py-3 text-lg;
+	padding: var(--spacing-3) var(--spacing-5);
+	font-size: 1.125rem;
 }
 
 /* Enhanced Input Styling */
 .input {
-	@apply border-surface-600 text-surface-900 dark:text-surface-100 w-full rounded-md border px-3 py-2 text-base outline-none;
+	width: 100%;
+	border-radius: var(--radius-md);
+	border: 1px solid var(--color-surface-600);
+	padding: var(--spacing-2) var(--spacing-3);
+	font-size: 1rem;
+	outline: none;
+	background-color: var(--color-surface-50);
+	color: var(--color-surface-900);
+	@variant dark {
+		background-color: var(--color-surface-800);
+		color: var(--color-surface-100);
+	}
 }
 
 .input-primary {
-	@apply bg-surface-50 dark:bg-surface-800 border-surface-400 dark:border-surface-600;
+	background-color: var(--color-surface-50);
+	border-color: var(--color-surface-400);
+	@variant dark {
+		background-color: var(--color-surface-800);
+		border-color: var(--color-surface-600);
+	}
 }
 
 .input:focus,
 .input-primary:focus {
-	@apply ring-primary-500 dark:ring-primary-400 ring-2;
+	box-shadow: 0 0 0 3px var(--color-primary-500);
+	@variant dark {
+		box-shadow: 0 0 0 3px var(--color-primary-400);
+	}
 }
 
 .input:hover,
 .input-primary:hover {
-	@apply border-surface-500 dark:border-surface-400;
+	border-color: var(--color-surface-500);
+	@variant dark {
+		border-color: var(--color-surface-400);
+	}
 }
 
 .input::placeholder {
-	@apply text-surface-500 dark:text-surface-300;
+	color: var(--color-surface-500);
+	@variant dark {
+		color: var(--color-surface-300);
+	}
 }

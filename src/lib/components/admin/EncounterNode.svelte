@@ -5,11 +5,16 @@
 	import IconPuzzle from '@lucide/svelte/icons/puzzle';
 	import IconMap from '@lucide/svelte/icons/map';
 	import { Handle, Position } from '@xyflow/svelte';
-	export let data: any;
+	
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <div
-	class="text-surface-900-100 dark:text-surface-100-900 min-w-[120px] rounded-lg border-2 border-sky-300 bg-gradient-to-br from-sky-400/80 to-sky-700/80 px-4 py-2 text-center shadow"
+	class="text-surface-900 dark:text-surface-100 min-w-[120px] rounded-lg border-2 border-sky-300 bg-gradient-to-br from-sky-400/80 to-sky-700/80 px-4 py-2 text-center shadow"
 >
 	<Handle type="target" position={Position.Left} />
 	<div class="flex items-center justify-center gap-2 text-base font-bold">

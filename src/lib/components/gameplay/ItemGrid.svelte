@@ -1,7 +1,11 @@
 <script lang="ts">
 	import type { CharacterItemWithDetails } from '$lib/types/CharacterItemWithDetails';
 
-	export let inventory: CharacterItemWithDetails[];
+	interface Props {
+		inventory: CharacterItemWithDetails[];
+	}
+
+	let { inventory }: Props = $props();
 
 	function selectItem(item: CharacterItemWithDetails) {
 		const event = new CustomEvent('itemSelected', { detail: item, bubbles: true });
@@ -19,7 +23,7 @@
 	{#each inventory as item}
 		<button
 			type="button"
-			class="bg-surface-700 hover:bg-surface-600 cursor-pointer rounded p-3"
+			class="bg-surface-700 dark:bg-surface-800 hover:bg-surface-600 dark:hover:bg-surface-700 cursor-pointer rounded p-3"
 			aria-label={`Select ${item.name}`}
 			onclick={() => selectItem(item)}
 			onkeydown={(event) => handleKey(event, item)}

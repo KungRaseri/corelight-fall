@@ -2,11 +2,16 @@
 	import IconFlag from '@lucide/svelte/icons/flag';
 	import IconStar from '@lucide/svelte/icons/star';
 	import { Handle, Position } from '@xyflow/svelte';
-	export let data: any;
+	
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <div
-	class="text-surface-900-100 dark:text-surface-100-900 min-w-[120px] rounded-lg border-2 border-emerald-300 bg-gradient-to-br from-emerald-400/80 to-emerald-700/80 px-4 py-2 text-center shadow"
+	class="text-surface-900 dark:text-surface-100 min-w-[120px] rounded-lg border-2 border-emerald-300 bg-gradient-to-br from-emerald-400/80 to-emerald-700/80 px-4 py-2 text-center shadow"
 >
 	<Handle type="target" position={Position.Left} />
 	<div class="flex items-center justify-center gap-2 text-lg font-bold">
