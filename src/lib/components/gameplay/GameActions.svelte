@@ -13,9 +13,9 @@
 </script>
 
 <div class="bg-surface-800 text-surface-100 flex justify-center gap-4 p-4 shadow-md">
-	<button class="btn preset-filled-primary" onclick={explore}>Explore</button>
+	<button class="btn preset-glass-primary" onclick={explore}>Explore</button>
 	<button class="btn btn-danger" onclick={fight}>Fight</button>
-	<button class="btn preset-tonal-secondary" onclick={useItem}>Use Item</button>
+	<button class="btn preset-glass-secondary" onclick={useItem}>Use Item</button>
 </div>
 
 

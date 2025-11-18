@@ -21,7 +21,7 @@
 
 		<!-- Learn More Button -->
 		<div class="mt-8 text-center">
-			<a href="/about" class="btn preset-filled-primary flex items-center gap-2 mx-auto w-fit">
+			<a href="/about" class="btn preset-glass-primary flex items-center gap-2 mx-auto w-fit">
 				<BookOpen class="size-5" />
 				<span>Learn More</span>
 			</a>

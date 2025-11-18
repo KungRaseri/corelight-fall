@@ -76,7 +76,7 @@
 						<option value={act.id}>{act.title}</option>
 					{/each}
 				</select>
-				<button type="button" class="btn preset-filled-primary px-1 py-0.5 text-xs" onclick={onAddAct}>+ Act</button>
+				<button type="button" class="btn preset-glass-primary px-1 py-0.5 text-xs" onclick={onAddAct}>+ Act</button>
 			</div>
 		</div>
 		<!-- Phase selection and add -->
@@ -97,7 +97,7 @@
 				</select>
 				<button
 					type="button"
-					class="btn preset-filled-primary px-1 py-0.5 text-xs"
+					class="btn preset-glass-primary px-1 py-0.5 text-xs"
 					disabled={selectedActId == null}
 					onclick={onAddPhase}
 				>
@@ -186,10 +186,10 @@
 		</div>
 	</div>
 	<div class="mt-4 flex gap-4">
-		<button class="btn preset-filled-primary" type="submit" disabled={loading}>
+		<button class="btn preset-glass-primary" type="submit" disabled={loading}>
 			{loading ? 'Saving...' : 'Save Storyline'}
 		</button>
-		<button class="btn preset-tonal-secondary" type="button" onclick={onCancel}>Cancel</button>
+		<button class="btn preset-glass-secondary" type="button" onclick={onCancel}>Cancel</button>
 	</div>
 </form>
 

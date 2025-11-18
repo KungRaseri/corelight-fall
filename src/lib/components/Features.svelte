@@ -18,8 +18,8 @@
 
 		<!-- Feature List -->
 		<div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-			<div class="card preset-tonal-surface p-6 flex flex-col items-center space-y-4 text-center hover:preset-outlined-primary transition-all duration-300">
-				<div class="preset-filled-primary p-4 rounded-full">
+			<div class="card preset-glass-surface p-6 flex flex-col items-center space-y-4 text-center hover:preset-glass-primary transition-all duration-300">
+				<div class="preset-glass-primary p-4 rounded-full">
 					<Map class="size-8" />
 				</div>
 				<h3 class="text-xl font-semibold font-heading">Story-Driven Exploration</h3>
@@ -28,8 +28,8 @@
 					of the Corelight.
 				</p>
 			</div>
-			<div class="card preset-tonal-surface p-6 flex flex-col items-center space-y-4 text-center hover:preset-outlined-primary transition-all duration-300">
-				<div class="preset-filled-primary p-4 rounded-full">
+			<div class="card preset-glass-surface p-6 flex flex-col items-center space-y-4 text-center hover:preset-glass-primary transition-all duration-300">
+				<div class="preset-glass-primary p-4 rounded-full">
 					<Swords class="size-8" />
 				</div>
 				<h3 class="text-xl font-semibold font-heading">Dynamic Combat</h3>
@@ -37,8 +37,8 @@
 					Battle corrupted entities using a blend of arcane and technological abilities.
 				</p>
 			</div>
-			<div class="card preset-tonal-surface p-6 flex flex-col items-center space-y-4 text-center hover:preset-outlined-primary transition-all duration-300">
-				<div class="preset-filled-primary p-4 rounded-full">
+			<div class="card preset-glass-surface p-6 flex flex-col items-center space-y-4 text-center hover:preset-glass-primary transition-all duration-300">
+				<div class="preset-glass-primary p-4 rounded-full">
 					<Settings class="size-8" />
 				</div>
 				<h3 class="text-xl font-semibold font-heading">Resource Management</h3>
@@ -46,8 +46,8 @@
 					Gather relics, craft items, and manage resources to survive.
 				</p>
 			</div>
-			<div class="card preset-tonal-surface p-6 flex flex-col items-center space-y-4 text-center hover:preset-outlined-primary transition-all duration-300">
-				<div class="preset-filled-primary p-4 rounded-full">
+			<div class="card preset-glass-surface p-6 flex flex-col items-center space-y-4 text-center hover:preset-glass-primary transition-all duration-300">
+				<div class="preset-glass-primary p-4 rounded-full">
 					<Users class="size-8" />
 				</div>
 				<h3 class="text-xl font-semibold font-heading">Faction Alignment</h3>
@@ -59,7 +59,7 @@
 
 		<!-- Learn More Button -->
 		<div class="mt-12 text-center">
-			<a href="/features" class="btn preset-filled-primary flex items-center gap-2 mx-auto w-fit">
+			<a href="/features" class="btn preset-glass-primary flex items-center gap-2 mx-auto w-fit">
 				<span>Explore All Features</span>
 				<ArrowRight class="size-5" />
 			</a>

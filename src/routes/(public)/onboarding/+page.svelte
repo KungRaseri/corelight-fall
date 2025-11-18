@@ -106,8 +106,8 @@
 				{#each steps as step, i}
 					<button
 						class="btn-icon btn-icon rounded-full {isCurrentStep(i)
-							? 'preset-filled-primary'
-							: 'preset-filled-surface'}"
+							? 'preset-glass-primary'
+							: 'preset-glass-surface'}"
 						onclick={() => setStep(i)}
 						title={step.label}
 						type="button"
@@ -208,7 +208,7 @@
 		<nav class="flex items-center justify-between gap-4">
 			<button
 				type="button"
-				class="btn preset-tonal hover:preset-filled"
+				class="btn preset-glass hover:preset-glass-primary"
 				onclick={prevStep}
 				disabled={currentStep === 0}
 			>
@@ -217,7 +217,7 @@
 			</button>
 			<button
 				type="button"
-				class="btn preset-tonal hover:preset-filled"
+				class="btn preset-glass hover:preset-glass-primary"
 				onclick={async () => {
 					const forms = Array.from(document.querySelectorAll('form'));
 					const form = forms.find((f) => f.offsetParent !== null);

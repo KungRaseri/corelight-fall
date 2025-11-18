@@ -45,12 +45,12 @@
 	<div class="mt-10">
 		<h2 class="mb-4 text-xl font-bold">Quick Links</h2>
 		<div class="flex flex-wrap gap-4">
-			<a href="/admin/blog" class="btn preset-filled-primary">Manage Blog</a>
-			<a href="/admin/story" class="btn preset-filled-primary">Manage Story</a>
-			<a href="/admin/quest" class="btn preset-filled-primary">Manage Quests</a>
-			<a href="/admin/encounter" class="btn preset-filled-primary">Manage Encounters</a>
-			<a href="/admin/user" class="btn preset-filled-primary">Manage Users</a>
-			<a href="/admin/settings" class="btn preset-filled-primary">Settings</a>
+			<a href="/admin/blog" class="btn preset-glass-primary">Manage Blog</a>
+			<a href="/admin/story" class="btn preset-glass-primary">Manage Story</a>
+			<a href="/admin/quest" class="btn preset-glass-primary">Manage Quests</a>
+			<a href="/admin/encounter" class="btn preset-glass-primary">Manage Encounters</a>
+			<a href="/admin/user" class="btn preset-glass-primary">Manage Users</a>
+			<a href="/admin/settings" class="btn preset-glass-primary">Settings</a>
 		</div>
 	</div>
 

@@ -1,15 +1,14 @@
 @import 'tailwindcss';
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton/themes/nouveau';
+/* Import custom theme */
+@import './lib/themes/corelight-fall.css';
 
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 
 /* Custom dark mode variant for manual control */
 @custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
-
-/* Import custom theme */
-@import './lib/themes/corelight-fall.css';
 
 html,
 body {

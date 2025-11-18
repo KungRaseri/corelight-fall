@@ -15,21 +15,21 @@
 		</p>
 		<div class="mt-8 flex justify-center gap-4 flex-wrap">
 			{#if !page.data?.user}
-				<a href="/auth/login" class="btn preset-filled-primary flex items-center gap-2">
+				<a href="/auth/login" class="btn preset-glass-primary flex items-center gap-2">
 					<LogIn class="size-5" />
 					<span>Login</span>
 				</a>
-				<a href="/auth/register" class="btn preset-tonal-secondary flex items-center gap-2">
+				<a href="/auth/register" class="btn preset-glass-secondary flex items-center gap-2">
 					<UserPlus class="size-5" />
 					<span>Register</span>
 				</a>
 			{:else}
-				<a href="/game" class="btn preset-filled-primary flex items-center gap-2">
+				<a href="/game" class="btn preset-glass-primary flex items-center gap-2">
 					<PlayCircle class="size-5" />
 					<span>Play Now</span>
 				</a>
 			{/if}
-			<a href="/about" class="btn preset-outlined-primary flex items-center gap-2">
+			<a href="/about" class="btn preset-glass-primary flex items-center gap-2">
 				<Info class="size-5" />
 				<span>Learn More</span>
 			</a>

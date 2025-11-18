@@ -52,7 +52,7 @@
 		{#if displayed === text && choices.length > 0}
 			<div class="mt-4 flex flex-col gap-2">
 				{#each choices as choice}
-					<button class="btn preset-tonal w-full" onclick={() => onChoice(choice.value)}>
+					<button class="btn preset-glass w-full" onclick={() => onChoice(choice.value)}>
 						{choice.label}
 					</button>
 				{/each}

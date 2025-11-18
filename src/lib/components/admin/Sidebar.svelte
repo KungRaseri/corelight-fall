@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Navigation } from '@skeletonlabs/skeleton-svelte';
 	import IconDashboard from 'lucide-svelte/icons/layout-dashboard';
 	import IconUsers from 'lucide-svelte/icons/users';
 	import IconStats from 'lucide-svelte/icons/bar-chart';
@@ -11,53 +10,65 @@
 	import IconBoxes from 'lucide-svelte/icons/boxes';
 </script>
 
-<div class="bg-surface-900 h-full w-60">
-	<Navigation expanded={true}>
-		{#snippet header()}
-			<Navigation.Tile labelExpanded="Admin Dashboard" href="/admin">
-				<IconDashboard />
-			</Navigation.Tile>
-		{/snippet}
-		{#snippet tiles()}
-			<div class="w-full">
-				<span class="px-2 text-2xl"> Content </span>
-				<hr class="border-surface-950-50 w-3/4" />
-			</div>
-			<Navigation.Tile labelExpanded="Blog" href="/admin/blog">
-				<IconNotebookPen />
-			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Story Builder" href="/admin/story-builder">
-				<IconBookOpen />
-			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Items" href="/admin/item">
-				<IconBoxes />
-			</Navigation.Tile>
-			<div class="w-full">
-				<span class="px-2 text-2xl"> Management </span>
-				<hr class="border-surface-950-50 w-3/4" />
-			</div>
-			<Navigation.Tile labelExpanded="Users" href="/admin/user">
-				<IconUsers />
-			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Stats" href="/admin/stats">
-				<IconStats />
-			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Logs" href="/admin/log">
-				<IconLogs />
-			</Navigation.Tile>
-			<div class="w-full">
-				<span class="px-2 text-2xl"> System </span>
-				<hr class="border-surface-950-50 w-3/4" />
-			</div>
-			<Navigation.Tile labelExpanded="Settings" href="/admin/settings">
-				<IconSettings />
-			</Navigation.Tile>
-			<Navigation.Tile labelExpanded="Seed Data" href="/admin/database">
-				<IconSeed />
-			</Navigation.Tile>
-		{/snippet}
-	</Navigation>
-</div>
+<nav class="bg-surface-900 h-full w-60 flex flex-col">
+	<!-- Header -->
+	<div class="p-4 border-b border-surface-700">
+		<a href="/admin" class="flex items-center gap-3 hover:bg-surface-800 rounded-lg p-2 transition-colors">
+			<IconDashboard class="size-5" />
+			<span class="font-semibold">Admin Dashboard</span>
+		</a>
+	</div>
+
+	<!-- Navigation Links -->
+	<div class="flex-1 overflow-y-auto p-2">
+		<!-- Content Section -->
+		<div class="mb-4">
+			<div class="px-2 py-1 text-xs font-semibold text-surface-400 uppercase tracking-wider">Content</div>
+			<a href="/admin/blog" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+				<IconNotebookPen class="size-5" />
+				<span>Blog</span>
+			</a>
+			<a href="/admin/story-builder" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+				<IconBookOpen class="size-5" />
+				<span>Story Builder</span>
+			</a>
+			<a href="/admin/item" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+				<IconBoxes class="size-5" />
+				<span>Items</span>
+			</a>
+		</div>
+
+		<!-- Management Section -->
+		<div class="mb-4">
+			<div class="px-2 py-1 text-xs font-semibold text-surface-400 uppercase tracking-wider">Management</div>
+			<a href="/admin/user" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+				<IconUsers class="size-5" />
+				<span>Users</span>
+			</a>
+			<a href="/admin/stats" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+				<IconStats class="size-5" />
+				<span>Stats</span>
+			</a>
+			<a href="/admin/log" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+				<IconLogs class="size-5" />
+				<span>Logs</span>
+			</a>
+		</div>
+
+		<!-- System Section -->
+		<div>
+			<div class="px-2 py-1 text-xs font-semibold text-surface-400 uppercase tracking-wider">System</div>
+			<a href="/admin/settings" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+				<IconSettings class="size-5" />
+				<span>Settings</span>
+			</a>
+			<a href="/admin/database" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+				<IconSeed class="size-5" />
+				<span>Seed Data</span>
+			</a>
+		</div>
+	</div>
+</nav>
 
 
 

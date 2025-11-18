@@ -104,9 +104,9 @@
 			<div class="ml-2 whitespace-pre-line">{viewingEncounter.description}</div>
 		</div>
 		<div class="mt-6 flex gap-4">
-			<button class="btn preset-tonal-secondary" onclick={() => (viewingEncounter = null)}>Go Back</button>
+			<button class="btn preset-glass-secondary" onclick={() => (viewingEncounter = null)}>Go Back</button>
 			<button
-				class="btn preset-filled-primary"
+				class="btn preset-glass-primary"
 				onclick={() => {
 					editingEncounter = viewingEncounter;
 					showForm = true;
@@ -117,7 +117,7 @@
 	</div>
 {:else}
 	<h1 class="mb-4 text-2xl font-bold">Encounters</h1>
-	<button class="btn preset-filled-primary mb-4" onclick={addEncounter}>Add New Encounter</button>
+	<button class="btn preset-glass-primary mb-4" onclick={addEncounter}>Add New Encounter</button>
 	{#if loading}
 		<p>Loading...</p>
 	{:else}
@@ -137,10 +137,10 @@
 						<td class="px-3 py-2">{encounter.type}</td>
 						<td class="px-3 py-2">{encounter.order}</td>
 						<td class="flex gap-2 px-3 py-2">
-							<button class="btn preset-filled-primary px-1 py-0.5 text-xs" onclick={() => editEncounter(encounter)}
+							<button class="btn preset-glass-primary px-1 py-0.5 text-xs" onclick={() => editEncounter(encounter)}
 								>Edit</button
 							>
-							<button class="btn preset-tonal-secondary px-1 py-0.5 text-xs" onclick={() => viewEncounter(encounter)}
+							<button class="btn preset-glass-secondary px-1 py-0.5 text-xs" onclick={() => viewEncounter(encounter)}
 								>View</button
 							>
 						</td>

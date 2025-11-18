@@ -334,7 +334,7 @@
 		<div class="mb-2 flex items-center justify-between">
 			<h2 class="text-lg font-bold">Storylines</h2>
 			<button
-				class="btn preset-filled-success px-1 py-0.5 text-xs flex items-center gap-1"
+				class="btn preset-glass-success px-1 py-0.5 text-xs flex items-center gap-1"
 				onclick={startCreatingStoryline}
 				title="Add Storyline"
 			>
@@ -357,7 +357,7 @@
 						<span>{s.title}</span>
 					</button>
 					<button
-						class="btn preset-filled-error px-1 py-0.5 text-xs"
+						class="btn preset-glass-error px-1 py-0.5 text-xs"
 						title="Delete Storyline"
 						onclick={() => deleteStoryline(s.id)}
 					>
@@ -394,8 +394,8 @@
 		{#if loadingTree}
 			<div class="flex h-32 items-center justify-center">
 				<p>Loading...</p>
-			</div>
-		{:else if error}
+				</div>
+			{:else if error}
 			<p class="text-red-500">{error}</p>
 		{:else if $selectedStoryLine}
 			<div class="mb-2 flex flex-col md:flex-row md:items-center md:justify-between">
@@ -405,7 +405,7 @@
 				</div>
 				<div class="mt-2 flex gap-2 md:mt-0">
 					<button
-						class="btn preset-filled-primary flex items-center gap-1"
+						class="btn preset-glass-primary flex items-center gap-1"
 						onclick={() => {
 							clearInlineEditing();
 							editingQuest = {
@@ -447,7 +447,7 @@
 									{/if}
 									<span class="font-semibold">{quest.title}</span>
 									<button
-										class="btn preset-tonal-secondary px-1 py-0.5 text-xs flex items-center"
+										class="btn preset-glass-secondary px-1 py-0.5 text-xs flex items-center"
 										onclick={() => {
 											clearInlineEditing();
 											editingQuest = quest;
@@ -457,14 +457,14 @@
 										<IconEdit size={16} />
 									</button>
 									<button
-										class="btn preset-filled-error px-1 py-0.5 text-xs flex items-center"
+										class="btn preset-glass-error px-1 py-0.5 text-xs flex items-center"
 										title="Delete Quest"
 										onclick={() => deleteQuest(quest.id)}
 									>
 										<IconTrash size={16} />
 									</button>
 									<button
-										class="btn preset-filled-primary px-1 py-0.5 text-xs flex items-center"
+										class="btn preset-glass-primary px-1 py-0.5 text-xs flex items-center"
 										onclick={() => {
 											clearInlineEditing();
 											editingEncounter = {
@@ -505,7 +505,7 @@
 
 												<span>{encounter.title}</span>
 												<button
-													class="btn preset-tonal-secondary px-1 py-0.5 text-xs flex items-center"
+													class="btn preset-glass-secondary px-1 py-0.5 text-xs flex items-center"
 													onclick={() => {
 														clearInlineEditing();
 														editingEncounter = encounter;
@@ -515,14 +515,14 @@
 													<IconEdit size={16} />
 												</button>
 												<button
-													class="btn preset-filled-error px-1 py-0.5 text-xs flex items-center"
+													class="btn preset-glass-error px-1 py-0.5 text-xs flex items-center"
 													title="Delete Encounter"
 													onclick={() => deleteEncounter(quest.id, encounter.id)}
 												>
 													<IconTrash size={16} />
 												</button>
 												<button
-													class="btn preset-filled-primary px-1 py-0.5 text-xs flex items-center"
+													class="btn preset-glass-primary px-1 py-0.5 text-xs flex items-center"
 													onclick={() => {
 														clearInlineEditing();
 														editingChoice = {
@@ -550,7 +550,7 @@
 														>
 														<span>{choice.text}</span>
 														<button
-															class="btn preset-tonal-secondary px-1 py-0.5 text-xs flex items-center"
+															class="btn preset-glass-secondary px-1 py-0.5 text-xs flex items-center"
 															onclick={() => {
 																clearInlineEditing();
 																editingChoice = choice;
@@ -560,7 +560,7 @@
 															<IconEdit size={16} />
 														</button>
 														<button
-															class="btn preset-filled-error px-1 py-0.5 text-xs flex items-center"
+															class="btn preset-glass-error px-1 py-0.5 text-xs flex items-center"
 															title="Delete Choice"
 															onclick={() => deleteChoice(encounter.id, choice.id)}
 														>
@@ -575,58 +575,34 @@
 							</li>
 						{/each}
 					</ul>
-				</div>
-				<!-- Form Panel -->
-				<div class="w-full md:w-1/2">
-					{#if editingEncounter}
-						<Dialog
-							open
-							closeOnEscape
-							closeOnInteractOutside
-							onOpenChange={(e) => {
-								if (!e.open) {
-									editingEncounter = null;
-								}
-							}}
-						>
-							{#snippet content()}
-								<EncounterForm
-									loading={false}
-									encounter={editingEncounter}
-									quests={$selectedStoryLine.quests ?? []}
-									onSave={handleEncounterSave}
-									onCancel={() => (editingEncounter = null)}
-								/>
-							{/snippet}
-						</Dialog>
-					{:else if editingChoice}
-						<Dialog
-							open
-							closeOnEscape
-							closeOnInteractOutside
-							onOpenChange={(e) => {
-								if (!e.open) {
-									editingChoice = null;
-								}
-							}}
-						>
-							{#snippet content()}
-								<ChoiceForm
-									loading={false}
-									choice={editingChoice}
-									encounters={$selectedStoryLine.quests?.flatMap((q) => q.encounters ?? []) ?? []}
-									onSave={handleChoiceSave}
-									onCancel={() => (editingChoice = null)}
-								/>
-							{/snippet}
-						</Dialog>
-					{:else}
-						<div class="text-surface-400 mt-8 text-center">Select or add an item to edit.</div>
-					{/if}
-				</div>
 			</div>
-
-			<!-- Branching Graph Visualization -->
+			<!-- Form Panel -->
+			<div class="w-full md:w-1/2">
+				{#if editingEncounter}
+					<div class="card bg-surface-100 dark:bg-surface-900 p-6 shadow-xl">
+						<EncounterForm
+							loading={false}
+							encounter={editingEncounter}
+							quests={$selectedStoryLine.quests ?? []}
+							onSave={handleEncounterSave}
+							onCancel={() => (editingEncounter = null)}
+						/>
+					</div>
+				{:else if editingChoice}
+					<div class="card bg-surface-100 dark:bg-surface-900 p-6 shadow-xl">
+						<ChoiceForm
+							loading={false}
+							choice={editingChoice}
+							encounters={$selectedStoryLine.quests?.flatMap((q) => q.encounters ?? []) ?? []}
+							onSave={handleChoiceSave}
+							onCancel={() => (editingChoice = null)}
+						/>
+					</div>
+				{:else}
+					<div class="text-surface-400 mt-8 text-center">Select or add an item to edit.</div>
+				{/if}
+			</div>
+		</div>			<!-- Branching Graph Visualization -->
 			<div class="my-6">
 				<StoryBranchingGraph
 					acts={data.acts}
@@ -643,17 +619,8 @@
 </div>
 
 {#if showActDialog}
-	<Dialog
-		open
-		closeOnEscape
-		closeOnInteractOutside
-		onOpenChange={(e) => {
-			if (!e.open) {
-				showActDialog = false;
-			}
-		}}
-	>
-		{#snippet content()}
+	<div class="card bg-surface-100 dark:bg-surface-900 p-6 shadow-xl">
+		
 			<ActForm
 				act={{
 					id: null,
@@ -667,22 +634,13 @@
 				onSave={handleActSave}
 				onCancel={() => (showActDialog = false)}
 			/>
-		{/snippet}
-	</Dialog>
+		
+	</div>
 {/if}
 
 {#if showPhaseDialog}
-	<Dialog
-		open
-		closeOnEscape
-		closeOnInteractOutside
-		onOpenChange={(e) => {
-			if (!e.open) {
-				showPhaseDialog = false;
-			}
-		}}
-	>
-		{#snippet content()}
+	<div class="card bg-surface-100 dark:bg-surface-900 p-6 shadow-xl">
+		
 			<PhaseForm
 				phase={{
 					id: null,
@@ -697,30 +655,21 @@
 				onSave={handlePhaseSave}
 				onCancel={() => (showPhaseDialog = false)}
 			/>
-		{/snippet}
-	</Dialog>
+		
+	</div>
 {/if}
 
 {#if editingQuest}
-	<Dialog
-		open
-		closeOnEscape
-		closeOnInteractOutside
-		onOpenChange={(e) => {
-			if (!e.open) {
-				editingQuest = null;
-			}
-		}}
-	>
-		{#snippet content()}
+	<div class="card bg-surface-100 dark:bg-surface-900 p-6 shadow-xl">
+		
 			<QuestForm
 				loading={false}
 				quest={editingQuest}
 				onSave={handleQuestSave}
 				onCancel={() => (editingQuest = null)}
 			/>
-		{/snippet}
-	</Dialog>
+		
+	</div>
 {/if}
 
 

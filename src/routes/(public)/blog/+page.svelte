@@ -10,7 +10,7 @@
 	<h1 class="mb-8 text-center text-4xl font-extrabold tracking-tight">Blog</h1>
 	
 	{#if data.posts.length === 0}
-		<div class="card preset-tonal-surface p-12 text-center">
+		<div class="card preset-glass-surface p-12 text-center">
 			<div class="flex justify-center mb-4">
 				<BookOpen class="size-16 text-surface-500 dark:text-surface-400" />
 			</div>
@@ -21,10 +21,10 @@
 				The blog is currently empty. Check back soon for exciting stories, updates, and insights about Corelight Fall!
 			</p>
 			<div class="flex gap-4 justify-center">
-				<a href="/" class="btn preset-filled-primary">
+				<a href="/" class="btn preset-glass-primary">
 					Back to Home
 				</a>
-				<a href="/game" class="btn preset-outlined-primary">
+				<a href="/game" class="btn preset-glass-primary">
 					Play Game
 				</a>
 			</div>

@@ -38,10 +38,10 @@
 			/>
 		</div>
 		<div class="flex gap-4">
-			<button class="btn preset-filled-primary" type="submit" disabled={loading}>
+			<button class="btn preset-glass-primary" type="submit" disabled={loading}>
 				{loading ? 'Saving...' : 'Save Phase'}
 			</button>
-			<button class="btn preset-tonal-secondary" type="button" onclick={onCancel}>Cancel</button>
+			<button class="btn preset-glass-secondary" type="button" onclick={onCancel}>Cancel</button>
 		</div>
 	</form>
 </div>

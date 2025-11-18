@@ -105,10 +105,10 @@
 		</div>
 	</div>
 	<div class="mt-4 flex gap-4">
-		<button class="btn preset-filled-primary" type="submit" disabled={loading}>
+		<button class="btn preset-glass-primary" type="submit" disabled={loading}>
 			{loading ? 'Saving...' : 'Save Quest'}
 		</button>
-		<button class="btn preset-tonal-secondary" onclick={onCancel}>Cancel</button>
+		<button class="btn preset-glass-secondary" onclick={onCancel}>Cancel</button>
 	</div>
 </form>
 

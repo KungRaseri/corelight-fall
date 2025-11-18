@@ -2,7 +2,7 @@
 	import Recap from '$lib/components/Recap.svelte';
 	import CharacterAttributes from '$lib/components/gameplay/CharacterAttributes.svelte';
 	import PlayerStoryView from '$lib/components/gameplay/PlayerStoryView.svelte';
-	import Dialog from '$lib/components/ui/Modal.svelte';
+	import Modal from '$lib/components/ui/Modal.svelte';
 	import { character, setCharacterAttributes } from '$lib/stores/character';
 	import type { ChoiceFormData } from '$lib/types/ChoiceFormData.js';
 	import { onMount } from 'svelte';
@@ -63,14 +63,14 @@
 
 	<!-- Modal Activation Buttons -->
 	<div class="mb-8 flex flex-auto justify-between gap-4">
-		<button class="btn preset-filled-surface" onclick={() => (showCharacter = true)}
+		<button class="btn preset-glass-surface" onclick={() => (showCharacter = true)}
 			>Character Info</button
 		>
-		<button class="btn preset-filled-surface" onclick={() => (showMap = true)}>Map</button>
-		<button class="btn preset-filled-surface" onclick={() => (showQuests = true)}
+		<button class="btn preset-glass-surface" onclick={() => (showMap = true)}>Map</button>
+		<button class="btn preset-glass-surface" onclick={() => (showQuests = true)}
 			>Quests</button
 		>
-		<button class="btn preset-filled-surface" onclick={() => (showLog = true)}
+		<button class="btn preset-glass-surface" onclick={() => (showLog = true)}
 			>Activity Log</button
 		>
 	</div>
@@ -87,7 +87,7 @@
 					<ul class="space-y-2">
 						{#each data.storylines ?? [] as s}
 							<li>
-								<button class="btn preset-filled-primary w-full" onclick={() => chooseStory(s.id)}>
+								<button class="btn preset-glass-primary w-full" onclick={() => chooseStory(s.id)}>
 									{s.title}
 								</button>
 							</li>
@@ -113,7 +113,7 @@
 							>
 								{outcome}
 							</div>
-							<button class="btn preset-filled-primary mx-auto mt-4" onclick={handleContinue}>Continue</button
+							<button class="btn preset-glass-primary mx-auto mt-4" onclick={handleContinue}>Continue</button
 							>
 						{:else}
 							<div class="mt-4 flex flex-col gap-2">

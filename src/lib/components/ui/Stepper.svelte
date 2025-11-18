@@ -29,8 +29,8 @@
 			{#each steps as step, i}
 				<button
 					class="btn-icon btn-icon rounded-full {isCurrentStep(i)
-						? 'preset-filled-primary'
-						: 'preset-filled-surface'}"
+						? 'preset-glass-primary'
+						: 'preset-glass-surface'}"
 					onclick={() => setStep(i)}
 					title={step.label}
 					type="button"
@@ -52,7 +52,7 @@
 	<nav class="mt-8 flex items-center justify-between gap-4">
 		<button
 			type="button"
-			class="btn preset-tonal hover:preset-filled"
+			class="btn preset-glass hover:preset-glass-primary"
 			onclick={prevStep}
 			disabled={isFirstStep}
 		>
@@ -61,7 +61,7 @@
 		</button>
 		<button
 			type="button"
-			class="btn preset-tonal hover:preset-filled"
+			class="btn preset-glass hover:preset-glass-primary"
 			onclick={nextStep}
 			disabled={isLastStep}
 		>
