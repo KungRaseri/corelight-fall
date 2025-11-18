@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { characterEquipment } from '$lib/server/db/schema';
+import type { NewCharacterEquipment } from '$lib/server/db/types';
 import { requireSession } from '$lib/utils/requireSession';
 
 export async function POST({ request, locals }) {
@@ -14,14 +15,16 @@ export async function POST({ request, locals }) {
 	}
 
 	try {
+		const newEquipment: NewCharacterEquipment = {
+			characterId: characterId,
+			itemId,
+			slot
+		};
+
 		// Update the character's equipment slot
 		await db
 			.insert(characterEquipment)
-			.values({
-				characterId: characterId,
-				itemId,
-				slot
-			})
+			.values(newEquipment)
 			.onConflictDoNothing();
 
 		return json({ success: true });

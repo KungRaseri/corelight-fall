@@ -34,6 +34,7 @@ import type { worldState } from '../schema/world/worldState';
 import type { role } from '../schema/core/role';
 import type { permission } from '../schema/core/permission';
 import type { rolePermission } from '../schema/core/rolePermission';
+import type { userRole } from '../schema/core/userRole';
 import type { blogPost } from '../schema/blog/blogPost';
 import type { storyline } from '../schema/story/storyline';
 import type { quest } from '../schema/story/quest';
@@ -42,6 +43,7 @@ import type { choice } from '../schema/story/choice';
 import type { playerStoryProgress } from '../schema/story/playerStoryProgress';
 import type { act } from '../schema/story/act';
 import type { phase } from '../schema/story/phase';
+import type { playerGameState } from '../schema/gameplay/playerGameState';
 
 export type User = typeof user.$inferSelect;
 export type Character = typeof character.$inferSelect;
@@ -87,6 +89,7 @@ export type Choice = typeof choice.$inferSelect;
 export type PlayerStoryProgress = typeof playerStoryProgress.$inferSelect;
 export type Act = typeof act.$inferSelect;
 export type Phase = typeof phase.$inferSelect;
+export type PlayerGameState = typeof playerGameState.$inferSelect;
 
 // Insert types - useful for creating new records
 export type NewUser = typeof user.$inferInsert;
@@ -125,6 +128,7 @@ export type NewLocation = typeof location.$inferInsert;
 export type NewRole = typeof role.$inferInsert;
 export type NewPermission = typeof permission.$inferInsert;
 export type NewRolePermission = typeof rolePermission.$inferInsert;
+export type NewUserRole = typeof userRole.$inferInsert;
 export type NewBlogPost = typeof blogPost.$inferInsert;
 export type NewStoryline = typeof storyline.$inferInsert;
 export type NewQuest = typeof quest.$inferInsert;
@@ -133,3 +137,4 @@ export type NewChoice = typeof choice.$inferInsert;
 export type NewPlayerStoryProgress = typeof playerStoryProgress.$inferInsert;
 export type NewAct = typeof act.$inferInsert;
 export type NewPhase = typeof phase.$inferInsert;
+export type NewPlayerGameState = typeof playerGameState.$inferInsert;

@@ -2,7 +2,21 @@ import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { hash } from '@node-rs/argon2';
-import type { RolePermission } from '../types/index.js';
+import type { 
+	RolePermission, 
+	NewRole, 
+	NewPermission, 
+	NewRolePermission, 
+	NewAttribute, 
+	NewRegion, 
+	NewLocation, 
+	NewFaction, 
+	NewUser, 
+	NewUserRole,
+	NewItem,
+	NewCharacterItem,
+	NewCharacterEquipment
+} from '../types/index.js';
 import { eq } from 'drizzle-orm';
 import {
 	attribute,
@@ -25,13 +39,13 @@ if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 const client = postgres(process.env.DATABASE_URL);
 const db = drizzle(client, { schema });
 
-const roles = [
+const roles: NewRole[] = [
 	{ name: 'admin', description: 'Administrator with full access' },
 	{ name: 'moderator', description: 'Moderator with limite admin permissions' },
 	{ name: 'user', description: 'Default user role' }
 ];
 
-const permissions = [
+const permissions: NewPermission[] = [
 	{ name: 'manage_users', description: 'Can manage users and roles' },
 	{ name: 'edit_content', description: 'Can edit game content' },
 	{ name: 'view_admin', description: 'Access to admin panel' }
@@ -44,7 +58,7 @@ const rolePermissions = [
 	{ role: 'moderator', permission: 'view_admin' } // Moderator -> View Admin
 ];
 
-const attributes = [
+const attributes: NewAttribute[] = [
 	{
 		name: 'Vigor',
 		description: 'Physical endurance, health, and resistance to decay or exhaustion.',
@@ -97,12 +111,12 @@ const attributes = [
 	}
 ];
 
-const regions = [
+const regions: NewRegion[] = [
 	{ name: 'Ashen Wastes', description: 'A barren, ash-covered landscape.' },
 	{ name: 'Verdant Overgrowth', description: 'A dense jungle reclaimed by nature.' }
 ];
 
-const locations = [
+const locations: NewLocation[] = [
 	{ name: 'Cinderlight Outpost', description: 'An old watchtower', x: 12, y: 34, type: 'outpost' },
 	{
 		name: 'Ironroot Glade',
@@ -113,7 +127,7 @@ const locations = [
 	}
 ];
 
-const factions = [
+const factions: NewFaction[] = [
 	{ name: 'Cinderlight Conclave', description: 'Fanatics seeking to reawaken the Corelight.' },
 	{ name: 'Forgewalkers Union', description: 'Rebuilders focused on technology.' }
 ];
@@ -171,45 +185,42 @@ export async function seedDatabase() {
 
 		// Seed Admin
 		const adminPasswordHash = await hashPassword('corelight-fall123');
-		await db
-			.insert(user)
-			.values({
-				username: 'admin',
-				passwordHash: adminPasswordHash,
-				createdAt: new Date()
-			})
-			.onConflictDoNothing();
+		const adminUser: NewUser = {
+			username: 'admin',
+			passwordHash: adminPasswordHash,
+			createdAt: new Date()
+		};
+		await db.insert(user).values(adminUser).onConflictDoNothing();
 		const admin = (await db.select().from(user).where(eq(user.username, 'admin')))[0];
 		console.log('✅ Admin seeded');
-
-		const dbAttributes = await db.select().from(attribute);
 
 		const adminRole = dbRoles.find((r) => r.name === 'admin');
 		const defaultRole = dbRoles.find((r) => r.name === 'user');
 
-		if (adminRole)
-			await db.insert(userRole).values({
+		if (adminRole) {
+			const adminUserRole: NewUserRole = {
 				userId: admin.id,
 				roleId: adminRole.id
-			});
+			};
+			await db.insert(userRole).values(adminUserRole);
+		}
 
 		// Seed Test User
 		const passwordHash = await hashPassword('password123');
-		await db
-			.insert(user)
-			.values({
-				username: 'TestUser',
-				passwordHash,
-				createdAt: new Date()
-			})
-			.onConflictDoNothing();
+		const testUser: NewUser = {
+			username: 'TestUser',
+			passwordHash,
+			createdAt: new Date()
+		};
+		await db.insert(user).values(testUser).onConflictDoNothing();
 		const newUser = await db.select().from(user).where(eq(user.username, 'TestUser'));
 
 		if (defaultRole) {
-			await db.insert(userRole).values({
+			const testUserRole: NewUserRole = {
 				userId: newUser[0].id,
 				roleId: defaultRole.id
-			});
+			};
+			await db.insert(userRole).values(testUserRole);
 		}
 
 		console.log('✅ Test user seeded');
@@ -221,51 +232,38 @@ export async function seedDatabase() {
 }
 
 export async function seedTestData() {
-	await db
-		.insert(item)
-		.values([
-			{
-				name: 'Iron Helm',
-				description: 'Iron Helmet and all that',
-				type: 'helmet'
-			}
-		])
-		.onConflictDoNothing();
+	const testItem: NewItem = {
+		name: 'Iron Helm',
+		description: 'Iron Helmet and all that',
+		type: 'helmet'
+	};
+	await db.insert(item).values([testItem]).onConflictDoNothing();
 
 	const items = await db.select().from(item);
 
-	await db
-		.insert(characterItem)
-		.values([
-			{
-				characterId: 3,
-				itemId: items[0].id,
-				quantity: 1
-			}
-		])
-		.onConflictDoNothing();
+	const testCharacterItem: NewCharacterItem = {
+		characterId: 3,
+		itemId: items[0].id,
+		quantity: 1
+	};
+	await db.insert(characterItem).values([testCharacterItem]).onConflictDoNothing();
 
-	await db
-		.insert(characterEquipment)
-		.values([
-			{
-				characterId: 3,
-				itemId: items[0].id,
-				slot: 'helmet'
-			}
-		])
-		.onConflictDoNothing();
+	const testCharacterEquipment: NewCharacterEquipment = {
+		characterId: 3,
+		itemId: items[0].id,
+		slot: 'helmet'
+	};
+	await db.insert(characterEquipment).values([testCharacterEquipment]).onConflictDoNothing();
 }
 
 // Run the seed function
-seedDatabase()
-	.then(() => {
-		console.log('✅ Database seeding completed successfully');
-		client.end();
-		process.exit(0);
-	})
-	.catch((error) => {
-		console.error('❌ Database seeding failed:', error);
-		client.end();
-		process.exit(1);
-	});
+try {
+	await seedDatabase();
+	console.log('✅ Database seeding completed successfully');
+	client.end();
+	process.exit(0);
+} catch (error) {
+	console.error('❌ Database seeding failed:', error);
+	client.end();
+	process.exit(1);
+}

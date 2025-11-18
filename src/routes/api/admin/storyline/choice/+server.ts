@@ -1,5 +1,6 @@
 import { db } from '$lib/server/db';
 import { playerStoryProgress, quest, encounter, choice } from '$lib/server/db/schema';
+import type { NewPlayerStoryProgress } from '$lib/server/db/types';
 import { requireSession } from '$lib/utils/requireSession.js';
 import { eq } from 'drizzle-orm';
 
@@ -28,17 +29,20 @@ export const POST = async ({ request, locals }) => {
 				.orderBy(encounter.order)
 				.limit(1)
 		)[0];
+		
+		const newProgress: NewPlayerStoryProgress = {
+			userId: locals.user.id,
+			storylineId: body.storylineId,
+			questId: firstQuest.id,
+			encounterId: firstEncounter.id,
+			choiceId: null,
+			createdAt: new Date(),
+			updatedAt: new Date()
+		};
+		
 		await db
 			.insert(playerStoryProgress)
-			.values({
-				userId: locals.user.id,
-				storylineId: body.storylineId,
-				questId: firstQuest.id,
-				encounterId: firstEncounter.id,
-				choiceId: null,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			})
+			.values(newProgress)
 			.onConflictDoUpdate({
 				target: [playerStoryProgress.userId],
 				set: {

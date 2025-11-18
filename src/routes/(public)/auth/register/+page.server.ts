@@ -1,9 +1,9 @@
 import { hash } from '@node-rs/argon2';
-import { encodeBase32LowerCase } from '@oslojs/encoding';
 import { fail, redirect } from '@sveltejs/kit';
 import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
+import type { NewUser } from '$lib/server/db/types';
 import type { Actions, PageServerLoad } from './$types';
 import { eq } from 'drizzle-orm';
 
@@ -39,9 +39,6 @@ export const actions: Actions = {
 			return fail(409, { message: 'Username already taken.' });
 		}
 
-		// Generate user ID
-		const userId = generateUserId();
-
 		// Hash the password securely
 		const passwordHash = await hash(password, {
 			memoryCost: 19456,
@@ -52,7 +49,12 @@ export const actions: Actions = {
 
 		// Insert new user into the database
 		try {
-			const user = await db.insert(table.user).values({ username, passwordHash }).returning();
+			const newUser: NewUser = { 
+				username, 
+				passwordHash 
+			};
+			
+			const user = await db.insert(table.user).values(newUser).returning();
 			if (!user || user.length === 0) {
 				return fail(500, { message: 'Error creating user. Please try again later.' });
 			}
@@ -62,17 +64,12 @@ export const actions: Actions = {
 			const session = await auth.createSession(sessionToken, user[0].id);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} catch (e) {
+			console.error('Registration error:', e);
 			return fail(500, { message: 'An error has occurred' });
 		}
 		return redirect(302, '/onboarding');
 	}
 };
-
-// Helper function to generate a unique user ID
-function generateUserId(): string {
-	const bytes = crypto.getRandomValues(new Uint8Array(15));
-	return encodeBase32LowerCase(bytes);
-}
 
 // Validate username (alphanumeric, hyphen, underscore, 3-31 chars)
 function validateUsername(username: unknown): username is string {

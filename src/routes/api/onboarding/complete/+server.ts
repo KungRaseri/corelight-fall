@@ -6,6 +6,7 @@ import {
 	attribute,
 	character
 } from '$lib/server/db/schema';
+import type { NewCharacter, NewCharacterAttribute, NewCharacterFaction } from '$lib/server/db/types';
 import { requireSession } from '$lib/utils/requireSession';
 import { json, type RequestHandler } from '@sveltejs/kit';
 
@@ -14,41 +15,46 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 	const data = await request.json();
 
-	const newCharacter = (
+	const newCharacter: NewCharacter = {
+		name: data.name,
+		userId: locals.user?.id ?? -1,
+		appearance: data.appearance,
+		onboarding: true,
+		tutorial: data.tutorial
+	};
+
+	const newCharacterRecord = (
 		await db
 			.insert(character)
-			.values({
-				name: data.name,
-				userId: locals.user?.id ?? -1,
-				appearance: data.appearance,
-				onboarding: true,
-				tutorial: data.tutorial
-			})
+			.values(newCharacter)
 			.returning()
 	)[0];
 
 	const attributes = await db.select().from(attribute);
 	const factions = await db.select().from(faction);
 
-	attributes.forEach(async (attribute) => {
-		await db.insert(characterAttribute).values({
-			characterId: newCharacter.id,
-			attributeId: attribute.id,
-			value: data.attributes[attribute.name] || 0
-		});
-	});
+	// Insert character attributes with proper typing
+	for (const attr of attributes) {
+		const newAttr: NewCharacterAttribute = {
+			characterId: newCharacterRecord.id,
+			attributeId: attr.id,
+			value: data.attributes[attr.name] || 0
+		};
+		await db.insert(characterAttribute).values(newAttr);
+	}
 
 	const chosenFaction = factions.find((f) => f.name === data.faction);
 	if (!chosenFaction) {
 		return new Response('Faction not found', { status: 400 });
 	}
 
-	await db.insert(characterFaction).values({
-		characterId: newCharacter.id,
+	const newCharacterFaction: NewCharacterFaction = {
+		characterId: newCharacterRecord.id,
 		factionId: chosenFaction.id,
 		reputation: 100
-	});
+	};
 
-	// For now, just echo back the data
+	await db.insert(characterFaction).values(newCharacterFaction);
+
 	return json({ success: true, data });
 };

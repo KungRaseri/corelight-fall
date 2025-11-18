@@ -1,5 +1,6 @@
 import { db } from '$lib/server/db';
 import { playerGameState } from '$lib/server/db/schema/gameplay/playerGameState';
+import type { NewPlayerGameState } from '$lib/server/db/types';
 import { requireSession } from '$lib/utils/requireSession';
 import { json } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
@@ -21,13 +22,26 @@ export const POST = async ({ request, locals }) => {
 	const data = await request.json();
 	const now = Date.now();
 
+	const newState: NewPlayerGameState = {
+		userId: locals.user?.id ?? -1,
+		storylineId: data.storylineId,
+		questId: data.questId,
+		encounterId: data.encounterId,
+		updatedAt: now
+	};
+
 	// Upsert logic (simplified)
 	await db
 		.insert(playerGameState)
-		.values({ ...data, userId: locals.user?.id ?? -1, updatedAt: now })
+		.values(newState)
 		.onConflictDoUpdate({
 			target: playerGameState.userId,
-			set: { ...data, updatedAt: now }
+			set: { 
+				storylineId: data.storylineId,
+				questId: data.questId,
+				encounterId: data.encounterId,
+				updatedAt: now 
+			}
 		});
 
 	return json({ success: true });

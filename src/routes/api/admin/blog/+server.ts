@@ -1,5 +1,6 @@
 import { db } from '$lib/server/db';
 import { blogPost } from '$lib/server/db/schema/blog/blogPost';
+import type { NewBlogPost, BlogPost } from '$lib/server/db/types';
 import { requireAdmin } from '$lib/utils/requireAdmin';
 import { json } from '@sveltejs/kit';
 import { eq, desc } from 'drizzle-orm';
@@ -14,24 +15,42 @@ export const POST = async ({ locals, request }) => {
 	requireAdmin(locals);
 	const data = await request.json();
 
-	delete data.id;
+	// Create a properly typed insert object
+	const newPost: NewBlogPost = {
+		title: data.title,
+		markdown: data.markdown,
+		summary: data.summary,
+		slug: data.slug,
+		author: data.author,
+		tags: data.tags,
+		published: data.published,
+		coverImage: data.coverImage,
+		date: new Date(data.date),
+		createdAt: new Date(),
+		updatedAt: new Date()
+	};
 
-	data.date = new Date(data.date); // Convert to Date object
-	data.createdAt = new Date(); // Convert to Date object
-	data.updatedAt = new Date(); // Convert to Date object
-
-	const result = await db.insert(blogPost).values(data).returning();
+	const result = await db.insert(blogPost).values(newPost).returning();
 	return json({ success: true, post: result[0] });
 };
 
 export const PUT = async ({ locals, request }) => {
 	requireAdmin(locals);
 	const data = await request.json();
-	data.date = new Date(data.date); // Convert to Date object
-	data.createdAt = new Date(data.createdAt); // Convert to Date object
-	data.updatedAt = new Date(data.updatedAt); // Convert to Date object
+	
+	const updateData: Partial<BlogPost> = {
+		title: data.title,
+		markdown: data.markdown,
+		summary: data.summary,
+		slug: data.slug,
+		author: data.author,
+		tags: data.tags,
+		published: data.published,
+		coverImage: data.coverImage,
+		date: new Date(data.date),
+		updatedAt: new Date()
+	};
 
-	const { id, ...rest } = data;
-	const result = await db.update(blogPost).set(rest).where(eq(blogPost.id, id)).returning();
+	const result = await db.update(blogPost).set(updateData).where(eq(blogPost.id, data.id)).returning();
 	return json({ success: true, post: result[0] });
 };

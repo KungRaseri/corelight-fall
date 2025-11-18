@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
-import type { User, Session, Role } from './db/types';
+import type { User, Session, Role, NewSession } from './db/types';
 import { session } from './db/schema/core/session';
 import { user } from './db/schema/core/user';
 import type { SafeUser } from '$lib/types/SafeUser';
@@ -20,15 +20,15 @@ export function generateSessionToken() {
 	return token;
 }
 
-export async function createSession(token: string, userId: number) {
+export async function createSession(token: string, userId: number): Promise<Session> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const sessionObject: Session = {
+	const sessionObject: NewSession = {
 		id: sessionId,
 		userId,
 		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
 	};
 	await db.insert(session).values(sessionObject);
-	return sessionObject;
+	return sessionObject as Session;
 }
 
 export async function validateSessionToken(token: string) {
