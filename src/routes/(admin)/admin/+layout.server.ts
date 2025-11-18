@@ -15,11 +15,11 @@ import { eq } from 'drizzle-orm';
 
 export const load = async ({ locals }) => {
 	if (!locals.user || !locals.role) {
-		throw redirect(302, '/auth/login');
+		redirect(302, '/auth/login');
 	}
 
 	if (!requireAdmin(locals)) {
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 
 	const roles = await db.select().from(userRole).where(eq(userRole.userId, locals.user.id));

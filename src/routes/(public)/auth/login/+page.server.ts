@@ -51,7 +51,7 @@ export const actions: Actions = {
 		const session = await auth.createSession(sessionToken, existingUser.id);
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
-		throw redirect(302, '/game');
+		redirect(302, '/game');
 	}
 };
 

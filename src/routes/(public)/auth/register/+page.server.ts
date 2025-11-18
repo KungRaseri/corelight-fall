@@ -9,7 +9,7 @@ import { eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user) {
-		throw redirect(302, '/game');
+		redirect(302, '/game');
 	}
 	return {};
 };

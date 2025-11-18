@@ -16,7 +16,7 @@ import type { ChoiceFormData } from '$lib/types/ChoiceFormData';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
 	if (!locals.user) {
-		throw redirect(302, '/auth/login');
+		redirect(302, '/auth/login');
 	}
 
 	const characterData = (
@@ -24,7 +24,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	)[0];
 
 	if (!characterData) {
-		throw redirect(302, '/onboarding');
+		redirect(302, '/onboarding');
 	}
 
 	const attributes = await db

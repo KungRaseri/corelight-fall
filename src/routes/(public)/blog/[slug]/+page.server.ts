@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const post = (await db.select().from(blogPost).where(eq(blogPost.slug, params.slug)))[0];
-	if (!post) throw error(404, 'Not found');
+	if (!post) error(404, 'Not found');
 
 	// Compile markdown to HTML
 	const compiled = await compile(post.markdown);
