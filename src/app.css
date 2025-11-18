@@ -1,12 +1,30 @@
 @import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
-
 @import '@skeletonlabs/skeleton';
-@import '@skeletonlabs/skeleton/optional/presets';
-@import '@skeletonlabs/skeleton/themes/cerberus';
-@import './lib/themes/corelight-fall.css';
+@import '@skeletonlabs/skeleton/themes/nouveau';
 
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+
+/* Custom dark mode variant for manual control */
 @custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
 
-/* Custom styles - rely on Skeleton presets and Tailwind utilities */
+/* Import custom theme */
+@import './lib/themes/corelight-fall.css';
+
+html,
+body {
+    height: 100%;
+    font-family: 'Spectral', serif;
+    background-color: var(--body-background-color);
+    color: var(--base-font-color);
+}
+
+html[data-mode='dark'] body {
+    background-color: var(--body-background-color-dark);
+    color: var(--base-font-color-dark);
+}
+
+/* Font families */
+.font-heading {
+    font-family: 'Cinzel', serif;
+}

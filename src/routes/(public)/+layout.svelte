@@ -19,14 +19,14 @@
 	});
 </script>
 
-<div class="bg-surface-950 text-surface-100 font-base min-h-screen transition-all">
+<div class="bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-100 min-h-screen transition-colors">
 	<!-- Content wrapper -->
-	<div>
+	<div class="flex flex-col min-h-screen">
 		<!-- AppBar -->
 		<AppBar />
 
 		<!-- Main content -->
-		<main>
+		<main class="flex-1">
 			{@render children()}
 		</main>
 
