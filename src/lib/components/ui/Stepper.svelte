@@ -1,6 +1,6 @@
 <script lang="ts">
-	import IconArrowLeft from '@lucide/svelte/icons/arrow-left';
-	import IconArrowRight from '@lucide/svelte/icons/arrow-right';
+	import IconArrowLeft from 'lucide-svelte/icons/arrow-left';
+	import IconArrowRight from 'lucide-svelte/icons/arrow-right';
 
 	const { steps } = $props();
 
@@ -28,9 +28,9 @@
 		<div class="flex items-center justify-between gap-4">
 			{#each steps as step, i}
 				<button
-					class="btn-icon btn-icon-sm rounded-full {isCurrentStep(i)
-						? 'preset-filled-primary-500'
-						: 'preset-filled-surface-200-800'}"
+					class="btn-icon btn-icon rounded-full {isCurrentStep(i)
+						? 'preset-filled-primary'
+						: 'preset-filled-surface'}"
 					onclick={() => setStep(i)}
 					title={step.label}
 					type="button"
@@ -39,7 +39,7 @@
 				</button>
 			{/each}
 		</div>
-		<hr class="hr !border-surface-200-800 absolute top-[50%] right-0 left-0 z-[-1]" />
+		<hr class="hr !border-surface-200 dark:border-surface-800 absolute top-[50%] right-0 left-0 z-[-1]" />
 	</div>
 
 	<!-- Step Content -->

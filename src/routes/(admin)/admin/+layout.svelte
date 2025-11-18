@@ -9,7 +9,7 @@
 	const { children } = $props();
 </script>
 
-<div class="bg-surface-50-950 text-surface-900-100 flex h-screen">
+<div class="bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-100 flex h-screen">
 	<Sidebar />
 	<div class="flex flex-1 flex-col">
 		<NavBar />

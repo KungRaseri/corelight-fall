@@ -36,7 +36,7 @@
 	<h1 class="mb-4 text-2xl font-bold">Database Management</h1>
 
 	<div class="space-y-4">
-		<button class="btn preset-filled-primary-500" onclick={seedDatabase}>Seed Database</button>
+		<button class="btn preset-filled-primary" onclick={seedDatabase}>Seed Database</button>
 		<button class="btn" onclick={seedTestData}>Seed Test Data</button>
 		<button class="btn preset-tonal-secondary" onclick={resetDatabase}>Reset Database</button>
 

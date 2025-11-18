@@ -36,7 +36,7 @@
 </script>
 
 <form
-	class="bg-surface-200-800 text-surface-900-100 mx-auto max-w-2xl space-y-6 rounded-lg p-8 shadow-lg"
+	class="bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 mx-auto max-w-2xl space-y-6 rounded-lg p-8 shadow-lg"
 	onsubmit={handleSubmit}
 >
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -64,7 +64,7 @@
 			<label class="mb-1 block font-semibold" for="type">Type</label>
 			<select
 				id="type"
-				class="input bg-surface-200-800 text-surface-900-100 w-full"
+				class="input bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 w-full"
 				bind:value={encounterData.type}
 				required
 			>
@@ -79,7 +79,7 @@
 			<label class="mb-1 block font-semibold" for="questId">Quest</label>
 			<select
 				id="questId"
-				class="input bg-surface-200-800 text-surface-900-100 w-full"
+				class="input bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 w-full"
 				bind:value={encounterData.questId}
 				required
 			>
@@ -133,7 +133,7 @@
 		</div>
 	</div>
 	<div class="mt-4 flex gap-4">
-		<button class="btn preset-filled-primary-500" type="submit" disabled={loading}>
+		<button class="btn preset-filled-primary" type="submit" disabled={loading}>
 			{loading ? 'Saving...' : 'Save Encounter'}
 		</button>
 		<button class="btn preset-tonal-secondary" onclick={onCancel}>Cancel</button>

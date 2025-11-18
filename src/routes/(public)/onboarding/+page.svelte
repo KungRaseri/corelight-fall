@@ -1,6 +1,6 @@
 <script lang="ts">
-	import IconArrowLeft from '@lucide/svelte/icons/arrow-left';
-	import IconArrowRight from '@lucide/svelte/icons/arrow-right';
+	import IconArrowLeft from 'lucide-svelte/icons/arrow-left';
+	import IconArrowRight from 'lucide-svelte/icons/arrow-right';
 	import StepCharacter from '$lib/components/onboarding/StepCharacter.svelte';
 	import StepFaction from '$lib/components/onboarding/StepFaction.svelte';
 	import StepAttributes from '$lib/components/onboarding/StepAttributes.svelte';
@@ -105,9 +105,9 @@
 			<div class="flex items-center justify-between gap-4">
 				{#each steps as step, i}
 					<button
-						class="btn-icon btn-icon-sm rounded-full {isCurrentStep(i)
-							? 'preset-filled-primary-500'
-							: 'preset-filled-surface-200-800'}"
+						class="btn-icon btn-icon rounded-full {isCurrentStep(i)
+							? 'preset-filled-primary'
+							: 'preset-filled-surface'}"
 						onclick={() => setStep(i)}
 						title={step.label}
 						type="button"
@@ -116,12 +116,12 @@
 					</button>
 				{/each}
 			</div>
-			<hr class="hr !border-surface-200-800 absolute top-[50%] right-0 left-0 z-[-1]" />
+			<hr class="hr !border-surface-200 dark:border-surface-800 absolute top-[50%] right-0 left-0 z-[-1]" />
 		</div>
 
 		<!-- Step 0: Introduction -->
 		{#if isCurrentStep(0)}
-			<div class="card bg-surface-100-900 mx-auto max-w-xl space-y-4 p-10 text-center">
+			<div class="card bg-surface-100 dark:bg-surface-900 mx-auto max-w-xl space-y-4 p-10 text-center">
 				<h2 class="h3 mb-2">Welcome to The Corelight Fall!</h2>
 				<p>
 					The world is fractured, and you are called to shape its fate.<br />
@@ -151,7 +151,7 @@
 
 		<!-- Step 4: Finalize -->
 		{#if isCurrentStep(4)}
-			<div class="card bg-surface-100-900 mx-auto max-w-xl space-y-4 p-10 text-left">
+			<div class="card bg-surface-100 dark:bg-surface-900 mx-auto max-w-xl space-y-4 p-10 text-left">
 				<h2 class="h3 mb-4">{steps[4].label}</h2>
 				<div>
 					<div><b>Name:</b> {name}</div>
@@ -172,7 +172,7 @@
 		<!-- Step 5: Tutorial -->
 		{#if isCurrentStep(5)}
 			<form
-				class="card bg-surface-100-900 mx-auto max-w-md space-y-4 p-10 text-center"
+				class="card bg-surface-100 dark:bg-surface-900 mx-auto max-w-md space-y-4 p-10 text-center"
 				onsubmit={(e) => {
 					e.preventDefault();
 					// Save onboardingData here if needed

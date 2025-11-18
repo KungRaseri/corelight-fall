@@ -42,7 +42,7 @@
 			</div>
 
 			<div>
-				<button type="submit" class="btn preset-filled-primary-500 w-full">Register</button>
+				<button type="submit" class="btn preset-filled-primary w-full">Register</button>
 			</div>
 
 			<p class="text-surface-300 mt-4 text-center text-sm">

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Map from '@lucide/svelte/icons/map';
-	import Flame from '@lucide/svelte/icons/flame';
-	import Settings from '@lucide/svelte/icons/settings';
-	import Brain from '@lucide/svelte/icons/brain';
+	import Map from 'lucide-svelte/icons/map';
+	import Flame from 'lucide-svelte/icons/flame';
+	import Settings from 'lucide-svelte/icons/settings';
+	import Brain from 'lucide-svelte/icons/brain';
 </script>
 
 <section

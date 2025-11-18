@@ -2,7 +2,7 @@
 	import Recap from '$lib/components/Recap.svelte';
 	import CharacterAttributes from '$lib/components/gameplay/CharacterAttributes.svelte';
 	import PlayerStoryView from '$lib/components/gameplay/PlayerStoryView.svelte';
-	import Modal from '$lib/components/ui/Modal.svelte';
+	import Dialog from '$lib/components/ui/Modal.svelte';
 	import { character, setCharacterAttributes } from '$lib/stores/character';
 	import type { ChoiceFormData } from '$lib/types/ChoiceFormData.js';
 	import { onMount } from 'svelte';
@@ -63,21 +63,21 @@
 
 	<!-- Modal Activation Buttons -->
 	<div class="mb-8 flex flex-auto justify-between gap-4">
-		<button class="btn preset-filled-surface-400-600" onclick={() => (showCharacter = true)}
+		<button class="btn preset-filled-surface" onclick={() => (showCharacter = true)}
 			>Character Info</button
 		>
-		<button class="btn preset-filled-surface-400-600" onclick={() => (showMap = true)}>Map</button>
-		<button class="btn preset-filled-surface-400-600" onclick={() => (showQuests = true)}
+		<button class="btn preset-filled-surface" onclick={() => (showMap = true)}>Map</button>
+		<button class="btn preset-filled-surface" onclick={() => (showQuests = true)}
 			>Quests</button
 		>
-		<button class="btn preset-filled-surface-400-600" onclick={() => (showLog = true)}
+		<button class="btn preset-filled-surface" onclick={() => (showLog = true)}
 			>Activity Log</button
 		>
 	</div>
 
 	<!-- Main Scene Content Area -->
 	<div
-		class="bg-surface-400-600 text-surface-900-100 flex min-h-[300px] flex-col items-center justify-center rounded-lg p-6 shadow-lg"
+		class="bg-surface-400 dark:bg-surface-600 text-surface-900 dark:text-surface-100 flex min-h-[300px] flex-col items-center justify-center rounded-lg p-6 shadow-lg"
 	>
 		<h2 class="mb-2 text-2xl font-bold">Current Scene</h2>
 		<div class="text-lg">
@@ -87,7 +87,7 @@
 					<ul class="space-y-2">
 						{#each data.storylines ?? [] as s}
 							<li>
-								<button class="btn preset-filled-primary-500 w-full" onclick={() => chooseStory(s.id)}>
+								<button class="btn preset-filled-primary w-full" onclick={() => chooseStory(s.id)}>
 									{s.title}
 								</button>
 							</li>
@@ -96,31 +96,31 @@
 				</div>
 			{:else if data.currentQuest && data.currentEncounter}
 				<div
-					class="bg-surface-100-900 border-surface-200-800 mx-auto max-w-xl rounded-xl border p-6 shadow"
+					class="bg-surface-100 dark:bg-surface-900 border-surface-200 dark:border-surface-800 mx-auto max-w-xl rounded-xl border p-6 shadow"
 				>
-					<div class="text-surface-500-400 mb-2 text-xs tracking-wider uppercase">Quest</div>
-					<div class="text-surface-900-100 mb-1 text-2xl font-bold">{data.currentQuest.title}</div>
-					<div class="text-surface-800-200 mb-4 text-base">{data.currentQuest.description}</div>
-					<div class="text-surface-500-400 mb-2 text-xs tracking-wider uppercase">Encounter</div>
-					<div class="text-surface-900-100 mb-2 text-lg font-semibold">
+					<div class="text-surface-500 dark:text-surface-400 mb-2 text-xs tracking-wider uppercase">Quest</div>
+					<div class="text-surface-900 dark:text-surface-100 mb-1 text-2xl font-bold">{data.currentQuest.title}</div>
+					<div class="text-surface-800 dark:text-surface-200 mb-4 text-base">{data.currentQuest.description}</div>
+					<div class="text-surface-500 dark:text-surface-400 mb-2 text-xs tracking-wider uppercase">Encounter</div>
+					<div class="text-surface-900 dark:text-surface-100 mb-2 text-lg font-semibold">
 						{data.currentEncounter.title}
 					</div>
-					<div class="text-surface-800-200 mb-4 text-base">{data.currentEncounter.description}</div>
+					<div class="text-surface-800 dark:text-surface-200 mb-4 text-base">{data.currentEncounter.description}</div>
 					{#if data.availableChoices && data.availableChoices.length > 0}
 						{#if outcome && awaitingContinue}
 							<div
-								class="bg-surface-200-800 text-surface-900-100 mt-4 rounded p-4 text-center font-semibold shadow"
+								class="bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 mt-4 rounded p-4 text-center font-semibold shadow"
 							>
 								{outcome}
 							</div>
-							<button class="btn preset-filled-primary-500 mx-auto mt-4" onclick={handleContinue}>Continue</button
+							<button class="btn preset-filled-primary mx-auto mt-4" onclick={handleContinue}>Continue</button
 							>
 						{:else}
 							<div class="mt-4 flex flex-col gap-2">
 								{#each data.availableChoices as choice}
 									<button
 										onclick={() => handleChoice(choice)}
-										class="bg-amber-400-600 border-amber-300-700 text-surface-900-100 rounded border-2 px-4 py-2 font-semibold shadow transition hover:border-amber-400 hover:bg-amber-500"
+										class="bg-amber-400-600 border-amber-300-700 text-surface-900 dark:text-surface-100 rounded border-2 px-4 py-2 font-semibold shadow transition hover:border-amber-400 hover:bg-amber-500"
 									>
 										{choice.text}
 									</button>
@@ -132,7 +132,7 @@
 					{/if}
 				</div>
 			{:else}
-				<div class="text-surface-500-400 text-center text-lg">No active quest.</div>
+				<div class="text-surface-500 dark:text-surface-400 text-center text-lg">No active quest.</div>
 			{/if}
 		</div>
 		<!-- Add scene actions, choices, or visuals here -->

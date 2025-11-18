@@ -1,13 +1,13 @@
 <script lang="ts">
 	const { storyline, currentQuest, currentEncounter, availableChoices, onChoose } = $props();
 
-	import IconQuest from '@lucide/svelte/icons/flag';
-	import IconStar from '@lucide/svelte/icons/star';
-	import IconSword from '@lucide/svelte/icons/sword';
-	import IconUsers from '@lucide/svelte/icons/users';
-	import IconBookOpen from '@lucide/svelte/icons/book-open';
-	import IconPuzzle from '@lucide/svelte/icons/puzzle';
-	import IconMap from '@lucide/svelte/icons/map';
+	import IconQuest from 'lucide-svelte/icons/flag';
+	import IconStar from 'lucide-svelte/icons/star';
+	import IconSword from 'lucide-svelte/icons/sword';
+	import IconUsers from 'lucide-svelte/icons/users';
+	import IconBookOpen from 'lucide-svelte/icons/book-open';
+	import IconPuzzle from 'lucide-svelte/icons/puzzle';
+	import IconMap from 'lucide-svelte/icons/map';
 
 	function getEncounterIcon(type: string | undefined) {
 		switch (type) {
@@ -56,7 +56,7 @@
 
 	<div class="flex flex-col gap-2">
 		{#each availableChoices as choice}
-			<button class="btn preset-filled-primary-500" onclick={onChoose(choice)}>
+			<button class="btn preset-filled-primary" onclick={onChoose(choice)}>
 				{choice.text}
 			</button>
 		{/each}

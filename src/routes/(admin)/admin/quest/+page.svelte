@@ -77,7 +77,7 @@
 		onCancel={() => (showForm = false)}
 	/>
 {:else}
-	<button class="btn preset-filled-primary-500 mb-4" onclick={addQuest}>Add New Quest</button>
+	<button class="btn preset-filled-primary mb-4" onclick={addQuest}>Add New Quest</button>
 	{#if loading}
 		<p>Loading...</p>
 	{:else}
@@ -101,7 +101,7 @@
 						<td class="px-3 py-2">{quest.order}</td>
 						<td class="px-3 py-2">{quest.description}</td>
 						<td class="flex gap-2 px-3 py-2">
-							<button class="btn preset-filled-primary-500 px-1 py-0.5 text-xs" onclick={() => editQuest(quest)}>Edit</button>
+							<button class="btn preset-filled-primary px-1 py-0.5 text-xs" onclick={() => editQuest(quest)}>Edit</button>
 							<!-- Add view/delete as needed -->
 						</td>
 					</tr>

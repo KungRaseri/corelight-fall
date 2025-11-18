@@ -56,7 +56,7 @@
 </script>
 
 <form
-	class="bg-surface-200-800 text-surface-900-100 mx-auto max-w-2xl space-y-6 rounded-lg p-8 shadow-lg"
+	class="bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 mx-auto max-w-2xl space-y-6 rounded-lg p-8 shadow-lg"
 	onsubmit={handleSubmit}
 >
 	<h2 class="mb-4 text-2xl font-bold">{storylineData.id ? 'Edit Storyline' : 'New Storyline'}</h2>
@@ -67,7 +67,7 @@
 			<div class="flex gap-2">
 				<select
 					id="act"
-					class="input input-bordered bg-surface-200-800 text-surface-900-100 w-full"
+					class="input input-bordered bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 w-full"
 					bind:value={selectedActId}
 					required
 				>
@@ -76,7 +76,7 @@
 						<option value={act.id}>{act.title}</option>
 					{/each}
 				</select>
-				<button type="button" class="btn preset-filled-primary-500 px-1 py-0.5 text-xs" onclick={onAddAct}>+ Act</button>
+				<button type="button" class="btn preset-filled-primary px-1 py-0.5 text-xs" onclick={onAddAct}>+ Act</button>
 			</div>
 		</div>
 		<!-- Phase selection and add -->
@@ -85,7 +85,7 @@
 			<div class="flex gap-2">
 				<select
 					id="phase"
-					class="input input-bordered bg-surface-200-800 text-surface-900-100 w-full"
+					class="input input-bordered bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 w-full"
 					bind:value={storylineData.phaseId}
 					required
 					disabled={selectedActId == null}
@@ -97,7 +97,7 @@
 				</select>
 				<button
 					type="button"
-					class="btn preset-filled-primary-500 px-1 py-0.5 text-xs"
+					class="btn preset-filled-primary px-1 py-0.5 text-xs"
 					disabled={selectedActId == null}
 					onclick={onAddPhase}
 				>
@@ -186,7 +186,7 @@
 		</div>
 	</div>
 	<div class="mt-4 flex gap-4">
-		<button class="btn preset-filled-primary-500" type="submit" disabled={loading}>
+		<button class="btn preset-filled-primary" type="submit" disabled={loading}>
 			{loading ? 'Saving...' : 'Save Storyline'}
 		</button>
 		<button class="btn preset-tonal-secondary" type="button" onclick={onCancel}>Cancel</button>

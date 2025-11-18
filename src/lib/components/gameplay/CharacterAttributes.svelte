@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { characterAttributes } from '$lib/stores/character';
 	import type { CharacterAttribute, Attribute } from '$lib/server/db/types';
-	import Info from '@lucide/svelte/icons/info';
+	import Info from 'lucide-svelte/icons/info';
 
 	let attributes: { attribute: Attribute; characterAttribute: CharacterAttribute }[] = [];
 	characterAttributes.subscribe((value) => (attributes = value));

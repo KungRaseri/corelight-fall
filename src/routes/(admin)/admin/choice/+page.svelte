@@ -125,7 +125,7 @@
 		<div class="mt-6 flex gap-4">
 			<button class="btn preset-tonal-secondary" onclick={() => (viewingChoice = null)}>Go Back</button>
 			<button
-				class="btn preset-filled-primary-500"
+				class="btn preset-filled-primary"
 				onclick={() => {
 					editingChoice = viewingChoice;
 					showForm = true;
@@ -136,7 +136,7 @@
 	</div>
 {:else}
 	<h1 class="mb-4 text-2xl font-bold">Choices</h1>
-	<button class="btn preset-filled-primary-500 mb-4" onclick={addChoice}>Add New Choice</button>
+	<button class="btn preset-filled-primary mb-4" onclick={addChoice}>Add New Choice</button>
 	{#if loading}
 		<p>Loading...</p>
 	{:else}
@@ -178,7 +178,7 @@
 							{/if}
 						</td>
 						<td class="flex gap-2 px-3 py-2">
-							<button class="btn preset-filled-primary-500 px-1 py-0.5 text-xs" onclick={() => editChoice(choice)}>Edit</button
+							<button class="btn preset-filled-primary px-1 py-0.5 text-xs" onclick={() => editChoice(choice)}>Edit</button
 							>
 							<button class="btn preset-tonal-secondary px-1 py-0.5 text-xs" onclick={() => viewChoice(choice)}
 								>View</button

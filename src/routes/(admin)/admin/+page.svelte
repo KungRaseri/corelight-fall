@@ -19,23 +19,23 @@
 	<h1 class="mb-4 text-3xl font-extrabold">Admin Dashboard</h1>
 
 	<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
+		<div class="bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Total Blog Posts</h2>
 			<p class="text-3xl font-extrabold">{statsData.blogPosts}</p>
 		</div>
-		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
+		<div class="bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Storylines</h2>
 			<p class="text-3xl font-extrabold">{statsData.storylines}</p>
 		</div>
-		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
+		<div class="bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Quests</h2>
 			<p class="text-3xl font-extrabold">{statsData.quests}</p>
 		</div>
-		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
+		<div class="bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Encounters</h2>
 			<p class="text-3xl font-extrabold">{statsData.encounters}</p>
 		</div>
-		<div class="bg-surface-200-800 text-surface-900-100 rounded-lg p-6 shadow">
+		<div class="bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 rounded-lg p-6 shadow">
 			<h2 class="mb-2 text-lg font-bold">Registered Users</h2>
 			<p class="text-3xl font-extrabold">{statsData.users}</p>
 		</div>
@@ -45,12 +45,12 @@
 	<div class="mt-10">
 		<h2 class="mb-4 text-xl font-bold">Quick Links</h2>
 		<div class="flex flex-wrap gap-4">
-			<a href="/admin/blog" class="btn preset-filled-primary-600-400">Manage Blog</a>
-			<a href="/admin/story" class="btn preset-filled-primary-600-400">Manage Story</a>
-			<a href="/admin/quest" class="btn preset-filled-primary-600-400">Manage Quests</a>
-			<a href="/admin/encounter" class="btn preset-filled-primary-600-400">Manage Encounters</a>
-			<a href="/admin/user" class="btn preset-filled-primary-600-400">Manage Users</a>
-			<a href="/admin/settings" class="btn preset-filled-primary-600-400">Settings</a>
+			<a href="/admin/blog" class="btn preset-filled-primary">Manage Blog</a>
+			<a href="/admin/story" class="btn preset-filled-primary">Manage Story</a>
+			<a href="/admin/quest" class="btn preset-filled-primary">Manage Quests</a>
+			<a href="/admin/encounter" class="btn preset-filled-primary">Manage Encounters</a>
+			<a href="/admin/user" class="btn preset-filled-primary">Manage Users</a>
+			<a href="/admin/settings" class="btn preset-filled-primary">Settings</a>
 		</div>
 	</div>
 

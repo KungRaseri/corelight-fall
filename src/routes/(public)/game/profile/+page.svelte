@@ -6,7 +6,7 @@
 
 <main class="space-y-4 p-4">
 	<div
-		class="divide-gray-200-800 bg-surface-200-800 mx-auto max-w-160 divide-y overflow-hidden rounded-lg shadow"
+		class="divide-gray-200 dark:divide-gray-800 bg-surface-200 dark:bg-surface-800 mx-auto max-w-160 divide-y overflow-hidden rounded-lg shadow"
 	>
 		<div class="px-4 py-5 sm:px-6">
 			<label class="text-gray-900-100 block text-sm/6 font-medium" for="userId">User ID</label>

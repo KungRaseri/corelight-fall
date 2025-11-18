@@ -184,7 +184,7 @@
 	});
 </script>
 
-<div class="bg-surface-200-800 h-[600px] w-full rounded border">
+<div class="bg-surface-200 dark:bg-surface-800 h-[600px] w-full rounded border">
 	<SvelteFlow
 		{colorMode}
 		{nodes}

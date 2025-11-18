@@ -46,7 +46,7 @@
 				{/each}
 			</div>
 		{/if}
-		<a href={`/blog/${post.slug}`} class="btn preset-filled-primary-500 px-2 py-1 text-sm mt-auto self-start"> Read more </a>
+		<a href={`/blog/${post.slug}`} class="btn preset-filled-primary px-2 py-1 text-sm mt-auto self-start"> Read more </a>
 	</div>
 </div>
 

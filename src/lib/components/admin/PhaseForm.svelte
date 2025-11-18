@@ -9,7 +9,7 @@
 	}
 </script>
 
-<div class="card bg-surface-200-800 text-surface-900-100 mx-auto max-w-md shadow-lg">
+<div class="card bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 mx-auto max-w-md shadow-lg">
 	<form class="space-y-6 p-6" onsubmit={handleSubmit}>
 		<h2 class="text-xl font-bold">{phaseData.id ? 'Edit Phase' : 'New Phase'}</h2>
 		<div>
@@ -38,7 +38,7 @@
 			/>
 		</div>
 		<div class="flex gap-4">
-			<button class="btn preset-filled-primary-500" type="submit" disabled={loading}>
+			<button class="btn preset-filled-primary" type="submit" disabled={loading}>
 				{loading ? 'Saving...' : 'Save Phase'}
 			</button>
 			<button class="btn preset-tonal-secondary" type="button" onclick={onCancel}>Cancel</button>

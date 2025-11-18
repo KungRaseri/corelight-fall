@@ -1,9 +1,9 @@
 <script lang="ts">
-	import IconSword from '@lucide/svelte/icons/sword';
-	import IconUsers from '@lucide/svelte/icons/users';
-	import IconBookOpen from '@lucide/svelte/icons/book-open';
-	import IconPuzzle from '@lucide/svelte/icons/puzzle';
-	import IconMap from '@lucide/svelte/icons/map';
+	import IconSword from 'lucide-svelte/icons/sword';
+	import IconUsers from 'lucide-svelte/icons/users';
+	import IconBookOpen from 'lucide-svelte/icons/book-open';
+	import IconPuzzle from 'lucide-svelte/icons/puzzle';
+	import IconMap from 'lucide-svelte/icons/map';
 	import { Handle, Position } from '@xyflow/svelte';
 	
 	interface Props {

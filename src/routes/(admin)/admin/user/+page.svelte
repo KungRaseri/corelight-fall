@@ -27,8 +27,8 @@
 							>
 							<td class="text-surface-200 px-4 py-2 text-sm">{user.roleName ?? 'None'}</td>
 							<td class="text-surface-200 space-x-2 px-4 py-2 text-sm">
-								<button class="btn preset-filled-primary-500 px-2 py-1 text-sm">Edit</button>
-								<button class="btn preset-filled-error-500 px-2 py-1 text-sm">Delete</button>
+								<button class="btn preset-filled-primary px-2 py-1 text-sm">Edit</button>
+								<button class="btn preset-filled-error px-2 py-1 text-sm">Delete</button>
 							</td>
 						</tr>
 					{/each}

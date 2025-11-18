@@ -8,7 +8,7 @@
 	import PhaseForm from '$lib/components/admin/PhaseForm.svelte';
 	import StoryBranchingGraph from '$lib/components/admin/StoryBranchingGraph.svelte';
 
-	import { Modal } from '@skeletonlabs/skeleton-svelte';
+	import { Dialog } from '@skeletonlabs/skeleton-svelte';
 	import type { ActFormData } from '$lib/types/ActFormData';
 	import type { PhaseFormData } from '$lib/types/PhaseFormData';
 	import type { StorylineFormData } from '$lib/types/StorylineFormData';
@@ -16,17 +16,17 @@
 	import type { EncounterFormData } from '$lib/types/EncounterFormData';
 	import type { ChoiceFormData } from '$lib/types/ChoiceFormData';
 
-	import IconStar from '@lucide/svelte/icons/star';
-	import IconPlus from '@lucide/svelte/icons/plus';
-	import IconEdit from '@lucide/svelte/icons/pencil';
-	import IconFlag from '@lucide/svelte/icons/flag';
-	import IconMap from '@lucide/svelte/icons/map';
-	import IconGitBranch from '@lucide/svelte/icons/git-branch';
-	import IconSword from '@lucide/svelte/icons/sword';
-	import IconUsers from '@lucide/svelte/icons/users';
-	import IconBookOpen from '@lucide/svelte/icons/book-open';
-	import IconPuzzle from '@lucide/svelte/icons/puzzle';
-	import IconTrash from '@lucide/svelte/icons/trash';
+	import IconStar from 'lucide-svelte/icons/star';
+	import IconPlus from 'lucide-svelte/icons/plus';
+	import IconEdit from 'lucide-svelte/icons/pencil';
+	import IconFlag from 'lucide-svelte/icons/flag';
+	import IconMap from 'lucide-svelte/icons/map';
+	import IconGitBranch from 'lucide-svelte/icons/git-branch';
+	import IconSword from 'lucide-svelte/icons/sword';
+	import IconUsers from 'lucide-svelte/icons/users';
+	import IconBookOpen from 'lucide-svelte/icons/book-open';
+	import IconPuzzle from 'lucide-svelte/icons/puzzle';
+	import IconTrash from 'lucide-svelte/icons/trash';
 
 	const { data } = $props();
 
@@ -330,11 +330,11 @@
 
 <div class="mx-auto flex max-w-7xl flex-col gap-6 p-4 md:flex-row">
 	<!-- Sidebar: Storylines -->
-	<aside class="bg-surface-100-900 flex w-full flex-col rounded-lg p-4 shadow md:w-1/4">
+	<aside class="bg-surface-100 dark:bg-surface-900 flex w-full flex-col rounded-lg p-4 shadow md:w-1/4">
 		<div class="mb-2 flex items-center justify-between">
 			<h2 class="text-lg font-bold">Storylines</h2>
 			<button
-				class="btn preset-filled-success-500 px-1 py-0.5 text-xs flex items-center gap-1"
+				class="btn preset-filled-success px-1 py-0.5 text-xs flex items-center gap-1"
 				onclick={startCreatingStoryline}
 				title="Add Storyline"
 			>
@@ -347,8 +347,8 @@
 					<button
 						class="w-full rounded px-2 py-1 text-left transition
 							{$selectedStorylineId === s.id
-							? 'bg-surface-200-800 text-surface-900-100 font-semibold'
-							: 'hover:bg-surface-200-800 hover:text-surface-900-100 text-surface-900-100'}"
+							? 'bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 font-semibold'
+							: 'hover:bg-surface-200 dark:bg-surface-800 hover:text-surface-900 dark:text-surface-100 text-surface-900 dark:text-surface-100'}"
 						onclick={() => selectStoryline(s.id)}
 					>
 						{#if s.isMain}
@@ -357,7 +357,7 @@
 						<span>{s.title}</span>
 					</button>
 					<button
-						class="btn preset-filled-error-500 px-1 py-0.5 text-xs"
+						class="btn preset-filled-error px-1 py-0.5 text-xs"
 						title="Delete Storyline"
 						onclick={() => deleteStoryline(s.id)}
 					>
@@ -405,7 +405,7 @@
 				</div>
 				<div class="mt-2 flex gap-2 md:mt-0">
 					<button
-						class="btn preset-filled-primary-500 flex items-center gap-1"
+						class="btn preset-filled-primary flex items-center gap-1"
 						onclick={() => {
 							clearInlineEditing();
 							editingQuest = {
@@ -457,14 +457,14 @@
 										<IconEdit size={16} />
 									</button>
 									<button
-										class="btn preset-filled-error-500 px-1 py-0.5 text-xs flex items-center"
+										class="btn preset-filled-error px-1 py-0.5 text-xs flex items-center"
 										title="Delete Quest"
 										onclick={() => deleteQuest(quest.id)}
 									>
 										<IconTrash size={16} />
 									</button>
 									<button
-										class="btn preset-filled-primary-500 px-1 py-0.5 text-xs flex items-center"
+										class="btn preset-filled-primary px-1 py-0.5 text-xs flex items-center"
 										onclick={() => {
 											clearInlineEditing();
 											editingEncounter = {
@@ -515,14 +515,14 @@
 													<IconEdit size={16} />
 												</button>
 												<button
-													class="btn preset-filled-error-500 px-1 py-0.5 text-xs flex items-center"
+													class="btn preset-filled-error px-1 py-0.5 text-xs flex items-center"
 													title="Delete Encounter"
 													onclick={() => deleteEncounter(quest.id, encounter.id)}
 												>
 													<IconTrash size={16} />
 												</button>
 												<button
-													class="btn preset-filled-primary-500 px-1 py-0.5 text-xs flex items-center"
+													class="btn preset-filled-primary px-1 py-0.5 text-xs flex items-center"
 													onclick={() => {
 														clearInlineEditing();
 														editingChoice = {
@@ -560,7 +560,7 @@
 															<IconEdit size={16} />
 														</button>
 														<button
-															class="btn preset-filled-error-500 px-1 py-0.5 text-xs flex items-center"
+															class="btn preset-filled-error px-1 py-0.5 text-xs flex items-center"
 															title="Delete Choice"
 															onclick={() => deleteChoice(encounter.id, choice.id)}
 														>
@@ -579,7 +579,7 @@
 				<!-- Form Panel -->
 				<div class="w-full md:w-1/2">
 					{#if editingEncounter}
-						<Modal
+						<Dialog
 							open
 							closeOnEscape
 							closeOnInteractOutside
@@ -598,9 +598,9 @@
 									onCancel={() => (editingEncounter = null)}
 								/>
 							{/snippet}
-						</Modal>
+						</Dialog>
 					{:else if editingChoice}
-						<Modal
+						<Dialog
 							open
 							closeOnEscape
 							closeOnInteractOutside
@@ -619,7 +619,7 @@
 									onCancel={() => (editingChoice = null)}
 								/>
 							{/snippet}
-						</Modal>
+						</Dialog>
 					{:else}
 						<div class="text-surface-400 mt-8 text-center">Select or add an item to edit.</div>
 					{/if}
@@ -643,7 +643,7 @@
 </div>
 
 {#if showActDialog}
-	<Modal
+	<Dialog
 		open
 		closeOnEscape
 		closeOnInteractOutside
@@ -668,11 +668,11 @@
 				onCancel={() => (showActDialog = false)}
 			/>
 		{/snippet}
-	</Modal>
+	</Dialog>
 {/if}
 
 {#if showPhaseDialog}
-	<Modal
+	<Dialog
 		open
 		closeOnEscape
 		closeOnInteractOutside
@@ -698,11 +698,11 @@
 				onCancel={() => (showPhaseDialog = false)}
 			/>
 		{/snippet}
-	</Modal>
+	</Dialog>
 {/if}
 
 {#if editingQuest}
-	<Modal
+	<Dialog
 		open
 		closeOnEscape
 		closeOnInteractOutside
@@ -720,7 +720,7 @@
 				onCancel={() => (editingQuest = null)}
 			/>
 		{/snippet}
-	</Modal>
+	</Dialog>
 {/if}
 
 

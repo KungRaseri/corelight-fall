@@ -21,10 +21,10 @@
 				The blog is currently empty. Check back soon for exciting stories, updates, and insights about Corelight Fall!
 			</p>
 			<div class="flex gap-4 justify-center">
-				<a href="/" class="btn preset-filled-primary-500">
+				<a href="/" class="btn preset-filled-primary">
 					Back to Home
 				</a>
-				<a href="/game" class="btn preset-outlined-primary-500">
+				<a href="/game" class="btn preset-outlined-primary">
 					Play Game
 				</a>
 			</div>

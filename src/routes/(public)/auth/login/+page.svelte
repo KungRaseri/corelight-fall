@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData } from './$types';
-	import Login from '@lucide/svelte/icons/log-in';
+	import Login from 'lucide-svelte/icons/log-in';
 
 	let { form }: { form: ActionData } = $props();
 </script>
@@ -45,7 +45,7 @@
 			</div>
 
 			<div>
-				<button type="submit" class="btn preset-filled-primary-500 w-full">Sign In</button>
+				<button type="submit" class="btn preset-filled-primary w-full">Sign In</button>
 			</div>
 
 			<p class="text-surface-300 mt-4 text-center text-sm">

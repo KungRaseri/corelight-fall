@@ -1,5 +1,5 @@
 <script lang="ts">
-	import IconGitBranch from '@lucide/svelte/icons/git-branch';
+	import IconGitBranch from 'lucide-svelte/icons/git-branch';
 	import { Handle, Position } from '@xyflow/svelte';
 	
 	interface Props {

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import IconFlag from '@lucide/svelte/icons/flag';
-	import IconStar from '@lucide/svelte/icons/star';
+	import IconFlag from 'lucide-svelte/icons/flag';
+	import IconStar from 'lucide-svelte/icons/star';
 	import { Handle, Position } from '@xyflow/svelte';
 	
 	interface Props {

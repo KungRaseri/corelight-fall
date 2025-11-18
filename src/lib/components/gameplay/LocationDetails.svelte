@@ -16,7 +16,7 @@
 		<h2 class="text-xl font-bold">{selectedLocation.name}</h2>
 		<p>{selectedLocation.description ?? 'No description available.'}</p>
 		<div class="mt-4">
-			<button class="btn preset-filled-primary-500" onclick={close}>Close</button>
+			<button class="btn preset-filled-primary" onclick={close}>Close</button>
 		</div>
 	</div>
 </div>

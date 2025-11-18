@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Map from '@lucide/svelte/icons/map';
-	import Swords from '@lucide/svelte/icons/swords';
-	import Settings from '@lucide/svelte/icons/settings';
-	import Users from '@lucide/svelte/icons/users';
+	import Map from 'lucide-svelte/icons/map';
+	import Swords from 'lucide-svelte/icons/swords';
+	import Settings from 'lucide-svelte/icons/settings';
+	import Users from 'lucide-svelte/icons/users';
 </script>
 
 <section

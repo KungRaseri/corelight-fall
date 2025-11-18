@@ -17,7 +17,7 @@
 	{/snippet}
 	{#snippet trail()}
 		<LightSwitch />
-		<button class="btn preset-outlined-primary-500 px-2 py-1 text-sm" onclick={handleLogout}>Logout</button>
+		<button class="btn preset-outlined-primary px-2 py-1 text-sm" onclick={handleLogout}>Logout</button>
 	{/snippet}
 </AppBar>
 
