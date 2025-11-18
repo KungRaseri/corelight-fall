@@ -1,4 +1,7 @@
 test-results
+playwright-report
+coverage
+.vitest
 node_modules
 
 # Output

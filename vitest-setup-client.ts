@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
 
-// required for svelte5 + jsdom as jsdom does not support matchMedia
-Object.defineProperty(window, 'matchMedia', {
+// Required for Svelte 5 + jsdom as jsdom does not support matchMedia
+Object.defineProperty(globalThis, 'matchMedia', {
 	writable: true,
 	enumerable: true,
 	value: vi.fn().mockImplementation((query) => ({
@@ -15,4 +15,16 @@ Object.defineProperty(window, 'matchMedia', {
 	}))
 });
 
-// add more mocks here if you need them
+// Mock IntersectionObserver
+globalThis.IntersectionObserver = vi.fn().mockImplementation(() => ({
+	observe: vi.fn(),
+	unobserve: vi.fn(),
+	disconnect: vi.fn()
+})) as unknown as typeof IntersectionObserver;
+
+// Mock ResizeObserver
+globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+	observe: vi.fn(),
+	unobserve: vi.fn(),
+	disconnect: vi.fn()
+})) as unknown as typeof ResizeObserver;
