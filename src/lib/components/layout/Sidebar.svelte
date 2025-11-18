@@ -15,7 +15,7 @@
 	<div class="p-4 border-b border-surface-700">
 		<button 
 			onclick={toggleSidebar} 
-			class="flex items-center gap-3 hover:bg-surface-800 rounded-lg p-2 transition-colors w-full"
+			class="btn preset-glass-surface-primary flex items-center gap-3 rounded-lg p-2 w-full"
 			title="Toggle Menu Width"
 		>
 			<IconMenu class="size-5" />
@@ -27,19 +27,19 @@
 
 	<!-- Navigation Links -->
 	<div class="flex-1 overflow-y-auto p-2">
-		<a href="/game" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+		<a href="/game" class="btn preset-glass-surface-primary flex items-center gap-3 px-3 py-2 rounded-lg mb-1">
 			<IconDashboard class="size-5" />
 			{#if expanded}
 				<span>Dashboard</span>
 			{/if}
 		</a>
-		<a href="/game/inventory" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+		<a href="/game/inventory" class="btn preset-glass-surface-primary flex items-center gap-3 px-3 py-2 rounded-lg mb-1">
 			<IconInventory class="size-5" />
 			{#if expanded}
 				<span>Inventory</span>
 			{/if}
 		</a>
-		<a href="/game/map" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+		<a href="/game/map" class="btn preset-glass-surface-primary flex items-center gap-3 px-3 py-2 rounded-lg mb-1">
 			<IconMap class="size-5" />
 			{#if expanded}
 				<span>Map</span>
@@ -49,7 +49,7 @@
 
 	<!-- Footer -->
 	<div class="p-2 border-t border-surface-700">
-		<a href="/settings" class="flex items-center gap-3 px-3 py-2 hover:bg-surface-800 rounded-lg transition-colors">
+		<a href="/settings" class="btn preset-glass-surface-primary flex items-center gap-3 px-3 py-2 rounded-lg">
 			<IconSettings class="size-5" />
 			{#if expanded}
 				<span>Settings</span>

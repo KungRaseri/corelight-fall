@@ -31,21 +31,19 @@
 			<a href="/" class="hover:text-primary-600 dark:hover:text-primary-300 transition-colors">The Corelight Fall</a>
 		</div>
 
-		<!-- Navigation Links -->
-		<nav class="hidden md:flex items-center gap-2">
-			<a href="/" class="hover:preset-glass-primary px-3 py-2 rounded-lg transition-all">Home</a>
-			<a href="/about" class="hover:preset-glass-primary px-3 py-2 rounded-lg transition-all">About</a>
-			<a href="/features" class="hover:preset-glass-primary px-3 py-2 rounded-lg transition-all">Features</a>
-			<a href="/blog" class="hover:preset-glass-primary px-3 py-2 rounded-lg transition-all">Blog</a>
-		</nav>
-
-		<!-- User Menu / Auth Buttons -->
+	<!-- Navigation Links -->
+	<nav class="hidden md:flex items-center gap-2">
+		<a href="/" class="btn preset-glass-surface-primary px-3 py-2 rounded-lg">Home</a>
+		<a href="/about" class="btn preset-glass-surface-primary px-3 py-2 rounded-lg">About</a>
+		<a href="/features" class="btn preset-glass-surface-primary px-3 py-2 rounded-lg">Features</a>
+		<a href="/blog" class="btn preset-glass-surface-primary px-3 py-2 rounded-lg">Blog</a>
+	</nav>		<!-- User Menu / Auth Buttons -->
 		<div class="flex items-center gap-3">
 			<LightSwitch />
 			{#if userData}
-				<div class="relative">
+							<div class="relative">
 					<button
-						class="preset-glass flex items-center gap-2 rounded-lg px-3 py-2"
+						class="btn preset-glass-surface-primary flex items-center gap-2 rounded-lg px-3 py-2"
 						onclick={() => (isUserMenuEnabled = !isUserMenuEnabled)}
 						aria-label="User menu"
 					>
@@ -59,11 +57,11 @@
 					</button>
 					{#if isUserMenuEnabled}
 						<div
-							class="card preset-glass bg-surface-50 dark:bg-surface-900 absolute right-0 mt-2 w-48 shadow-xl z-50"
+							class="card preset-glass-surface bg-surface-50 dark:bg-surface-900 absolute right-0 mt-2 w-48 shadow-xl z-50"
 							transition:slide
 						>
-							<a href="/game/profile" class="block px-4 py-2 hover:preset-glass-primary rounded-t-lg">Profile</a>
-							<button onclick={handleLogout} class="block w-full px-4 py-2 text-left hover:preset-glass-primary rounded-b-lg">Logout</button>
+							<a href="/game/profile" class="btn preset-glass-surface-primary block px-4 py-2 rounded-t-lg">Profile</a>
+							<button onclick={handleLogout} class="btn preset-glass-surface-error block w-full px-4 py-2 text-left rounded-b-lg">Logout</button>
 						</div>
 					{/if}
 				</div>

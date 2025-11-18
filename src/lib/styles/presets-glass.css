@@ -1,0 +1,228 @@
+/* Custom Glass Presets - inspired by Skeleton documentation */
+/* https://www.skeleton.dev/docs/svelte/design/presets */
+
+/* Neutral Glass */
+.preset-glass {
+    background-color: color-mix(in srgb, var(--color-surface-100) 30%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-surface-300, var(--color-surface-100)) 50%, transparent);
+    color: var(--color-surface-900);
+    transition: all 200ms;
+}
+
+[data-mode='dark'] .preset-glass {
+    background-color: color-mix(in srgb, var(--color-surface-900) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-surface-700, var(--color-surface-900)) 50%, transparent);
+    color: var(--color-surface-100);
+}
+
+/* Primary Glass */
+.preset-glass-primary {
+    background-color: color-mix(in srgb, var(--color-primary-500) 20%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-primary-500) 50%, transparent);
+    color: var(--color-primary-900, var(--color-surface-950));
+    transition: all 200ms;
+}
+
+[data-mode='dark'] .preset-glass-primary {
+    background-color: color-mix(in srgb, var(--color-primary-500) 30%, transparent);
+    color: var(--color-primary-50, var(--color-surface-50));
+}
+
+/* Secondary Glass */
+.preset-glass-secondary {
+    background-color: color-mix(in srgb, var(--color-secondary-500) 20%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-secondary-500) 50%, transparent);
+    color: var(--color-secondary-900, var(--color-surface-950));
+    transition: all 200ms;
+}
+
+[data-mode='dark'] .preset-glass-secondary {
+    background-color: color-mix(in srgb, var(--color-secondary-500) 30%, transparent);
+    color: var(--color-secondary-50, var(--color-surface-50));
+}
+
+/* Tertiary Glass */
+.preset-glass-tertiary {
+    background-color: color-mix(in srgb, var(--color-tertiary-500, var(--color-accent-500)) 20%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-tertiary-500, var(--color-accent-500)) 50%, transparent);
+    color: var(--color-tertiary-900, var(--color-surface-950));
+    transition: all 200ms;
+}
+
+[data-mode='dark'] .preset-glass-tertiary {
+    background-color: color-mix(in srgb, var(--color-tertiary-500, var(--color-accent-500)) 30%, transparent);
+    color: var(--color-tertiary-50, var(--color-surface-50));
+}
+
+/* Success Glass */
+.preset-glass-success {
+    background-color: color-mix(in srgb, var(--color-success-500, #22c55e) 20%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-success-500, #22c55e) 50%, transparent);
+    color: var(--color-success-900, var(--color-surface-950));
+    transition: all 200ms;
+}
+
+[data-mode='dark'] .preset-glass-success {
+    background-color: color-mix(in srgb, var(--color-success-500, #22c55e) 30%, transparent);
+    color: var(--color-success-50, var(--color-surface-50));
+}
+
+/* Warning Glass */
+.preset-glass-warning {
+    background-color: color-mix(in srgb, var(--color-warning-500, #f59e0b) 20%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-warning-500, #f59e0b) 50%, transparent);
+    color: var(--color-warning-900, var(--color-surface-950));
+    transition: all 200ms;
+}
+
+[data-mode='dark'] .preset-glass-warning {
+    background-color: color-mix(in srgb, var(--color-warning-500, #f59e0b) 30%, transparent);
+    color: var(--color-warning-50, var(--color-surface-50));
+}
+
+/* Error Glass */
+.preset-glass-error {
+    background-color: color-mix(in srgb, var(--color-error-500, #ef4444) 20%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-error-500, #ef4444) 50%, transparent);
+    color: var(--color-error-900, var(--color-surface-950));
+    transition: all 200ms;
+}
+
+[data-mode='dark'] .preset-glass-error {
+    background-color: color-mix(in srgb, var(--color-error-500, #ef4444) 30%, transparent);
+    color: var(--color-error-50, var(--color-surface-50));
+}
+
+/* Surface Glass */
+.preset-glass-surface {
+    background-color: color-mix(in srgb, var(--color-surface-200, var(--color-surface-100)) 30%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-surface-400, var(--color-surface-100)) 50%, transparent);
+    color: var(--color-surface-900);
+    transition: all 200ms;
+}
+
+[data-mode='dark'] .preset-glass-surface {
+    background-color: color-mix(in srgb, var(--color-surface-800, var(--color-surface-900)) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-surface-600, var(--color-surface-900)) 50%, transparent);
+    color: var(--color-surface-100);
+}
+
+/* ========================================
+   Compound Glass Presets (Base + Hover)
+   ======================================== */
+
+/* Surface base with Primary hover */
+.preset-glass-surface-primary {
+    background-color: color-mix(in srgb, var(--color-surface-200, var(--color-surface-100)) 30%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-surface-400, var(--color-surface-100)) 50%, transparent);
+    color: var(--color-surface-900);
+    transition: all 200ms;
+}
+
+.preset-glass-surface-primary:hover {
+    background-color: color-mix(in srgb, var(--color-primary-500) 20%, transparent);
+    border-color: color-mix(in srgb, var(--color-primary-500) 50%, transparent);
+    color: var(--color-primary-900, var(--color-surface-950));
+}
+
+[data-mode='dark'] .preset-glass-surface-primary {
+    background-color: color-mix(in srgb, var(--color-surface-800, var(--color-surface-900)) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-surface-600, var(--color-surface-900)) 50%, transparent);
+    color: var(--color-surface-100);
+}
+
+[data-mode='dark'] .preset-glass-surface-primary:hover {
+    background-color: color-mix(in srgb, var(--color-primary-500) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-primary-500) 50%, transparent);
+    color: var(--color-primary-50, var(--color-surface-50));
+}
+
+/* Surface base with Secondary hover */
+.preset-glass-surface-secondary {
+    background-color: color-mix(in srgb, var(--color-surface-200, var(--color-surface-100)) 30%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-surface-400, var(--color-surface-100)) 50%, transparent);
+    color: var(--color-surface-900);
+    transition: all 200ms;
+}
+
+.preset-glass-surface-secondary:hover {
+    background-color: color-mix(in srgb, var(--color-secondary-500) 20%, transparent);
+    border-color: color-mix(in srgb, var(--color-secondary-500) 50%, transparent);
+    color: var(--color-secondary-900, var(--color-surface-950));
+}
+
+[data-mode='dark'] .preset-glass-surface-secondary {
+    background-color: color-mix(in srgb, var(--color-surface-800, var(--color-surface-900)) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-surface-600, var(--color-surface-900)) 50%, transparent);
+    color: var(--color-surface-100);
+}
+
+[data-mode='dark'] .preset-glass-surface-secondary:hover {
+    background-color: color-mix(in srgb, var(--color-secondary-500) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-secondary-500) 50%, transparent);
+    color: var(--color-secondary-50, var(--color-surface-50));
+}
+
+/* Surface base with Error hover */
+.preset-glass-surface-error {
+    background-color: color-mix(in srgb, var(--color-surface-200, var(--color-surface-100)) 30%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-surface-400, var(--color-surface-100)) 50%, transparent);
+    color: var(--color-surface-900);
+    transition: all 200ms;
+}
+
+.preset-glass-surface-error:hover {
+    background-color: color-mix(in srgb, var(--color-error-500, #ef4444) 20%, transparent);
+    border-color: color-mix(in srgb, var(--color-error-500, #ef4444) 50%, transparent);
+    color: var(--color-error-900, var(--color-surface-950));
+}
+
+[data-mode='dark'] .preset-glass-surface-error {
+    background-color: color-mix(in srgb, var(--color-surface-800, var(--color-surface-900)) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-surface-600, var(--color-surface-900)) 50%, transparent);
+    color: var(--color-surface-100);
+}
+
+[data-mode='dark'] .preset-glass-surface-error:hover {
+    background-color: color-mix(in srgb, var(--color-error-500, #ef4444) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-error-500, #ef4444) 50%, transparent);
+    color: var(--color-error-50, var(--color-surface-50));
+}
+
+/* Surface base with Success hover */
+.preset-glass-surface-success {
+    background-color: color-mix(in srgb, var(--color-surface-200, var(--color-surface-100)) 30%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-surface-400, var(--color-surface-100)) 50%, transparent);
+    color: var(--color-surface-900);
+    transition: all 200ms;
+}
+
+.preset-glass-surface-success:hover {
+    background-color: color-mix(in srgb, var(--color-success-500, #22c55e) 20%, transparent);
+    border-color: color-mix(in srgb, var(--color-success-500, #22c55e) 50%, transparent);
+    color: var(--color-success-900, var(--color-surface-950));
+}
+
+[data-mode='dark'] .preset-glass-surface-success {
+    background-color: color-mix(in srgb, var(--color-surface-800, var(--color-surface-900)) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-surface-600, var(--color-surface-900)) 50%, transparent);
+    color: var(--color-surface-100);
+}
+
+[data-mode='dark'] .preset-glass-surface-success:hover {
+    background-color: color-mix(in srgb, var(--color-success-500, #22c55e) 30%, transparent);
+    border-color: color-mix(in srgb, var(--color-success-500, #22c55e) 50%, transparent);
+    color: var(--color-success-50, var(--color-surface-50));
+}
