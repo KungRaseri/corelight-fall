@@ -56,9 +56,15 @@
 
 	<div class="flex flex-col gap-2">
 		{#each availableChoices as choice}
-			<button class="btn btn-primary" onclick={onChoose(choice)}>
+			<button class="btn preset-filled-primary-500" onclick={onChoose(choice)}>
 				{choice.text}
 			</button>
 		{/each}
 	</div>
 </div>
+
+
+
+
+
+

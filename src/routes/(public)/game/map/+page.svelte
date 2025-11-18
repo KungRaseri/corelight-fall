@@ -31,3 +31,9 @@
 		<LocationDetails {selectedLocation} on:close={closeDetails} />
 	{/if}
 </div>
+
+
+
+
+
+

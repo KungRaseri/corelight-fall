@@ -14,12 +14,18 @@
 		</p>
 		<div class="mt-8 flex justify-center gap-4">
 			{#if !page.data?.user}
-				<a href="/auth/login" class="btn btn-primary">Login</a>
-				<a href="/auth/register" class="btn btn-secondary">Register</a>
+				<a href="/auth/login" class="btn preset-filled-primary-500">Login</a>
+				<a href="/auth/register" class="btn preset-tonal-secondary">Register</a>
 			{:else}
-				<a href="/game" class="btn btn-primary">Play Now</a>
+				<a href="/game" class="btn preset-filled-primary-500">Play Now</a>
 			{/if}
-			<a href="/about" class="btn btn-outline">Learn More</a>
+			<a href="/about" class="btn preset-outlined-primary-500">Learn More</a>
 		</div>
 	</div>
 </section>
+
+
+
+
+
+

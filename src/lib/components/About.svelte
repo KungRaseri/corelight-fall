@@ -15,7 +15,13 @@
 
 		<!-- Learn More Button -->
 		<div class="mt-4 text-center">
-			<a href="/about" class="btn btn-primary">Learn More</a>
+			<a href="/about" class="btn preset-filled-primary-500">Learn More</a>
 		</div>
 	</div>
 </section>
+
+
+
+
+
+

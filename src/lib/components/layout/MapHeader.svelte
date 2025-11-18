@@ -10,3 +10,9 @@
 	<h2 class="text-2xl font-semibold">Map - {currentLocation.name}</h2>
 	<p>Coordinates: ({currentLocation.x}, {currentLocation.y})</p>
 </header>
+
+
+
+
+
+

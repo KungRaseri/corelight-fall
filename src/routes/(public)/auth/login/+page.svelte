@@ -28,7 +28,7 @@
 					id="username"
 					autocomplete="username"
 					required
-					class="input input-primary mt-2 w-full"
+					class="input preset-tonal-surface mt-2 w-full"
 				/>
 			</div>
 
@@ -40,12 +40,12 @@
 					id="password"
 					autocomplete="current-password"
 					required
-					class="input input-primary mt-2 w-full"
+					class="input preset-tonal-surface mt-2 w-full"
 				/>
 			</div>
 
 			<div>
-				<button type="submit" class="btn btn-primary w-full">Sign In</button>
+				<button type="submit" class="btn preset-filled-primary-500 w-full">Sign In</button>
 			</div>
 
 			<p class="text-surface-300 mt-4 text-center text-sm">
@@ -60,3 +60,9 @@
 		</form>
 	</div>
 </div>
+
+
+
+
+
+

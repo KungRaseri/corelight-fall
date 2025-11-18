@@ -28,9 +28,15 @@
 		<p>Type: {selectedItem.type ?? 'Unknown'}</p>
 		<p>Description: {selectedItem.description ?? 'No description available'}</p>
 		<div class="mt-4 flex gap-2">
-			<button class="btn btn-primary" onclick={useItem}>Use</button>
+			<button class="btn preset-filled-primary-500" onclick={useItem}>Use</button>
 			<button class="btn btn-danger" onclick={dropItem}>Drop</button>
-			<button class="btn btn-secondary" onclick={close}>Close</button>
+			<button class="btn preset-tonal-secondary" onclick={close}>Close</button>
 		</div>
 	</div>
 </div>
+
+
+
+
+
+

@@ -48,7 +48,13 @@
 
 		<!-- Learn More Button -->
 		<div class="mt-8 text-center">
-			<a href="/features" class="btn btn-primary">Learn More</a>
+			<a href="/features" class="btn preset-filled-primary-500">Learn More</a>
 		</div>
 	</div>
 </section>
+
+
+
+
+
+

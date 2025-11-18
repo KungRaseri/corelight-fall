@@ -334,7 +334,7 @@
 		<div class="mb-2 flex items-center justify-between">
 			<h2 class="text-lg font-bold">Storylines</h2>
 			<button
-				class="btn btn-xs btn-success flex items-center gap-1"
+				class="btn preset-filled-success-500 px-1 py-0.5 text-xs flex items-center gap-1"
 				onclick={startCreatingStoryline}
 				title="Add Storyline"
 			>
@@ -357,7 +357,7 @@
 						<span>{s.title}</span>
 					</button>
 					<button
-						class="btn btn-xs btn-error"
+						class="btn preset-filled-error-500 px-1 py-0.5 text-xs"
 						title="Delete Storyline"
 						onclick={() => deleteStoryline(s.id)}
 					>
@@ -405,7 +405,7 @@
 				</div>
 				<div class="mt-2 flex gap-2 md:mt-0">
 					<button
-						class="btn btn-primary flex items-center gap-1"
+						class="btn preset-filled-primary-500 flex items-center gap-1"
 						onclick={() => {
 							clearInlineEditing();
 							editingQuest = {
@@ -447,7 +447,7 @@
 									{/if}
 									<span class="font-semibold">{quest.title}</span>
 									<button
-										class="btn btn-xs btn-secondary flex items-center"
+										class="btn preset-tonal-secondary px-1 py-0.5 text-xs flex items-center"
 										onclick={() => {
 											clearInlineEditing();
 											editingQuest = quest;
@@ -457,14 +457,14 @@
 										<IconEdit size={16} />
 									</button>
 									<button
-										class="btn btn-xs btn-error flex items-center"
+										class="btn preset-filled-error-500 px-1 py-0.5 text-xs flex items-center"
 										title="Delete Quest"
 										onclick={() => deleteQuest(quest.id)}
 									>
 										<IconTrash size={16} />
 									</button>
 									<button
-										class="btn btn-xs btn-primary flex items-center"
+										class="btn preset-filled-primary-500 px-1 py-0.5 text-xs flex items-center"
 										onclick={() => {
 											clearInlineEditing();
 											editingEncounter = {
@@ -505,7 +505,7 @@
 
 												<span>{encounter.title}</span>
 												<button
-													class="btn btn-xs btn-secondary flex items-center"
+													class="btn preset-tonal-secondary px-1 py-0.5 text-xs flex items-center"
 													onclick={() => {
 														clearInlineEditing();
 														editingEncounter = encounter;
@@ -515,14 +515,14 @@
 													<IconEdit size={16} />
 												</button>
 												<button
-													class="btn btn-xs btn-error flex items-center"
+													class="btn preset-filled-error-500 px-1 py-0.5 text-xs flex items-center"
 													title="Delete Encounter"
 													onclick={() => deleteEncounter(quest.id, encounter.id)}
 												>
 													<IconTrash size={16} />
 												</button>
 												<button
-													class="btn btn-xs btn-primary flex items-center"
+													class="btn preset-filled-primary-500 px-1 py-0.5 text-xs flex items-center"
 													onclick={() => {
 														clearInlineEditing();
 														editingChoice = {
@@ -550,7 +550,7 @@
 														>
 														<span>{choice.text}</span>
 														<button
-															class="btn btn-xs btn-secondary flex items-center"
+															class="btn preset-tonal-secondary px-1 py-0.5 text-xs flex items-center"
 															onclick={() => {
 																clearInlineEditing();
 																editingChoice = choice;
@@ -560,7 +560,7 @@
 															<IconEdit size={16} />
 														</button>
 														<button
-															class="btn btn-xs btn-error flex items-center"
+															class="btn preset-filled-error-500 px-1 py-0.5 text-xs flex items-center"
 															title="Delete Choice"
 															onclick={() => deleteChoice(encounter.id, choice.id)}
 														>
@@ -722,3 +722,9 @@
 		{/snippet}
 	</Modal>
 {/if}
+
+
+
+
+
+

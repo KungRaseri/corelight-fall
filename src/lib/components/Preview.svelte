@@ -24,8 +24,14 @@
 
 			<!-- Call to Action -->
 			<div class="absolute right-4 bottom-4">
-				<a href="/game" class="btn btn-primary">Start Your Journey</a>
+				<a href="/game" class="btn preset-filled-primary-500">Start Your Journey</a>
 			</div>
 		</div>
 	</div>
 </section>
+
+
+
+
+
+

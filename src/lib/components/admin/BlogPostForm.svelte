@@ -109,9 +109,15 @@
 		<div class="text-red-500">{error}</div>
 	{/if}
 	<div class="mt-4 flex gap-4">
-		<button class="btn btn-primary" type="submit" disabled={loading}>
+		<button class="btn preset-filled-primary-500" type="submit" disabled={loading}>
 			{loading ? 'Saving...' : 'Save Post'}
 		</button>
 		<button class="btn mt-4" onclick={onCancel}>Cancel</button>
 	</div>
 </form>
+
+
+
+
+
+

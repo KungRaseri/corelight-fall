@@ -18,3 +18,9 @@
     <p>Resources: {characterData.resources ?? 0}</p>
     <p>Location: {characterData.location ?? 'Unknown'}</p> -->
 </div>
+
+
+
+
+
+

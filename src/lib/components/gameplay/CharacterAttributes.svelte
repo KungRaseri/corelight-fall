@@ -48,3 +48,9 @@
 		<p class="text-center text-gray-400">No attributes available.</p>
 	{/if}
 </div>
+
+
+
+
+
+

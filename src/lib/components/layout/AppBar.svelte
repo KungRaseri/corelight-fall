@@ -61,8 +61,8 @@
 				{/if}
 			</div>
 		{:else}
-			<a href="/auth/login" class="btn btn-primary">Login</a>
-			<a href="/auth/register" class="btn btn-secondary">Register</a>
+			<a href="/auth/login" class="btn preset-filled-primary-500">Login</a>
+			<a href="/auth/register" class="btn preset-tonal-secondary">Register</a>
 		{/if}
 	{/snippet}
 	{#snippet headline()}
@@ -71,3 +71,9 @@
 		</div>
 	{/snippet}
 </AppBar>
+
+
+
+
+
+

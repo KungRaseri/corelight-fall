@@ -10,9 +10,15 @@
 		<div class="text-center">
 			<span>{item.name}</span>
 			<p class="text-sm">{item.description}</p>
-			<button class="btn btn-xs btn-error" onclick={onUnequip}>Unequip</button>
+			<button class="btn preset-filled-error-500 px-1 py-0.5 text-xs" onclick={onUnequip}>Unequip</button>
 		</div>
 	{:else}
 		<div class="text-center text-gray-500">{emptySlotText}</div>
 	{/if}
 </div>
+
+
+
+
+
+

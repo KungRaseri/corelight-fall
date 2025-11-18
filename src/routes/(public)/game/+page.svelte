@@ -87,7 +87,7 @@
 					<ul class="space-y-2">
 						{#each data.storylines ?? [] as s}
 							<li>
-								<button class="btn btn-primary w-full" onclick={() => chooseStory(s.id)}>
+								<button class="btn preset-filled-primary-500 w-full" onclick={() => chooseStory(s.id)}>
 									{s.title}
 								</button>
 							</li>
@@ -113,7 +113,7 @@
 							>
 								{outcome}
 							</div>
-							<button class="btn btn-primary mx-auto mt-4" onclick={handleContinue}>Continue</button
+							<button class="btn preset-filled-primary-500 mx-auto mt-4" onclick={handleContinue}>Continue</button
 							>
 						{:else}
 							<div class="mt-4 flex flex-col gap-2">
@@ -160,3 +160,9 @@
 <Modal open={showLog} onClose={() => (showLog = false)}>
 	<ActivityLog />
 </Modal> -->
+
+
+
+
+
+

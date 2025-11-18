@@ -94,7 +94,7 @@
 		onCancel={() => (showForm = false)}
 	/>
 {:else}
-	<button class="btn btn-primary mb-4" onclick={addPost}>Add New Post</button>
+	<button class="btn preset-filled-primary-500 mb-4" onclick={addPost}>Add New Post</button>
 	{#if loading}
 		<p>Loading...</p>
 	{:else}
@@ -122,9 +122,9 @@
 						</td>
 						<td class="px-3 py-2">{post.published ? 'Yes' : 'No'}</td>
 						<td class="flex gap-2 px-3 py-2">
-							<button class="btn btn-xs btn-primary" onclick={() => editPost(post)}>Edit</button>
-							<button class="btn btn-xs btn-secondary" onclick={() => viewPost(post)}>View</button>
-							<button class="btn btn-xs btn-error" onclick={() => deletePost(post)}>Delete</button>
+							<button class="btn preset-filled-primary-500 px-1 py-0.5 text-xs" onclick={() => editPost(post)}>Edit</button>
+							<button class="btn preset-tonal-secondary px-1 py-0.5 text-xs" onclick={() => viewPost(post)}>View</button>
+							<button class="btn preset-filled-error-500 px-1 py-0.5 text-xs" onclick={() => deletePost(post)}>Delete</button>
 						</td>
 					</tr>
 				{/each}
@@ -136,3 +136,9 @@
 {#if error}
 	<p class="mt-2 text-red-500">{error}</p>
 {/if}
+
+
+
+
+
+

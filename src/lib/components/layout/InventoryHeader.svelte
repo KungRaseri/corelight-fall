@@ -10,3 +10,9 @@
 	<h2 class="text-2xl font-semibold">Inventory</h2>
 	<p>Total Items: {itemCount}</p>
 </header>
+
+
+
+
+
+

@@ -133,9 +133,15 @@
 		</div>
 	</div>
 	<div class="mt-4 flex gap-4">
-		<button class="btn btn-primary" type="submit" disabled={loading}>
+		<button class="btn preset-filled-primary-500" type="submit" disabled={loading}>
 			{loading ? 'Saving...' : 'Save Encounter'}
 		</button>
-		<button class="btn btn-secondary" onclick={onCancel}>Cancel</button>
+		<button class="btn preset-tonal-secondary" onclick={onCancel}>Cancel</button>
 	</div>
 </form>
+
+
+
+
+
+

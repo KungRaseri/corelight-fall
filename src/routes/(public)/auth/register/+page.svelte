@@ -26,7 +26,7 @@
 					name="username"
 					id="username"
 					required
-					class="input input-primary mt-2 w-full"
+					class="input preset-tonal-surface mt-2 w-full"
 				/>
 			</div>
 
@@ -37,12 +37,12 @@
 					name="password"
 					id="password"
 					required
-					class="input input-primary mt-2 w-full"
+					class="input preset-tonal-surface mt-2 w-full"
 				/>
 			</div>
 
 			<div>
-				<button type="submit" class="btn btn-primary w-full">Register</button>
+				<button type="submit" class="btn preset-filled-primary-500 w-full">Register</button>
 			</div>
 
 			<p class="text-surface-300 mt-4 text-center text-sm">
@@ -57,3 +57,9 @@
 		</form>
 	</div>
 </div>
+
+
+
+
+
+
