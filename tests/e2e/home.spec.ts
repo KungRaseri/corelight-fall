@@ -6,7 +6,7 @@ test.describe('Home Page', () => {
 	});
 
 	test('should load successfully', async ({ page }) => {
-		await expect(page).toHaveTitle(/Corelight Fall/i);
+		await expect(page).toHaveTitle('Corelight Fall');
 	});
 
 	test('should display main heading', async ({ page }) => {
@@ -27,7 +27,6 @@ test.describe('Home Page', () => {
 			}
 		});
 
-		await page.goto('/');
 		await page.waitForLoadState('networkidle');
 		
 		// Filter out known third-party errors if any

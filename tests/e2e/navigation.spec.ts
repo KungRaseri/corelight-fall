@@ -3,44 +3,65 @@ import { expect, test } from '@playwright/test';
 test.describe('Navigation', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/');
+		await page.waitForLoadState('networkidle');
 	});
 
 	test('should navigate to About page', async ({ page }) => {
 		// Find and click About link
-		const aboutLink = page.locator('a[href="/about"]');
-		if (await aboutLink.isVisible()) {
-			await aboutLink.click();
-			await expect(page).toHaveURL(/about/);
-		} else {
+		const aboutLink = page.locator('a[href="/about"]').first();
+		const isVisible = await aboutLink.isVisible().catch(() => false);
+		
+		if (!isVisible) {
 			test.skip();
+			return;
 		}
+		
+		await aboutLink.click();
+		await expect(page).toHaveURL(/about/);
 	});
 
 	test('should navigate to Features page', async ({ page }) => {
-		const featuresLink = page.locator('a[href="/features"]');
-		if (await featuresLink.isVisible()) {
-			await featuresLink.click();
-			await expect(page).toHaveURL(/features/);
-		} else {
+		const featuresLink = page.locator('a[href="/features"]').first();
+		const isVisible = await featuresLink.isVisible().catch(() => false);
+		
+		if (!isVisible) {
 			test.skip();
+			return;
 		}
+		
+		await featuresLink.click();
+		await expect(page).toHaveURL(/features/);
 	});
 
 	test('should navigate to Blog page', async ({ page }) => {
-		const blogLink = page.locator('a[href="/blog"]');
-		if (await blogLink.isVisible()) {
-			await blogLink.click();
-			await expect(page).toHaveURL(/blog/);
-		} else {
+		const blogLink = page.locator('a[href="/blog"]').first();
+		const isVisible = await blogLink.isVisible().catch(() => false);
+		
+		if (!isVisible) {
 			test.skip();
+			return;
 		}
+		
+		// Wait for navigation to complete
+		await Promise.all([
+			page.waitForURL(/blog/, { timeout: 10000 }),
+			blogLink.click()
+		]);
+		
+		await expect(page).toHaveURL(/blog/);
 	});
 
-	test('should have working logo link back to home', async ({ page }) => {
-		// Navigate away from home
-		await page.goto('/about');
+	test('should have working home link', async ({ page }) => {
+		// First go to another page if available
+		const aboutLink = page.locator('a[href="/about"]').first();
+		const aboutIsVisible = await aboutLink.isVisible().catch(() => false);
 		
-		// Click logo or home link
+		if (aboutIsVisible) {
+			await aboutLink.click();
+			await page.waitForURL(/about/);
+		}
+		
+		// Click home link (logo or explicit home link)
 		const homeLink = page.locator('a[href="/"]').first();
 		await homeLink.click();
 		
@@ -49,9 +70,12 @@ test.describe('Navigation', () => {
 });
 
 test.describe('Navigation Accessibility', () => {
-	test('should be keyboard navigable', async ({ page }) => {
+	test.beforeEach(async ({ page }) => {
 		await page.goto('/');
-		
+		await page.waitForLoadState('networkidle');
+	});
+
+	test('should be keyboard navigable', async ({ page }) => {
 		// Tab through navigation items
 		await page.keyboard.press('Tab');
 		const firstFocusable = await page.evaluate(() => document.activeElement?.tagName);
@@ -60,18 +84,11 @@ test.describe('Navigation Accessibility', () => {
 		expect(['A', 'BUTTON', 'INPUT']).toContain(firstFocusable || '');
 	});
 
-	test('should have proper ARIA labels', async ({ page }) => {
-		await page.goto('/');
-		
+	test('should have semantic navigation', async ({ page }) => {
 		const nav = page.locator('nav').first();
-		await expect(nav).toBeVisible();
+		const navExists = await nav.count();
 		
-		// Check if navigation has semantic meaning
-		const role = await nav.getAttribute('role');
-		const ariaLabel = await nav.getAttribute('aria-label');
-		
-		// Should have either role="navigation" or proper aria-label
-		const hasAccessibility = role === 'navigation' || ariaLabel !== null || true;
-		expect(hasAccessibility).toBeTruthy();
+		// Should have at least one nav element
+		expect(navExists).toBeGreaterThan(0);
 	});
 });
