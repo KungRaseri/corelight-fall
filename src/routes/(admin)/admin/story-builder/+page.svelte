@@ -334,7 +334,7 @@
 		<div class="mb-2 flex items-center justify-between">
 			<h2 class="text-lg font-bold">Storylines</h2>
 			<button
-				class="btn preset-glass-success px-1 py-0.5 text-xs flex items-center gap-1"
+				class="btn preset-glass-surface-primary px-1 py-0.5 text-xs flex items-center gap-1"
 				onclick={startCreatingStoryline}
 				title="Add Storyline"
 			>
@@ -447,7 +447,7 @@
 									{/if}
 									<span class="font-semibold">{quest.title}</span>
 									<button
-										class="btn preset-glass-secondary px-1 py-0.5 text-xs flex items-center"
+										class="btn preset-glass-surface px-1 py-0.5 text-xs flex items-center"
 										onclick={() => {
 											clearInlineEditing();
 											editingQuest = quest;
@@ -505,7 +505,7 @@
 
 												<span>{encounter.title}</span>
 												<button
-													class="btn preset-glass-secondary px-1 py-0.5 text-xs flex items-center"
+													class="btn preset-glass-surface px-1 py-0.5 text-xs flex items-center"
 													onclick={() => {
 														clearInlineEditing();
 														editingEncounter = encounter;
@@ -550,7 +550,7 @@
 														>
 														<span>{choice.text}</span>
 														<button
-															class="btn preset-glass-secondary px-1 py-0.5 text-xs flex items-center"
+															class="btn preset-glass-surface px-1 py-0.5 text-xs flex items-center"
 															onclick={() => {
 																clearInlineEditing();
 																editingChoice = choice;

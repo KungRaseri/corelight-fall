@@ -3,6 +3,7 @@
 	import BlogPostForm from '$lib/components/admin/BlogPostForm.svelte';
 	import type { BlogPostFormData } from '$lib/types/BlogPostFormData';
 	import { onMount } from 'svelte';
+	import { BookOpen, Plus, Edit, Eye, Trash2, Loader } from 'lucide-svelte';
 
 	const { data } = $props();
 
@@ -84,61 +85,140 @@
 	}
 </script>
 
-<h1 class="mb-4 text-2xl font-bold">Blog Admin</h1>
+<div class="space-y-6 p-8">
+	<div class="flex items-center justify-between">
+		<div class="flex items-center gap-3">
+			<BookOpen class="text-primary-500 dark:text-primary-400 size-8" />
+			<h1 class="text-primary-500 dark:text-primary-400 text-3xl font-bold">Blog Management</h1>
+		</div>
+		{#if !showForm}
+			<button class="btn preset-glass-surface-primary flex items-center gap-2" onclick={addPost}>
+				<Plus class="size-5" />
+				<span>New Post</span>
+			</button>
+		{/if}
+	</div>
 
-{#if showForm}
-	<BlogPostForm
-		post={editingPost}
-		{loading}
-		onSave={savePost}
-		onCancel={() => (showForm = false)}
-	/>
-{:else}
-	<button class="btn preset-glass-primary mb-4" onclick={addPost}>Add New Post</button>
-	{#if loading}
-		<p>Loading...</p>
-	{:else}
-		<table class="bg-surface-800 w-full table-auto border-collapse rounded shadow">
-			<thead>
-				<tr>
-					<th class="px-3 py-2 text-left">Title</th>
-					<th class="px-3 py-2 text-left">Author</th>
-					<th class="px-3 py-2 text-left">Date</th>
-					<th class="px-3 py-2 text-left">Published</th>
-					<th class="px-3 py-2 text-left">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each posts as post}
-					<tr class="border-surface-700 hover:bg-surface-700 border-t transition">
-						<td class="px-3 py-2">{post.title}</td>
-						<td class="px-3 py-2">{post.author}</td>
-						<td class="px-3 py-2">
-							{new Date(post.date).toLocaleDateString('en-US', {
-								year: 'numeric',
-								month: 'short',
-								day: '2-digit'
-							})}
-						</td>
-						<td class="px-3 py-2">{post.published ? 'Yes' : 'No'}</td>
-						<td class="flex gap-2 px-3 py-2">
-							<button class="btn preset-glass-primary px-1 py-0.5 text-xs" onclick={() => editPost(post)}>Edit</button>
-							<button class="btn preset-glass-secondary px-1 py-0.5 text-xs" onclick={() => viewPost(post)}>View</button>
-							<button class="btn preset-glass-error px-1 py-0.5 text-xs" onclick={() => deletePost(post)}>Delete</button>
-						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
+	{#if error}
+		<div class="card preset-glass-error rounded-xl p-4">
+			<p class="text-center font-semibold">{error}</p>
+		</div>
 	{/if}
-{/if}
 
-{#if error}
-	<p class="mt-2 text-red-500">{error}</p>
-{/if}
-
-
-
-
-
-
+	{#if showForm}
+		<BlogPostForm
+			post={editingPost}
+			{loading}
+			onSave={savePost}
+			onCancel={() => (showForm = false)}
+		/>
+	{:else if loading}
+		<div class="card preset-glass-surface rounded-2xl p-12 text-center">
+			<Loader class="text-primary-500 mx-auto mb-4 size-16 animate-spin" />
+			<p class="text-surface-600 dark:text-surface-400 text-lg">Loading posts...</p>
+		</div>
+	{:else}
+		<div class="card preset-glass-surface overflow-hidden rounded-2xl shadow-lg">
+			<div class="overflow-x-auto">
+				<table class="w-full">
+					<thead
+						class="bg-surface-200 dark:bg-surface-800 border-surface-300 dark:border-surface-700 border-b"
+					>
+						<tr>
+							<th
+								class="text-surface-900 dark:text-surface-100 px-6 py-4 text-left text-sm font-bold"
+								>Title</th
+							>
+							<th
+								class="text-surface-900 dark:text-surface-100 px-6 py-4 text-left text-sm font-bold"
+								>Author</th
+							>
+							<th
+								class="text-surface-900 dark:text-surface-100 px-6 py-4 text-left text-sm font-bold"
+								>Date</th
+							>
+							<th
+								class="text-surface-900 dark:text-surface-100 px-6 py-4 text-left text-sm font-bold"
+								>Status</th
+							>
+							<th
+								class="text-surface-900 dark:text-surface-100 px-6 py-4 text-right text-sm font-bold"
+								>Actions</th
+							>
+						</tr>
+					</thead>
+					<tbody class="divide-surface-200 dark:divide-surface-700 divide-y">
+						{#each posts as post}
+							<tr class="hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors">
+								<td class="px-6 py-4">
+									<div class="text-surface-900 dark:text-surface-100 font-semibold">
+										{post.title}
+									</div>
+									{#if post.summary}
+										<div class="text-surface-600 dark:text-surface-400 line-clamp-1 text-sm">
+											{post.summary}
+										</div>
+									{/if}
+								</td>
+								<td class="text-surface-700 dark:text-surface-300 px-6 py-4">{post.author}</td>
+								<td class="text-surface-700 dark:text-surface-300 px-6 py-4">
+									{new Date(post.date).toLocaleDateString('en-US', {
+										year: 'numeric',
+										month: 'short',
+										day: '2-digit'
+									})}
+								</td>
+								<td class="px-6 py-4">
+									{#if post.published}
+										<span class="badge preset-filled-success text-xs">Published</span>
+									{:else}
+										<span class="badge preset-filled-warning text-xs">Draft</span>
+									{/if}
+								</td>
+								<td class="px-6 py-4">
+									<div class="flex justify-end gap-2">
+										<button
+											class="btn-icon btn-icon-sm hover:preset-tonal-primary"
+											onclick={() => editPost(post)}
+											title="Edit post"
+										>
+											<Edit class="size-4" />
+										</button>
+										<button
+											class="btn-icon btn-icon-sm hover:preset-tonal-secondary"
+											onclick={() => viewPost(post)}
+											title="View post"
+										>
+											<Eye class="size-4" />
+										</button>
+										<button
+											class="btn-icon btn-icon-sm hover:preset-tonal-error"
+											onclick={() => deletePost(post)}
+											title="Delete post"
+										>
+											<Trash2 class="size-4" />
+										</button>
+									</div>
+								</td>
+							</tr>
+						{:else}
+							<tr>
+								<td colspan="5" class="px-6 py-12 text-center">
+									<BookOpen class="size-16 mx-auto mb-4 text-surface-400" />
+									<p class="text-lg text-surface-600 dark:text-surface-400">No blog posts yet</p>
+									<button
+										class="btn preset-glass-primary mt-4 flex items-center gap-2 mx-auto"
+										onclick={addPost}
+									>
+										<Plus class="size-5" />
+										<span>Create your first post</span>
+									</button>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	{/if}
+</div>

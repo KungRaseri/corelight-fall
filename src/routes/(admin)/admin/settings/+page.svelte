@@ -49,7 +49,7 @@ disabled={saving}
 </div>
 
 {#if message}
-<div class="card preset-glass-success p-4 rounded-xl">
+<div class="card preset-glass-surface-primary p-4 rounded-xl">
 <p class="text-center font-semibold">{message}</p>
 </div>
 {/if}
@@ -180,7 +180,7 @@ bind:checked={settings.enableNotifications}
 
 <!-- Actions -->
 <div class="flex gap-4 justify-end">
-<button class="btn preset-glass-secondary">Cancel</button>
+<button class="btn preset-glass-surface">Cancel</button>
 <button 
 class="btn preset-glass-surface-primary flex items-center gap-2"
 onclick={saveSettings}

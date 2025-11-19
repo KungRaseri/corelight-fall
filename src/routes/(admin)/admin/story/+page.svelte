@@ -119,7 +119,7 @@
 			</ul>
 		</div>
 		<div class="mt-6 flex gap-4">
-			<button class="btn preset-glass-secondary" onclick={() => (viewingStoryline = null)}>Go Back</button>
+			<button class="btn preset-glass-surface" onclick={() => (viewingStoryline = null)}>Go Back</button>
 			<button
 				class="btn preset-glass-primary"
 				onclick={() => {
@@ -131,7 +131,7 @@
 		</div>
 	</div>
 {:else}
-	<h1 class="mb-4 text-2xl font-bold">Storylines</h1>
+	<h1 class="mb-4 text-3xl font-bold text-primary-500 dark:text-primary-400">Storylines</h1>
 	<button class="btn preset-glass-primary mb-4" onclick={addStoryline}>Add New Storyline</button>
 	{#if loading}
 		<p>Loading...</p>
@@ -155,7 +155,7 @@
 							<button class="btn preset-glass-primary px-1 py-0.5 text-xs" onclick={() => editStoryline(storyline)}
 								>Edit</button
 							>
-							<button class="btn preset-glass-secondary px-1 py-0.5 text-xs" onclick={() => viewStoryline(storyline)}
+							<button class="btn preset-glass-surface px-1 py-0.5 text-xs" onclick={() => viewStoryline(storyline)}
 								>View</button
 							>
 							<!-- Add view/delete as needed -->

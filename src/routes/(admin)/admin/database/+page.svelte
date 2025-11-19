@@ -33,12 +33,12 @@
 </script>
 
 <section class="p-6">
-	<h1 class="mb-4 text-2xl font-bold">Database Management</h1>
+	<h1 class="mb-4 text-3xl font-bold text-primary-500 dark:text-primary-400">Database Management</h1>
 
 	<div class="space-y-4">
 		<button class="btn preset-glass-primary" onclick={seedDatabase}>Seed Database</button>
 		<button class="btn" onclick={seedTestData}>Seed Test Data</button>
-		<button class="btn preset-glass-secondary" onclick={resetDatabase}>Reset Database</button>
+		<button class="btn preset-glass-surface" onclick={resetDatabase}>Reset Database</button>
 
 		{#if message}
 			<p class="mt-4 text-green-500">{message}</p>

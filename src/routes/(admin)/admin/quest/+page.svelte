@@ -68,7 +68,7 @@
 	});
 </script>
 
-<h1 class="mb-4 text-2xl font-bold">Quests</h1>
+<h1 class="mb-4 text-3xl font-bold text-primary-500 dark:text-primary-400">Quests</h1>
 {#if showForm}
 	<QuestForm
 		quest={editingQuest}
