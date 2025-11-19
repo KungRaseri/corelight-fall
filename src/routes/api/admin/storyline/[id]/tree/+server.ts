@@ -8,7 +8,7 @@ import { json } from '@sveltejs/kit';
 import { eq, inArray } from 'drizzle-orm';
 
 export const GET = async ({ params, locals }) => {
-	requireAdmin(locals);
+	await requireAdmin(locals);
 
 	const id = Number(params.id);
 	if (!id) return json({ error: 'Missing storyline id' }, { status: 400 });

@@ -3,7 +3,7 @@ import { requireAdmin } from '$lib/utils/requireAdmin';
 import { json, type RequestHandler } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ locals }) => {
-	requireAdmin(locals);
+	await requireAdmin(locals);
 	try {
 		await seedTestData();
 		return json({ message: 'Database seeded successfully.' });
@@ -12,3 +12,4 @@ export const POST: RequestHandler = async ({ locals }) => {
 		return json({ message: 'Database operation failed.' }, { status: 500 });
 	}
 };
+

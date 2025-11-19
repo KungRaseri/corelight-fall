@@ -6,13 +6,13 @@ import { json } from '@sveltejs/kit';
 import { eq, asc } from 'drizzle-orm';
 
 export const GET = async ({ locals }) => {
-	requireAdmin(locals);
+	await requireAdmin(locals);
 	const items = await db.select().from(item).orderBy(asc(item.name));
 	return json(items);
 };
 
 export const POST = async ({ locals, request }) => {
-	requireAdmin(locals);
+	await requireAdmin(locals);
 	const data = await request.json();
 
 	// Create a properly typed insert object
@@ -27,7 +27,7 @@ export const POST = async ({ locals, request }) => {
 };
 
 export const PUT = async ({ locals, request }) => {
-	requireAdmin(locals);
+	await requireAdmin(locals);
 	const data = await request.json();
 	
 	const updateData: Partial<Item> = {
@@ -41,9 +41,10 @@ export const PUT = async ({ locals, request }) => {
 };
 
 export const DELETE = async ({ locals, request }) => {
-	requireAdmin(locals);
+	await requireAdmin(locals);
 	const { id } = await request.json();
 	
 	await db.delete(item).where(eq(item.id, id));
 	return json({ success: true });
 };
+

@@ -6,13 +6,13 @@ import { json } from '@sveltejs/kit';
 import { eq, desc } from 'drizzle-orm';
 
 export const GET = async ({ locals }) => {
-	requireAdmin(locals);
+	await requireAdmin(locals);
 	const quests = await db.select().from(quest).orderBy(desc(quest.id));
 	return json(quests);
 };
 
 export const POST = async ({ locals, request }) => {
-	requireAdmin(locals);
+	await requireAdmin(locals);
 	const data = await request.json();
 
 	const newQuest: NewQuest = {
@@ -36,7 +36,7 @@ export const POST = async ({ locals, request }) => {
 };
 
 export const PUT = async ({ locals, request }) => {
-	requireAdmin(locals);
+	await requireAdmin(locals);
 	const data = await request.json();
 	
 	const updateData: Partial<Quest> = {
@@ -57,3 +57,4 @@ export const PUT = async ({ locals, request }) => {
 	const result = await db.update(quest).set(updateData).where(eq(quest.id, data.id)).returning();
 	return json({ success: true, quest: result[0] });
 };
+

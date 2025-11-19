@@ -4,6 +4,15 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
+	resolve: {
+		conditions: ['node']
+	},
+	ssr: {
+		noExternal: []
+	},
+	optimizeDeps: {
+		exclude: ['@node-rs/argon2', '@node-rs/argon2-wasm32-wasi']
+	},
 	test: {
 		globals: true,
 		environment: 'jsdom',

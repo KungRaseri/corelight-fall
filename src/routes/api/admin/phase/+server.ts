@@ -20,3 +20,4 @@ export async function GET() {
 	const phases = await db.select().from(phase);
 	return json({ phases });
 }
+
