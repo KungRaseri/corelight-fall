@@ -12,7 +12,8 @@
 		Activity,
 		Settings,
 		Database,
-		Eye
+		Eye,
+		Package
 	} from 'lucide-svelte';
 
 	const { data } = $props();
@@ -213,6 +214,13 @@
 			>
 				<Target class="size-5" />
 				<span>Encounters</span>
+			</a>
+			<a
+				href="/admin/item"
+				class="btn preset-glass-surface-primary flex items-center justify-center gap-2"
+			>
+				<Package class="size-5" />
+				<span>Items</span>
 			</a>
 			<a
 				href="/admin/user"
