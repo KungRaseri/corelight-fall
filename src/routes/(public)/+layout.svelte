@@ -12,9 +12,12 @@
 
 	const { data, children } = $props();
 
-	onMount(() => {
+	// Update user store whenever data changes (including after login)
+	$effect(() => {
 		if (data?.user) {
 			setUser(data.user);
+		} else {
+			setUser(null);
 		}
 	});
 </script>

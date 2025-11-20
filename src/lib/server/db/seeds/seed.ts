@@ -321,173 +321,203 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 		// Seed Story Structure (Act -> Phase -> Storyline -> Quest -> Encounter -> Choice)
 		console.log('🌱 Seeding story structure...');
 
-		// Act I
-		const actOne: NewAct = {
-			title: 'ACT I: Awakening',
-			order: 1
-		};
-		await db.insert(act).values([actOne]).onConflictDoNothing();
-		const acts = await db.select().from(act);
-		const actOneRecord = acts.find(a => a.title === 'ACT I: Awakening');
+		// Act I - Check if exists first
+		let actOneRecord = (await db.select().from(act).where(eq(act.title, 'ACT I: Awakening')))[0];
+		
+		if (!actOneRecord) {
+			const actOne: NewAct = {
+				title: 'ACT I: Awakening',
+				order: 1
+			};
+			await db.insert(act).values([actOne]);
+			actOneRecord = (await db.select().from(act).where(eq(act.title, 'ACT I: Awakening')))[0];
+		}
 
 		if (!actOneRecord) throw new Error('Act I not created');
 
-		// Phase 1
-		const phaseOne: NewPhase = {
-			actId: actOneRecord.id,
-			title: 'PHASE 1: First Light',
-			order: 1
-		};
-		await db.insert(phase).values([phaseOne]).onConflictDoNothing();
-		const phases = await db.select().from(phase);
-		const phaseOneRecord = phases.find(p => p.title === 'PHASE 1: First Light');
+		// Phase 1 - Check if exists first
+		let phaseOneRecord = (await db.select().from(phase).where(eq(phase.title, 'PHASE 1: First Light')))[0];
+		
+		if (!phaseOneRecord) {
+			const phaseOne: NewPhase = {
+				actId: actOneRecord.id,
+				title: 'PHASE 1: First Light',
+				order: 1
+			};
+			await db.insert(phase).values([phaseOne]);
+			phaseOneRecord = (await db.select().from(phase).where(eq(phase.title, 'PHASE 1: First Light')))[0];
+		}
 
 		if (!phaseOneRecord) throw new Error('Phase 1 not created');
 
-		// Main Storyline
-		const mainStoryline: NewStoryline = {
-			title: 'The Dying Light',
-			description: 'Your journey begins at Cinderlight Outpost, where rumors speak of a relic that could restore the Corelight—or doom what remains of humanity.',
-			phaseId: phaseOneRecord.id,
-			tone: 'Dark, mysterious, hopeful',
-			goals: 'Discover the truth about the Signal Beacon and decide the fate of Cinderlight Outpost',
-			summary: 'The main story arc following the player\'s discovery of a mysterious Signal Beacon and their involvement with the Cinderlight Conclave.',
-			tags: 'main, corelight, beacon, mystery',
-			factions: 'Cinderlight Conclave, Forgewalkers Union',
-			order: 1,
-			isMain: true,
-			isActive: true,
-			coverImage: '/images/dying-light.jpg',
-			createdAt: new Date(),
-			updatedAt: new Date()
-		};
-		await db.insert(storyline).values([mainStoryline]).onConflictDoNothing();
-		const storylines = await db.select().from(storyline);
-		const mainStorylineRecord = storylines.find(s => s.title === 'The Dying Light');
+		// Main Storyline - Check if exists first
+		let mainStorylineRecord = (await db.select().from(storyline).where(eq(storyline.title, 'The Dying Light')))[0];
+		
+		if (!mainStorylineRecord) {
+			const mainStoryline: NewStoryline = {
+				title: 'The Dying Light',
+				description: 'Your journey begins at Cinderlight Outpost, where rumors speak of a relic that could restore the Corelight—or doom what remains of humanity.',
+				phaseId: phaseOneRecord.id,
+				tone: 'Dark, mysterious, hopeful',
+				goals: 'Discover the truth about the Signal Beacon and decide the fate of Cinderlight Outpost',
+				summary: 'The main story arc following the player\'s discovery of a mysterious Signal Beacon and their involvement with the Cinderlight Conclave.',
+				tags: 'main, corelight, beacon, mystery',
+				factions: 'Cinderlight Conclave, Forgewalkers Union',
+				order: 1,
+				isMain: true,
+				isActive: true,
+				coverImage: '/images/dying-light.jpg',
+				createdAt: new Date(),
+				updatedAt: new Date()
+			};
+			await db.insert(storyline).values([mainStoryline]);
+			mainStorylineRecord = (await db.select().from(storyline).where(eq(storyline.title, 'The Dying Light')))[0];
+		}
 
 		if (!mainStorylineRecord) throw new Error('Main storyline not created');
 
-		// Quest 1: Arrival at Cinderlight
-		const quest1: NewQuest = {
-			storylineId: mainStorylineRecord.id,
-			title: 'Arrival at Cinderlight',
-			description: 'You arrive at Cinderlight Outpost, a settlement built around the ruins of an ancient watchtower. The people here are wary of strangers, but you carry something that may change everything.',
-			tone: 'Tense, mysterious',
-			goals: 'Gain entry to Cinderlight Outpost and meet with Elder Cassia',
-			summary: 'The player arrives at Cinderlight Outpost carrying a mysterious Signal Beacon.',
-			tags: 'introduction, outpost, beacon',
-			factions: 'Cinderlight Conclave',
-			order: 1,
-			isMain: true,
-			isActive: true,
-			createdAt: new Date(),
-			updatedAt: new Date()
-		};
-		await db.insert(quest).values([quest1]).onConflictDoNothing();
-		const quests = await db.select().from(quest);
-		const quest1Record = quests.find(q => q.title === 'Arrival at Cinderlight');
+		// Quest 1: Arrival at Cinderlight - Check if exists first
+		let quest1Record = (await db.select().from(quest).where(eq(quest.title, 'Arrival at Cinderlight')))[0];
+		
+		if (!quest1Record) {
+			const quest1: NewQuest = {
+				storylineId: mainStorylineRecord.id,
+				title: 'Arrival at Cinderlight',
+				description: 'You arrive at Cinderlight Outpost, a settlement built around the ruins of an ancient watchtower. The people here are wary of strangers, but you carry something that may change everything.',
+				tone: 'Tense, mysterious',
+				goals: 'Gain entry to Cinderlight Outpost and meet with Elder Cassia',
+				summary: 'The player arrives at Cinderlight Outpost carrying a mysterious Signal Beacon.',
+				tags: 'introduction, outpost, beacon',
+				factions: 'Cinderlight Conclave',
+				order: 1,
+				isMain: true,
+				isActive: true,
+				createdAt: new Date(),
+				updatedAt: new Date()
+			};
+			await db.insert(quest).values([quest1]);
+			quest1Record = (await db.select().from(quest).where(eq(quest.title, 'Arrival at Cinderlight')))[0];
+		}
 
 		if (!quest1Record) throw new Error('Quest 1 not created');
 
-		// Encounter 1: The Gate Guard
-		const encounter1: NewEncounter = {
-			questId: quest1Record.id,
-			title: 'The Gate Guard',
-			description: 'A grizzled guard stands before the reinforced gates of Cinderlight Outpost. Her hand rests on her weapon as she sizes you up. Behind her, you can see the faint glow of firelight from within the settlement.',
-			type: 'dialogue',
-			tone: 'Suspicious, cautious',
-			summary: 'First interaction with Cinderlight Outpost. The guard questions the player\'s intentions.',
-			tags: 'guard, entrance, first-contact',
-			factions: 'Cinderlight Conclave',
-			order: 1,
-			isActive: true,
-			createdAt: new Date(),
-			updatedAt: new Date()
-		};
-		await db.insert(encounter).values([encounter1]).onConflictDoNothing();
-		const encounters = await db.select().from(encounter);
-		const encounter1Record = encounters.find(e => e.title === 'The Gate Guard');
+		// Encounter 1: The Gate Guard - Check if exists first
+		let encounter1Record = (await db.select().from(encounter).where(eq(encounter.title, 'The Gate Guard')))[0];
+		
+		if (!encounter1Record) {
+			const encounter1: NewEncounter = {
+				questId: quest1Record.id,
+				title: 'The Gate Guard',
+				description: 'A grizzled guard stands before the reinforced gates of Cinderlight Outpost. Her hand rests on her weapon as she sizes you up. Behind her, you can see the faint glow of firelight from within the settlement.',
+				type: 'dialogue',
+				tone: 'Suspicious, cautious',
+				summary: 'First interaction with Cinderlight Outpost. The guard questions the player\'s intentions.',
+				tags: 'guard, entrance, first-contact',
+				factions: 'Cinderlight Conclave',
+				order: 1,
+				isActive: true,
+				createdAt: new Date(),
+				updatedAt: new Date()
+			};
+			await db.insert(encounter).values([encounter1]);
+			encounter1Record = (await db.select().from(encounter).where(eq(encounter.title, 'The Gate Guard')))[0];
+		}
 
 		if (!encounter1Record) throw new Error('Encounter 1 not created');
 
-		// Encounter 2: Meeting Elder Cassia
-		const encounter2: NewEncounter = {
-			questId: quest1Record.id,
-			title: 'Meeting Elder Cassia',
-			description: 'Elder Cassia studies the Signal Beacon with a mixture of reverence and fear. "Do you know what you carry?" she asks, her weathered fingers hovering over the pulsing device. "This is a fragment of the old world—a key to powers we barely understand."',
-			type: 'dialogue',
-			tone: 'Revelatory, important',
-			summary: 'Elder Cassia explains the significance of the Signal Beacon and offers the player a choice.',
-			tags: 'elder, beacon, revelation, choice',
-			factions: 'Cinderlight Conclave',
-			order: 2,
-			isActive: true,
-			createdAt: new Date(),
-			updatedAt: new Date()
-		};
-		await db.insert(encounter).values([encounter2]).onConflictDoNothing();
-		const encounter2Record = encounters.find(e => e.title === 'Meeting Elder Cassia');
-
-		// Encounter 3: The Path Diverges (Ending)
-		const encounter3: NewEncounter = {
-			questId: quest1Record.id,
-			title: 'The Path Diverges',
-			description: 'You have made your choice. The future of Cinderlight Outpost—and perhaps the world—now rests in your hands.',
-			type: 'narrative',
-			tone: 'Conclusive, momentous',
-			summary: 'The conclusion of the first quest, setting up future storylines.',
-			tags: 'conclusion, choice-result',
-			factions: 'Cinderlight Conclave',
-			order: 3,
-			isActive: true,
-			createdAt: new Date(),
-			updatedAt: new Date()
-		};
-		await db.insert(encounter).values([encounter3]).onConflictDoNothing();
-		const encounter3Record = encounters.find(e => e.title === 'The Path Diverges');
-
-		// Choices for Encounter 1
-		if (encounter2Record) {
-			const choice1: NewChoice = {
-				encounterId: encounter1Record.id,
-				text: 'Show the Signal Beacon and request entry',
-				nextEncounterId: encounter2Record.id,
-				outcome: 'The guard\'s eyes widen at the sight of the beacon. She immediately escorts you to Elder Cassia.',
-				order: 1,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			};
-
-			const choice2: NewChoice = {
-				encounterId: encounter1Record.id,
-				text: 'Attempt to bribe the guard with Ancient Coins',
-				nextEncounterId: encounter2Record.id,
-				outcome: 'The guard pockets the coins and opens the gate, but warns you to keep your head down.',
+		// Encounter 2: Meeting Elder Cassia - Check if exists first
+		let encounter2Record = (await db.select().from(encounter).where(eq(encounter.title, 'Meeting Elder Cassia')))[0];
+		
+		if (!encounter2Record) {
+			const encounter2: NewEncounter = {
+				questId: quest1Record.id,
+				title: 'Meeting Elder Cassia',
+				description: 'Elder Cassia studies the Signal Beacon with a mixture of reverence and fear. "Do you know what you carry?" she asks, her weathered fingers hovering over the pulsing device. "This is a fragment of the old world—a key to powers we barely understand."',
+				type: 'dialogue',
+				tone: 'Revelatory, important',
+				summary: 'Elder Cassia explains the significance of the Signal Beacon and offers the player a choice.',
+				tags: 'elder, beacon, revelation, choice',
+				factions: 'Cinderlight Conclave',
 				order: 2,
+				isActive: true,
 				createdAt: new Date(),
 				updatedAt: new Date()
 			};
-
-			const choice3: NewChoice = {
-				encounterId: encounter1Record.id,
-				text: 'Intimidate the guard (Presence check)',
-				nextEncounterId: encounter2Record.id,
-				outcome: 'Your forceful demeanor convinces the guard you\'re not someone to trifle with. She reluctantly allows entry.',
-				order: 3,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			};
-
-			await db.insert(choice).values([choice1, choice2, choice3]).onConflictDoNothing();
+			await db.insert(encounter).values([encounter2]);
+			encounter2Record = (await db.select().from(encounter).where(eq(encounter.title, 'Meeting Elder Cassia')))[0];
 		}
 
-		// Choices for Encounter 2
+		// Encounter 3: The Path Diverges (Ending) - Check if exists first
+		let encounter3Record = (await db.select().from(encounter).where(eq(encounter.title, 'The Path Diverges')))[0];
+		
+		if (!encounter3Record) {
+			const encounter3: NewEncounter = {
+				questId: quest1Record.id,
+				title: 'The Path Diverges',
+				description: 'You have made your choice. The future of Cinderlight Outpost—and perhaps the world—now rests in your hands.',
+				type: 'narrative',
+				tone: 'Conclusive, momentous',
+				summary: 'The conclusion of the first quest, setting up future storylines.',
+				tags: 'conclusion, choice-result',
+				factions: 'Cinderlight Conclave',
+				order: 3,
+				isActive: true,
+				createdAt: new Date(),
+				updatedAt: new Date()
+			};
+			await db.insert(encounter).values([encounter3]);
+			encounter3Record = (await db.select().from(encounter).where(eq(encounter.title, 'The Path Diverges')))[0];
+		}
+
+		// Choices for Encounter 1 - Check if they exist first
+		if (encounter2Record) {
+			const existingChoices = await db.select().from(choice).where(eq(choice.encounterId, encounter1Record.id));
+			
+			if (existingChoices.length === 0) {
+				const choice1: NewChoice = {
+					encounterId: encounter1Record.id,
+					text: 'Show the Signal Beacon and request entry',
+					nextEncounterId: encounter2Record.id,
+					outcome: 'The guard\'s eyes widen at the sight of the beacon. She immediately escorts you to Elder Cassia.',
+					order: 1,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				};
+
+				const choice2: NewChoice = {
+					encounterId: encounter1Record.id,
+					text: 'Attempt to bribe the guard with Ancient Coins',
+					nextEncounterId: encounter2Record.id,
+					outcome: 'The guard pockets the coins and opens the gate, but warns you to keep your head down.',
+					order: 2,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				};
+
+				const choice3: NewChoice = {
+					encounterId: encounter1Record.id,
+					text: 'Intimidate the guard (Presence check)',
+					nextEncounterId: encounter2Record.id,
+					outcome: 'Your forceful demeanor convinces the guard you\'re not someone to trifle with. She reluctantly allows entry.',
+					order: 3,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				};
+
+				await db.insert(choice).values([choice1, choice2, choice3]);
+			}
+		}
+
+		// Choices for Encounter 2 - Check if they exist first
 		if (encounter2Record && encounter3Record) {
-			const choice4: NewChoice = {
-				encounterId: encounter2Record.id,
-				text: 'Agree to help the Conclave activate the beacon',
-				nextEncounterId: encounter3Record.id,
-				outcome: 'Elder Cassia nods gravely. "You have chosen a dangerous path, but perhaps a necessary one. We will prepare the ritual."',
+			const existingChoices = await db.select().from(choice).where(eq(choice.encounterId, encounter2Record.id));
+			
+			if (existingChoices.length === 0) {
+				const choice4: NewChoice = {
+					encounterId: encounter2Record.id,
+					text: 'Agree to help the Conclave activate the beacon',
+					nextEncounterId: encounter3Record.id,
+					outcome: 'Elder Cassia nods gravely. "You have chosen a dangerous path, but perhaps a necessary one. We will prepare the ritual."',
 				order: 1,
 				createdAt: new Date(),
 				updatedAt: new Date()
@@ -513,7 +543,8 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 				updatedAt: new Date()
 			};
 
-			await db.insert(choice).values([choice4, choice5, choice6]).onConflictDoNothing();
+				await db.insert(choice).values([choice4, choice5, choice6]);
+			}
 		}
 
 		console.log('✅ Story structure seeded');
@@ -521,6 +552,7 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 		console.log('🌱 Seed complete!');
 	} catch (error) {
 		console.error('❌ Seeding failed:', error);
+		throw error; // Rethrow so API endpoint can handle it properly
 	}
 }
 
