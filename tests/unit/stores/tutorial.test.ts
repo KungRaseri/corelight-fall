@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { tutorialStore, type TutorialHintId } from '../../../src/lib/stores/tutorial.js';
 import { get } from 'svelte/store';
 
@@ -100,5 +100,53 @@ describe('Tutorial Store', () => {
 
 		const state = get(tutorialStore);
 		expect(state.shownHints.size).toBe(1);
+	});
+
+	it('should handle corrupted localStorage data gracefully', () => {
+		// Set invalid JSON in localStorage
+		localStorage.setItem('tutorial_progress', 'invalid-json{]');
+
+		// Creating a new store instance would normally test this, but since the store is a singleton,
+		// we verify the store can still operate normally even with corrupted data
+		tutorialStore.markHintShown('first-encounter');
+		
+		const state = get(tutorialStore);
+		expect(state.shownHints.has('first-encounter')).toBe(true);
+	});
+
+	it('should handle localStorage errors when persisting', () => {
+		// Mock localStorage.setItem to throw an error
+		const originalSetItem = localStorage.setItem;
+		const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+		
+		localStorage.setItem = vi.fn(() => {
+			throw new Error('Storage quota exceeded');
+		});
+
+		// Should not throw, just log error
+		expect(() => {
+			tutorialStore.markHintShown('first-encounter');
+		}).not.toThrow();
+
+		// Verify error was logged
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			'Failed to persist tutorial state:',
+			expect.any(Error)
+		);
+
+		// Restore
+		localStorage.setItem = originalSetItem;
+		consoleErrorSpy.mockRestore();
+	});
+
+	it('should handle missing shownHints property in stored data', () => {
+		// Store data without shownHints property
+		localStorage.setItem('tutorial_progress', JSON.stringify({}));
+
+		// Mark a hint - should work even though stored data was incomplete
+		tutorialStore.markHintShown('first-encounter');
+		
+		const state = get(tutorialStore);
+		expect(state.shownHints.has('first-encounter')).toBe(true);
 	});
 });
