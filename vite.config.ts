@@ -4,9 +4,6 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
-	resolve: {
-		conditions: ['node']
-	},
 	ssr: {
 		noExternal: []
 	},

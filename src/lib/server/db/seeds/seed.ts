@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { db } from '../index.js';
 import { hash } from '@node-rs/argon2';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import type {
 	RolePermission,
 	NewRole,
@@ -208,7 +209,7 @@ export async function seedDatabase() {
 				userId: admin.id,
 				roleId: adminRole.id
 			};
-			await db.insert(userRole).values(adminUserRole);
+			await db.insert(userRole).values(adminUserRole).onConflictDoNothing();
 		}
 
 		// Seed Test User
@@ -226,7 +227,7 @@ export async function seedDatabase() {
 				userId: newUser[0].id,
 				roleId: defaultRole.id
 			};
-			await db.insert(userRole).values(testUserRole);
+			await db.insert(userRole).values(testUserRole).onConflictDoNothing();
 		}
 
 		console.log('✅ Test user seeded');
@@ -549,14 +550,18 @@ export async function seedTestData() {
 }
 
 // Only run seed if this file is executed directly (not imported)
-if (import.meta.url === `file://${process.argv[1]}`) {
-	(async () => {
-		try {
-			await seedDatabase();
-			console.log('✅ Database seeding completed successfully');
-		} catch (error) {
-			console.error('❌ Database seeding failed:', error);
-			process.exit(1);
-		}
-	})();
+// Convert Windows path to proper file URL
+const currentFile = fileURLToPath(import.meta.url);
+const executedFile = process.argv[1];
+
+if (currentFile === executedFile || import.meta.url === pathToFileURL(executedFile).href) {
+	try {
+		console.log('🌱 Starting database seeding...');
+		await seedDatabase();
+		console.log('✅ Database seeding completed successfully');
+		process.exit(0);
+	} catch (error) {
+		console.error('❌ Database seeding failed:', error);
+		process.exit(1);
+	}
 }
