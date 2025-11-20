@@ -10,10 +10,9 @@ const config = {
 		})
 	],
 	kit: { adapter: adapter() },
-	extensions: ['.svelte', '.svx', '.md'],
-	compilerOptions: {
-		runes: true
-	}
+	extensions: ['.svelte', '.svx', '.md']
+	// Remove global runes: true to allow third-party libraries to use legacy syntax
+	// Runes are opt-in per component in Svelte 5 by default
 };
 
 export default config;
