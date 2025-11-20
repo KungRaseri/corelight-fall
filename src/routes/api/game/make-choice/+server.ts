@@ -245,10 +245,17 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 					maxHpIncrease: rewards.maxHpIncrease,
 					goldBonus: rewards.goldBonus,
 				};
-			}				await db
+			}
+			
+				// Update character with quest rewards and return the updated character
+				const [questUpdatedCharacter] = await db
 					.update(character)
 					.set(questUpdateData)
-					.where(eq(character.id, currentCharacter.id));
+					.where(eq(character.id, currentCharacter.id))
+					.returning();
+				
+				// Update the updatedCharacter reference to include quest rewards
+				Object.assign(updatedCharacter, questUpdatedCharacter);
 
 				questRewards = {
 					xpGained: currentQuest.xpReward,

@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { item } from '$lib/server/db/schema/gameplay/item';
 import { characterEquipment, characterItem } from '$lib/server/db/schema';
 
@@ -30,7 +30,10 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 		.innerJoin(item, eq(characterItem.itemId, item.id))
 		.leftJoin(
 			characterEquipment,
-			eq(characterItem.characterId, character.id) && eq(characterItem.itemId, item.id)
+			and(
+				eq(characterEquipment.characterId, character.id),
+				eq(characterEquipment.itemId, characterItem.itemId)
+			)
 		)
 		.where(eq(characterItem.characterId, character.id));
 

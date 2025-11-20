@@ -8,7 +8,9 @@
 	import WorldIntroduction from '$lib/components/game/WorldIntroduction.svelte';
 	import StoryPrologue from '$lib/components/game/StoryPrologue.svelte';
 	import ArcChoice from '$lib/components/game/ArcChoice.svelte';
+	import TutorialHint from '$lib/components/ui/TutorialHint.svelte';
 	import { character, setCharacterAttributes } from '$lib/stores/character';
+	import { tutorialStore, type TutorialHintId } from '$lib/stores/tutorial';
 	import type { ChoiceFormData } from '$lib/types/ChoiceFormData.js';
 	import { onMount } from 'svelte';
 	import { Award } from 'lucide-svelte';
@@ -23,6 +25,18 @@
 	let skillCheckResult = $state<any>(null);
 	let awaitingContinue = $state(false);
 	let isProcessingChoice = $state(false);
+	
+	// Tutorial state
+	let tutorialState = $state($tutorialStore);
+	let activeHint = $state<{ id: TutorialHintId; title: string; message: string; variant?: 'info' | 'tip' | 'warning' } | null>(null);
+	
+	// Subscribe to tutorial store
+	$effect(() => {
+		const unsubscribe = tutorialStore.subscribe((state) => {
+			tutorialState = state;
+		});
+		return unsubscribe;
+	});
 	
 	// Reward tracking
 	let showLevelUpModal = $state(false);
@@ -75,6 +89,9 @@
 					levelUpData = result.levelUp;
 					// Will show modal on continue
 				}
+				
+				// Show tutorial hints if appropriate
+				showTutorialHints(result);
 			} else {
 				console.error('Failed to process choice');
 				outcome = 'Something went wrong...';
@@ -86,6 +103,46 @@
 			awaitingContinue = true;
 		} finally {
 			isProcessingChoice = false;
+		}
+	}
+	
+	function showTutorialHints(result: any) {
+		// Only show hints if tutorial is enabled
+		if (!data.character.tutorial) return;
+		
+		// Show skill check hint on first skill check
+		if (result.skillCheck && !tutorialStore.hasSeenHint('skill-check-intro', tutorialState)) {
+			activeHint = {
+				id: 'skill-check-intro',
+				title: '🎲 Skill Checks',
+				message: 'Skill checks use a d20 roll plus your attribute modifier. You need to meet or exceed the Difficulty Class (DC) to succeed. Critical successes (natural 20) always succeed!',
+				variant: 'info'
+			};
+		}
+		// Show consequences hint if there are rewards/penalties
+		else if ((result.rewards || result.questRewards) && !tutorialStore.hasSeenHint('choice-consequences', tutorialState)) {
+			activeHint = {
+				id: 'choice-consequences',
+				title: '⚖️ Choice Consequences',
+				message: 'Your choices have consequences! Some grant XP, gold, or items, while others may cause you to lose resources. Choose wisely!',
+				variant: 'tip'
+			};
+		}
+		// Show level up hint
+		else if (result.levelUp && !tutorialStore.hasSeenHint('level-up', tutorialState)) {
+			activeHint = {
+				id: 'level-up',
+				title: '⬆️ Level Up!',
+				message: 'Leveling up increases your max HP and grants attribute points. Spend these points wisely to enhance your character\'s abilities!',
+				variant: 'tip'
+			};
+		}
+	}
+	
+	function dismissHint() {
+		if (activeHint) {
+			tutorialStore.markHintShown(activeHint.id);
+			activeHint = null;
 		}
 	}
 
@@ -119,6 +176,18 @@
 			window.location.reload();
 		}
 	}
+	
+	// Show first encounter hint
+	onMount(() => {
+		if (data.character.tutorial && data.currentEncounter && !tutorialStore.hasSeenHint('first-encounter', tutorialState)) {
+			activeHint = {
+				id: 'first-encounter',
+				title: '👋 Welcome to Your Adventure!',
+				message: 'You\'ll face encounters with multiple choices. Read carefully and choose based on your character\'s strengths and your preferred playstyle.',
+				variant: 'info'
+			};
+		}
+	});
 
 	async function advanceIntroStage(stage: string) {
 		const res = await fetch('/api/game/advance-intro', {
@@ -154,6 +223,17 @@
 </script>
 
 <div class="container mx-auto max-w-7xl space-y-6 p-4 md:p-8">
+	<!-- Tutorial Hint (if active) -->
+	{#if activeHint}
+		{@const hint = activeHint}
+		<TutorialHint
+			title={hint.title}
+			message={hint.message}
+			variant={hint.variant ?? 'info'}
+			onDismiss={dismissHint}
+		/>
+	{/if}
+	
 	<!-- Character Stats Bar (visible during main game) -->
 	{#if currentCharacter && data.introStage === 'main_story'}
 		<CharacterStats character={currentCharacter} showDetails={false} />
