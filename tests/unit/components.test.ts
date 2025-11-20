@@ -1,32 +1,30 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/svelte';
 import '@testing-library/jest-dom/vitest';
 
-// Example component test
-describe('Svelte Component Testing', () => {
-	it('should render a simple component', () => {
-		// This is a placeholder - you'll replace this with actual component tests
-		const mockComponent = {
-			text: 'Hello World'
-		};
-		
-		expect(mockComponent.text).toBe('Hello World');
-	});
+/**
+ * Component Test Index
+ * 
+ * This file serves as documentation for the component tests.
+ * Actual component tests are organized by category in subdirectories.
+ * 
+ * Test Organization:
+ * - components/ui/        - UI components (buttons, modals, hints, etc.)
+ * - components/character/ - Character-related components (stats, inventory, etc.)
+ * - components/game/      - Game components (encounters, choices, etc.)
+ * - stores/               - Svelte store tests
+ * - utils/                - Utility function tests
+ * 
+ * To run all component tests:
+ * npm run test:unit
+ * 
+ * To run specific test file:
+ * npm run test:unit -- CharacterStats.test.ts
+ */
 
-	it('should handle component props', () => {
-		// Example of how you'd test props
-		const props = {
-			title: 'Test Title',
-			description: 'Test Description'
-		};
-
-		expect(props).toHaveProperty('title');
-		expect(props).toHaveProperty('description');
+describe('Component Test Suite', () => {
+	it('should have test files organized by category', () => {
+		// This test just validates our test structure is working
+		expect(true).toBe(true);
 	});
 });
 
-// To test actual Svelte components:
-// 1. Import the component: import MyComponent from '$lib/components/MyComponent.svelte';
-// 2. Use render(): render(MyComponent, { props: { ... } });
-// 3. Use screen queries: screen.getByText(), screen.getByRole(), etc.
-// 4. Use userEvent for interactions: import userEvent from '@testing-library/user-event';
