@@ -2,6 +2,8 @@
 	import Recap from '$lib/components/Recap.svelte';
 	import CharacterAttributes from '$lib/components/gameplay/CharacterAttributes.svelte';
 	import PlayerStoryView from '$lib/components/gameplay/PlayerStoryView.svelte';
+	import CharacterStats from '$lib/components/character/CharacterStats.svelte';
+	import LevelUpModal from '$lib/components/character/LevelUpModal.svelte';
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import WorldIntroduction from '$lib/components/game/WorldIntroduction.svelte';
 	import StoryPrologue from '$lib/components/game/StoryPrologue.svelte';
@@ -9,6 +11,7 @@
 	import { character, setCharacterAttributes } from '$lib/stores/character';
 	import type { ChoiceFormData } from '$lib/types/ChoiceFormData.js';
 	import { onMount } from 'svelte';
+	import { Award } from 'lucide-svelte';
 
 	let showCharacter = $state(false);
 	let showMap = $state(false);
@@ -18,19 +21,77 @@
 	const { data } = $props();
 	let outcome = $state<string | null>(null);
 	let awaitingContinue = $state(false);
+	let isProcessingChoice = $state(false);
+	
+	// Reward tracking
+	let showLevelUpModal = $state(false);
+	let levelUpData = $state<any>(null);
+	let encounterRewards = $state<{ xpGained: number; goldGained: number } | null>(null);
+	let questRewards = $state<{ xpGained: number; goldGained: number } | null>(null);
+	let currentCharacter = $state(data.character);
 
-	function handleChoice(choice: ChoiceFormData) {
-		// Simulate showing the outcome for the selected choice
-		outcome = choice.outcome ?? 'You made a choice.';
-		awaitingContinue = true;
-		// In a real app, you would also update the quest/encounter state here
+	async function handleChoice(choice: ChoiceFormData) {
+		if (isProcessingChoice || !choice.id || !data.currentEncounter) return;
+		
+		isProcessingChoice = true;
+		
+		try {
+			const res = await fetch('/api/game/make-choice', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ 
+					choiceId: choice.id, 
+					encounterId: data.currentEncounter.id 
+				})
+			});
+
+			if (res.ok) {
+				const result = await res.json();
+				
+				// Show outcome
+				outcome = result.outcome ?? choice.outcome ?? 'You made a choice.';
+				awaitingContinue = true;
+				
+				// Store rewards to display
+				encounterRewards = result.rewards;
+				questRewards = result.questRewards;
+				
+				// Update character data
+				if (result.levelUp) {
+					levelUpData = result.levelUp;
+					// Will show modal on continue
+				}
+			} else {
+				console.error('Failed to process choice');
+				outcome = 'Something went wrong...';
+				awaitingContinue = true;
+			}
+		} catch (error) {
+			console.error('Error processing choice:', error);
+			outcome = 'An error occurred.';
+			awaitingContinue = true;
+		} finally {
+			isProcessingChoice = false;
+		}
 	}
 
 	function handleContinue() {
-		outcome = null;
-		awaitingContinue = false;
-		// In a real app, fetch the next encounter/quest here
-		console.log('Continue to next encounter!');
+		// Show level up modal if character leveled up
+		if (levelUpData) {
+			showLevelUpModal = true;
+		} else {
+			// Otherwise reload to get next encounter
+			window.location.reload();
+		}
+	}
+
+	function closeLevelUpModal() {
+		showLevelUpModal = false;
+		levelUpData = null;
+		encounterRewards = null;
+		questRewards = null;
+		// Reload to show next encounter
+		window.location.reload();
 	}
 
 	async function chooseStory(storylineId: number) {
@@ -69,6 +130,7 @@
 	onMount(() => {
 		if (data.character) {
 			character.set(data.character);
+			currentCharacter = data.character;
 		}
 		if (data.attributes) {
 			setCharacterAttributes(data.attributes);
@@ -77,6 +139,11 @@
 </script>
 
 <div class="container mx-auto max-w-7xl space-y-6 p-4 md:p-8">
+	<!-- Character Stats Bar (visible during main game) -->
+	{#if currentCharacter && data.introStage === 'main_story'}
+		<CharacterStats character={currentCharacter} showDetails={false} />
+	{/if}
+
 	<!-- Quick Actions Bar -->
 	<div class="flex flex-wrap gap-2 md:gap-4">
 		<button 
@@ -162,22 +229,69 @@
 						{#if data.availableChoices && data.availableChoices.length > 0}
 							{#if outcome && awaitingContinue}
 								<!-- Outcome Display -->
-								<div class="card preset-filled-secondary-500 mb-4 p-6 text-center shadow-lg">
-									<p class="text-lg font-semibold">{outcome}</p>
+								<div class="space-y-4">
+									<div class="card preset-filled-secondary-500 p-6 text-center shadow-lg">
+										<p class="text-lg font-semibold">{outcome}</p>
+									</div>
+
+									<!-- Rewards Display -->
+									{#if encounterRewards && (encounterRewards.xpGained > 0 || encounterRewards.goldGained > 0)}
+										<div class="card preset-tonal-primary p-4">
+											<div class="flex items-center gap-3 justify-center">
+												<Award class="size-5 text-primary-500" />
+												<div class="font-semibold text-surface-900 dark:text-surface-100">
+													{#if encounterRewards.xpGained > 0}
+														<span>+{encounterRewards.xpGained} XP</span>
+													{/if}
+													{#if encounterRewards.xpGained > 0 && encounterRewards.goldGained > 0}
+														<span class="mx-2">•</span>
+													{/if}
+													{#if encounterRewards.goldGained > 0}
+														<span>+{encounterRewards.goldGained} Gold</span>
+													{/if}
+												</div>
+											</div>
+										</div>
+									{/if}
+
+									<!-- Quest Complete Rewards -->
+									{#if questRewards && (questRewards.xpGained > 0 || questRewards.goldGained > 0)}
+										<div class="card preset-tonal-success p-4">
+											<div class="text-center space-y-2">
+												<div class="text-sm font-bold uppercase tracking-wide text-success-600 dark:text-success-400">
+													Quest Complete!
+												</div>
+												<div class="font-semibold text-surface-900 dark:text-surface-100">
+													{#if questRewards.xpGained > 0}
+														<span>+{questRewards.xpGained} XP</span>
+													{/if}
+													{#if questRewards.xpGained > 0 && questRewards.goldGained > 0}
+														<span class="mx-2">•</span>
+													{/if}
+													{#if questRewards.goldGained > 0}
+														<span>+{questRewards.goldGained} Gold</span>
+													{/if}
+												</div>
+											</div>
+										</div>
+									{/if}
+									
+									<button 
+										class="btn preset-filled-primary-500 w-full flex items-center justify-center gap-2" 
+										onclick={handleContinue}
+										disabled={isProcessingChoice}
+									>
+										<span>Continue</span>
+									</button>
 								</div>
-								<button 
-									class="btn preset-filled-primary-500 w-full flex items-center justify-center gap-2" 
-									onclick={handleContinue}
-								>
-									<span>Continue</span>
-								</button>
 							{:else}
 								<!-- Choice Buttons -->
 								<div class="flex flex-col gap-3">
 									{#each data.availableChoices as choice}
 										<button
 											onclick={() => handleChoice(choice)}
-											class="card preset-outlined-surface-200-800 hover:preset-tonal-primary p-4 text-left transition-all duration-200"
+											disabled={isProcessingChoice}
+											class="card preset-outlined-surface-200-800 hover:preset-tonal-primary p-4 text-left transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
 										>
 											<span class="font-semibold text-surface-900 dark:text-surface-100">{choice.text}</span>
 										</button>
@@ -223,6 +337,8 @@
 <Modal open={showLog} onClose={() => (showLog = false)}>
 	<ActivityLog />
 </Modal> -->
+
+<LevelUpModal open={showLevelUpModal} {levelUpData} onClose={closeLevelUpModal} />
 
 
 

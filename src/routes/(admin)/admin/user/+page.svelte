@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Users, UserPlus, Edit, Trash2, Shield, Calendar } from 'lucide-svelte';
+	import { Users, UserPlus, Edit, Trash2, Shield, Calendar, Eye } from 'lucide-svelte';
 	
 	const { data } = $props();
 </script>
@@ -66,8 +66,15 @@
 								</td>
 								<td class="px-6 py-4">
 									<div class="flex gap-2 justify-end">
-										<button 
+										<a 
+											href="/admin/user/{user.id}"
 											class="btn-icon btn-icon-sm hover:preset-tonal-primary"
+											title="View user profile"
+										>
+											<Eye class="size-4" />
+										</a>
+										<button 
+											class="btn-icon btn-icon-sm hover:preset-tonal-secondary"
 											title="Edit user"
 										>
 											<Edit class="size-4" />

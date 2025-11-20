@@ -17,6 +17,8 @@
 		tags: '',
 		factions: '',
 		isActive: true,
+		xpReward: 0,
+		goldReward: 0,
 		choices: [],
 		createdAt: new Date(),
 		updatedAt: new Date()
@@ -116,6 +118,26 @@
 				class="input w-full"
 				bind:value={encounterData.factions}
 				placeholder="comma,separated"
+			/>
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="xpReward">XP Reward</label>
+			<input
+				id="xpReward"
+				type="number"
+				class="input w-full"
+				bind:value={encounterData.xpReward}
+				min="0"
+			/>
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="goldReward">Gold Reward</label>
+			<input
+				id="goldReward"
+				type="number"
+				class="input w-full"
+				bind:value={encounterData.goldReward}
+				min="0"
 			/>
 		</div>
 		<div class="flex items-center gap-3">

@@ -16,6 +16,11 @@ export const encounter = pgTable('encounter', {
 	factions: text('factions'),
 	order: integer('order').default(0).notNull(),
 	isActive: boolean('is_active').default(true).notNull(),
+	
+	// Rewards
+	xpReward: integer('xp_reward').default(0).notNull(),
+	goldReward: integer('gold_reward').default(0).notNull(),
+	
 	createdAt: timestamp('created_at').defaultNow().notNull(),
 	updatedAt: timestamp('updated_at').defaultNow().notNull()
 });

@@ -17,6 +17,8 @@
 		goals: '',
 		isActive: false,
 		summary: '',
+		xpReward: 0,
+		goldReward: 0,
 		encounters: [],
 		createdAt: new Date(),
 		updatedAt: new Date()
@@ -97,6 +99,26 @@
 				class="input w-full"
 				bind:value={questData.factions}
 				placeholder="comma,separated"
+			/>
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="xpReward">XP Reward</label>
+			<input
+				id="xpReward"
+				type="number"
+				class="input w-full"
+				bind:value={questData.xpReward}
+				min="0"
+			/>
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="goldReward">Gold Reward</label>
+			<input
+				id="goldReward"
+				type="number"
+				class="input w-full"
+				bind:value={questData.goldReward}
+				min="0"
 			/>
 		</div>
 		<div class="flex items-center gap-3">

@@ -29,6 +29,8 @@
 		isMain: false,
 		isActive: true,
 		coverImage: '',
+		xpReward: 0,
+		goldReward: 0,
 		createdAt: new Date(),
 		updatedAt: new Date(),
 		quests: []
@@ -166,6 +168,26 @@
 				class="input w-full"
 				bind:value={storylineData.factions}
 				placeholder="comma,separated"
+			/>
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="xpReward">XP Reward</label>
+			<input
+				id="xpReward"
+				type="number"
+				class="input w-full"
+				bind:value={storylineData.xpReward}
+				min="0"
+			/>
+		</div>
+		<div>
+			<label class="mb-1 block font-semibold" for="goldReward">Gold Reward</label>
+			<input
+				id="goldReward"
+				type="number"
+				class="input w-full"
+				bind:value={storylineData.goldReward}
+				min="0"
 			/>
 		</div>
 		<div class="md:col-span-2">
