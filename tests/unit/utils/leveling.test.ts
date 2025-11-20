@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { checkLevelUp, getLevelUpRewards, getXpProgress, formatXp, LEVELING_CONFIG } from '$lib/utils/leveling';
+import { checkLevelUp, getLevelUpRewards, getXpProgress, formatXp, LEVELING_CONFIG } from '../../../src/lib/utils/leveling.js';
 
 describe('Leveling Utilities', () => {
 	describe('checkLevelUp', () => {
@@ -23,10 +23,11 @@ describe('Leveling Utilities', () => {
 			expect(result.levelsGained).toBeGreaterThan(1);
 		});
 
-		it('should cap at max level', () => {
+		it('should not level up when already at max level', () => {
 			const result = checkLevelUp(999999, LEVELING_CONFIG.MAX_LEVEL);
 			expect(result.newLevel).toBe(LEVELING_CONFIG.MAX_LEVEL);
 			expect(result.canLevelUp).toBe(false);
+			expect(result.levelsGained).toBe(0);
 		});
 
 		it('should handle level 2 threshold correctly', () => {
@@ -109,8 +110,8 @@ describe('Leveling Utilities', () => {
 	describe('LEVELING_CONFIG', () => {
 		it('should have valid configuration values', () => {
 			expect(LEVELING_CONFIG.MAX_LEVEL).toBeGreaterThan(0);
-			expect(LEVELING_CONFIG.BASE_XP_REQUIRED).toBeGreaterThan(0);
-			expect(LEVELING_CONFIG.XP_MULTIPLIER).toBeGreaterThan(1);
+			expect(LEVELING_CONFIG.BASE_XP_REQUIREMENT).toBeGreaterThan(0);
+			expect(LEVELING_CONFIG.XP_SCALING_FACTOR).toBeGreaterThan(1);
 		});
 
 		it('should have reward configuration', () => {

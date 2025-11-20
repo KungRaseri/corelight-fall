@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom/vitest';
-import WorldIntroduction from '$lib/components/game/WorldIntroduction.svelte';
+import WorldIntroduction from '../../../../src/lib/components/game/WorldIntroduction.svelte';
 
 describe('WorldIntroduction Component', () => {
 	it('should render introduction text', () => {

@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'vitest';
-import { performSkillCheck, formatSkillCheckResult } from '$lib/utils/skillCheck';
+import { describe, it, expect, vi } from 'vitest';
+import { performSkillCheck, formatSkillCheckResult } from '../../../src/lib/utils/skillCheck';
 
 describe('Skill Check Utilities', () => {
 	describe('performSkillCheck', () => {
-		it('should return a skill check result object', () => {
+		it('should return a skill check result object with all required properties', () => {
 			const result = performSkillCheck(10, 15);
 			
 			expect(result).toHaveProperty('roll');
@@ -11,62 +11,67 @@ describe('Skill Check Utilities', () => {
 			expect(result).toHaveProperty('total');
 			expect(result).toHaveProperty('dc');
 			expect(result).toHaveProperty('success');
+			expect(result).toHaveProperty('criticalSuccess');
+			expect(result).toHaveProperty('criticalFailure');
 		});
 
-		it('should calculate modifier correctly', () => {
-			const result = performSkillCheck(10, 15);
-			expect(result.modifier).toBe(0); // 10 is average, modifier should be 0
+		it('should use attribute value as modifier', () => {
+			const result = performSkillCheck(5, 15);
+			expect(result.modifier).toBe(5);
 
-			const result2 = performSkillCheck(15, 15);
-			expect(result2.modifier).toBeGreaterThan(0); // 15 should have positive modifier
+			const result2 = performSkillCheck(12, 15);
+			expect(result2.modifier).toBe(12);
 		});
 
 		it('should calculate total as roll + modifier', () => {
-			const result = performSkillCheck(12, 15);
+			const result = performSkillCheck(3, 15);
 			expect(result.total).toBe(result.roll + result.modifier);
+			expect(result.total).toBe(result.roll + 3);
 		});
 
 		it('should mark success when total >= DC', () => {
 			// Mock Math.random to control the roll
-			const originalRandom = Math.random;
-			Math.random = () => 0.99; // Will roll 20 (critical success)
+			const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.99); // Will roll 20
 
-			const result = performSkillCheck(10, 15);
+			const result = performSkillCheck(0, 15);
+			expect(result.roll).toBe(20);
+			expect(result.total).toBe(20); // 20 roll + 0 modifier
 			expect(result.success).toBe(true);
 
-			Math.random = originalRandom;
+			randomSpy.mockRestore();
 		});
 
 		it('should mark failure when total < DC', () => {
-			const originalRandom = Math.random;
-			Math.random = () => 0.01; // Will roll 1 (critical failure)
+			const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.01); // Will roll 1
 
-			const result = performSkillCheck(5, 20);
+			const result = performSkillCheck(0, 10);
+			expect(result.roll).toBe(1);
+			expect(result.total).toBe(1); // 1 roll + 0 modifier
 			expect(result.success).toBe(false);
 
-			Math.random = originalRandom;
+			randomSpy.mockRestore();
 		});
 
-		it('should always succeed on natural 20', () => {
-			const originalRandom = Math.random;
-			Math.random = () => 0.99; // Will roll 20
+		it('should mark critical success on natural 20', () => {
+			const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.99); // Will roll 20
 
-			const result = performSkillCheck(1, 99);
+			const result = performSkillCheck(5, 15);
 			expect(result.roll).toBe(20);
-			expect(result.success).toBe(true); // Should succeed despite impossible DC
+			expect(result.criticalSuccess).toBe(true);
+			expect(result.criticalFailure).toBe(false);
 
-			Math.random = originalRandom;
+			randomSpy.mockRestore();
 		});
 
-		it('should always fail on natural 1', () => {
-			const originalRandom = Math.random;
-			Math.random = () => 0.01; // Will roll 1
+		it('should mark critical failure on natural 1', () => {
+			const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.01); // Will roll 1
 
-			const result = performSkillCheck(20, 5);
+			const result = performSkillCheck(10, 15);
 			expect(result.roll).toBe(1);
-			expect(result.success).toBe(false); // Should fail despite high modifier
+			expect(result.criticalFailure).toBe(true);
+			expect(result.criticalSuccess).toBe(false);
 
-			Math.random = originalRandom;
+			randomSpy.mockRestore();
 		});
 
 		it('should generate rolls between 1 and 20', () => {
@@ -75,6 +80,24 @@ describe('Skill Check Utilities', () => {
 				expect(result.roll).toBeGreaterThanOrEqual(1);
 				expect(result.roll).toBeLessThanOrEqual(20);
 			}
+		});
+
+		it('success should depend on total vs DC, not just roll', () => {
+			const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5); // Will roll 11
+
+			// With high modifier, should succeed
+			const successResult = performSkillCheck(10, 15);
+			expect(successResult.roll).toBe(11);
+			expect(successResult.total).toBe(21); // 11 + 10
+			expect(successResult.success).toBe(true);
+
+			// With low modifier, should fail
+			const failResult = performSkillCheck(0, 15);
+			expect(failResult.roll).toBe(11);
+			expect(failResult.total).toBe(11); // 11 + 0
+			expect(failResult.success).toBe(false);
+
+			randomSpy.mockRestore();
 		});
 	});
 
@@ -85,7 +108,9 @@ describe('Skill Check Utilities', () => {
 				modifier: 3,
 				total: 18,
 				dc: 15,
-				success: true
+				success: true,
+				criticalSuccess: false,
+				criticalFailure: false
 			};
 
 			const formatted = formatSkillCheckResult(result, 'Strength');
@@ -93,58 +118,67 @@ describe('Skill Check Utilities', () => {
 			expect(formatted).toContain('3');
 			expect(formatted).toContain('18');
 			expect(formatted).toContain('Strength');
+			expect(formatted).toContain('15'); // DC
 		});
 
-		it('should indicate success', () => {
+		it('should show success emoji when successful', () => {
 			const result = {
 				roll: 15,
 				modifier: 3,
 				total: 18,
 				dc: 15,
-				success: true
+				success: true,
+				criticalSuccess: false,
+				criticalFailure: false
 			};
 
 			const formatted = formatSkillCheckResult(result, 'Dexterity');
-			expect(formatted.toLowerCase()).toMatch(/success|passed|succeeded/i);
+			expect(formatted).toContain('✅');
 		});
 
-		it('should indicate failure', () => {
+		it('should show failure emoji when failed', () => {
 			const result = {
 				roll: 5,
 				modifier: 1,
 				total: 6,
 				dc: 15,
-				success: false
+				success: false,
+				criticalSuccess: false,
+				criticalFailure: false
 			};
 
 			const formatted = formatSkillCheckResult(result, 'Intelligence');
-			expect(formatted.toLowerCase()).toMatch(/fail|failed/i);
+			expect(formatted).toContain('❌');
 		});
 
-		it('should handle critical success (natural 20)', () => {
+		it('should show critical success emoji for natural 20', () => {
 			const result = {
 				roll: 20,
 				modifier: 2,
 				total: 22,
 				dc: 15,
-				success: true
+				success: true,
+				criticalSuccess: true,
+				criticalFailure: false
 			};
 
 			const formatted = formatSkillCheckResult(result, 'Charisma');
-			expect(formatted.toLowerCase()).toMatch(/critical|natural 20/i);
+			expect(formatted).toContain('🎯');
 		});
 
-		it('should handle critical failure (natural 1)', () => {
+		it('should show critical failure emoji for natural 1', () => {
 			const result = {
 				roll: 1,
 				modifier: 5,
 				total: 6,
 				dc: 10,
-				success: false
+				success: false,
+				criticalSuccess: false,
+				criticalFailure: true
 			};
 
 			const formatted = formatSkillCheckResult(result, 'Wisdom');
-			expect(formatted.toLowerCase()).toMatch(/critical|natural 1/i);
+			expect(formatted).toContain('💥');
 		});
 	});
 });

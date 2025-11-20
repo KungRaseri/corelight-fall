@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { tutorialStore, type TutorialHintId } from '$lib/stores/tutorial';
+import { tutorialStore, type TutorialHintId } from '../../../src/lib/stores/tutorial.js';
 import { get } from 'svelte/store';
 
 describe('Tutorial Store', () => {

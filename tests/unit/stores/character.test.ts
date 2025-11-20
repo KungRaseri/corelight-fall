@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { get } from 'svelte/store';
-import { character, setCharacterAttributes } from '$lib/stores/character';
+import { character, setCharacterAttributes } from '../../../src/lib/stores/character.js';
 
 describe('Character Store', () => {
 	beforeEach(() => {

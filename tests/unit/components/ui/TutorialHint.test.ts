@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom/vitest';
-import TutorialHint from '$lib/components/ui/TutorialHint.svelte';
+import TutorialHint from '../../../../src/lib/components/ui/TutorialHint.svelte';
 
 describe('TutorialHint Component', () => {
 	it('should render with title and message', () => {

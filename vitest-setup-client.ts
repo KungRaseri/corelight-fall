@@ -28,3 +28,39 @@ globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
 	unobserve: vi.fn(),
 	disconnect: vi.fn()
 })) as unknown as typeof ResizeObserver;
+
+// Mock localStorage
+const localStorageMock = (() => {
+	let store: Record<string, string> = {};
+
+	return {
+		getItem: (key: string) => store[key] || null,
+		setItem: (key: string, value: string) => {
+			store[key] = value.toString();
+		},
+		removeItem: (key: string) => {
+			delete store[key];
+		},
+		clear: () => {
+			store = {};
+		}
+	};
+})();
+
+Object.defineProperty(globalThis, 'localStorage', {
+	value: localStorageMock
+});
+
+// Mock SvelteKit modules
+vi.mock('$app/environment', () => ({
+	browser: true,
+	building: false,
+	dev: true,
+	version: '0.0.0'
+}));
+
+vi.mock('$app/stores', () => ({
+	page: { subscribe: vi.fn() },
+	navigating: { subscribe: vi.fn() },
+	updated: { subscribe: vi.fn() }
+}));
