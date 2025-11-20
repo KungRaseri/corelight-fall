@@ -69,9 +69,8 @@ async function fetchInventory(characterId: number) {
 				itemId: item.id,
 				name: item.name,
 				type: item.type,
-				rarity: item.rarity,
-				quantity: characterItem.quantity,
-				equipped: characterItem.equipped
+				description: item.description,
+				quantity: characterItem.quantity
 			})
 			.from(characterItem)
 			.innerJoin(item, eq(characterItem.itemId, item.id))

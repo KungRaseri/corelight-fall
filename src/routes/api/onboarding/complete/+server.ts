@@ -26,19 +26,43 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	let characterRecord;
 
 	if (existingCharacter) {
-		// Update existing character
+		console.log('[ONBOARDING] Updating existing character:', {
+			id: existingCharacter.id,
+			name: existingCharacter.name,
+			level: existingCharacter.level,
+			xp: existingCharacter.xp,
+			onboarding: existingCharacter.onboarding
+		});
+
+		// Update existing character (e.g., after admin reset)
+		// Reset ALL stats to starting values for a fresh start
 		const [updated] = await db
 			.update(character)
 			.set({
 				name: data.name,
 				appearance: data.appearance,
 				onboarding: true,
-				tutorial: data.tutorial
+				tutorial: data.tutorial,
+				// Reset stats to starting values
+				level: 1,
+				xp: 0,
+				gold: 0,
+				hp: 100,
+				maxHp: 100,
+				updatedAt: new Date()
 			})
 			.where(eq(character.userId, locals.user!.id))
 			.returning();
 		
 		characterRecord = updated;
+
+		console.log('[ONBOARDING] Character after update:', {
+			id: characterRecord.id,
+			name: characterRecord.name,
+			level: characterRecord.level,
+			xp: characterRecord.xp,
+			onboarding: characterRecord.onboarding
+		});
 
 		// Delete existing attributes and faction to re-insert
 		await db.delete(characterAttribute).where(eq(characterAttribute.characterId, characterRecord.id));

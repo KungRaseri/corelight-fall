@@ -53,8 +53,8 @@
 			});
 
 			if (res.ok) {
-				await invalidateAll();
 				alert('Story progress reset successfully!');
+				await goto(`/admin/user/${data.user.id}`, { invalidateAll: true });
 			} else {
 				const error = await res.json();
 				alert(`Error: ${error.message || 'Failed to reset progress'}`);
@@ -78,8 +78,8 @@
 			});
 
 			if (res.ok) {
-				await invalidateAll();
 				alert('Character deleted successfully!');
+				await goto(`/admin/user/${data.user.id}`, { invalidateAll: true });
 			} else {
 				const error = await res.json();
 				alert(`Error: ${error.message || 'Failed to delete character'}`);
@@ -103,8 +103,8 @@
 			});
 
 			if (res.ok) {
-				await invalidateAll();
 				alert('All user game data reset successfully!');
+				await goto(`/admin/user/${data.user.id}`, { invalidateAll: true });
 			} else {
 				const error = await res.json();
 				alert(`Error: ${error.message || 'Failed to reset data'}`);

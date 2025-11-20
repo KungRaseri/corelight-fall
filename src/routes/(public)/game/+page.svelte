@@ -73,6 +73,7 @@
 				// Update character data immediately with the new values
 				if (result.character) {
 					currentCharacter = result.character;
+					character.set(result.character); // Also update the store
 				}
 				
 				// Show outcome

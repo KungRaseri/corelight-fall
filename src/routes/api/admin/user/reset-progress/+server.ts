@@ -4,7 +4,8 @@ import {
 	character,
 	characterItem,
 	characterAttribute,
-	attribute
+	attribute,
+	characterFaction
 } from '$lib/server/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { json, error } from '@sveltejs/kit';
@@ -28,11 +29,22 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		.limit(1);
 
 	if (userCharacter) {
+		console.log('[RESET] Before reset - Character:', {
+			id: userCharacter.id,
+			name: userCharacter.name,
+			level: userCharacter.level,
+			xp: userCharacter.xp,
+			gold: userCharacter.gold
+		});
+
 		// Delete all character items (inventory)
 		await db.delete(characterItem).where(eq(characterItem.characterId, userCharacter.id));
 
+		// Delete faction relationship so player can choose again during onboarding
+		await db.delete(characterFaction).where(eq(characterFaction.characterId, userCharacter.id));
+
 		// Reset character stats to starting values and mark onboarding as incomplete
-		await db
+		const [resetCharacter] = await db
 			.update(character)
 			.set({
 				level: 1,
@@ -40,11 +52,19 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 				gold: 0,
 				hp: 100,
 				maxHp: 100,
-				attributePoints: 0,
 				onboarding: false, // Send them back through onboarding
 				updatedAt: new Date()
 			})
-			.where(eq(character.id, userCharacter.id));
+			.where(eq(character.id, userCharacter.id))
+			.returning();
+
+		console.log('[RESET] After reset - Character:', {
+			id: resetCharacter.id,
+			name: resetCharacter.name,
+			level: resetCharacter.level,
+			xp: resetCharacter.xp,
+			gold: resetCharacter.gold
+		});
 
 		// Reset character attributes to base values
 		const attributes = await db.select().from(attribute);
