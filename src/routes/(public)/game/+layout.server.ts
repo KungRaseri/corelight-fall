@@ -119,6 +119,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		currentStoryline,
 		currentQuest,
 		currentEncounter,
-		availableChoices
+		availableChoices,
+		introStage: progress?.introStage ?? null
 	};
 };

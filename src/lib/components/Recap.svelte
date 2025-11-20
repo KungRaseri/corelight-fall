@@ -10,16 +10,18 @@
 	] }: Props = $props();
 </script>
 
-<div class="bg-surface-400 dark:bg-surface-600 text-surface-900 dark:text-surface-100 mb-4 rounded-md p-4">
-	<h2 class="text-xl font-semibold">Recent Activities</h2>
+<div class="space-y-3">
 	{#if recentEvents.length}
-		<ul class="mt-2 list-disc pl-6">
+		<ul class="space-y-2">
 			{#each recentEvents as event}
-				<li>{event}</li>
+				<li class="flex items-start gap-3">
+					<span class="mt-1 size-2 shrink-0 rounded-full bg-primary-500"></span>
+					<span class="text-surface-700 dark:text-surface-300">{event}</span>
+				</li>
 			{/each}
 		</ul>
 	{:else}
-		<p>No recent activities found.</p>
+		<p class="text-surface-500 dark:text-surface-400">No recent activities found.</p>
 	{/if}
 </div>
 

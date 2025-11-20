@@ -14,6 +14,18 @@ This is a personal portfolio and content website built with:
 - `svelte` (^5.43.2) - Svelte 5 with runes mode
 - `tailwindcss` (^4.0.0) - Tailwind CSS v4
 
+## Workflow Rules
+
+### Critical Don'ts
+❌ **NEVER run the development server** - Do not use `npm run dev` or start Vite
+❌ **NEVER create documentation files** - No README.md, SUMMARY.md, or similar documentation
+❌ **NEVER create summary documents** - Focus only on code implementation
+
+### What To Do Instead
+✅ **Implement features directly** - Write code, not documentation
+✅ **Make code changes** - Use tools to edit files and create components
+✅ **Answer questions verbally** - Explain in chat, don't create docs
+
 ## Core Principles
 
 ### 1. Embrace Web Standards

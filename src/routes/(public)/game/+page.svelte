@@ -3,6 +3,9 @@
 	import CharacterAttributes from '$lib/components/gameplay/CharacterAttributes.svelte';
 	import PlayerStoryView from '$lib/components/gameplay/PlayerStoryView.svelte';
 	import Modal from '$lib/components/ui/Modal.svelte';
+	import WorldIntroduction from '$lib/components/game/WorldIntroduction.svelte';
+	import StoryPrologue from '$lib/components/game/StoryPrologue.svelte';
+	import ArcChoice from '$lib/components/game/ArcChoice.svelte';
 	import { character, setCharacterAttributes } from '$lib/stores/character';
 	import type { ChoiceFormData } from '$lib/types/ChoiceFormData.js';
 	import { onMount } from 'svelte';
@@ -41,6 +44,28 @@
 		}
 	}
 
+	async function advanceIntroStage(stage: string) {
+		const res = await fetch('/api/game/advance-intro', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ stage })
+		});
+		if (res.ok) {
+			window.location.reload();
+		}
+	}
+
+	async function chooseArc(arcChoice: 'trust' | 'investigate') {
+		const res = await fetch('/api/game/choose-arc', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ arcChoice })
+		});
+		if (res.ok) {
+			window.location.reload();
+		}
+	}
+
 	onMount(() => {
 		if (data.character) {
 			character.set(data.character);
@@ -51,98 +76,136 @@
 	});
 </script>
 
-<div class="space-y-8 p-8">
-	<!-- Quick Status Bar (optional, add your own stats here) -->
-	<!--
-	<div class="flex gap-6 items-center mb-4">
-		<span class="font-bold">HP: {data.character?.hp ?? '--'}</span>
-		<span class="font-bold">XP: {data.character?.xp ?? '--'}</span>
-		<span class="font-bold">Gold: {data.character?.gold ?? '--'}</span>
+<div class="container mx-auto max-w-7xl space-y-6 p-4 md:p-8">
+	<!-- Quick Actions Bar -->
+	<div class="flex flex-wrap gap-2 md:gap-4">
+		<button 
+			class="btn preset-tonal-surface flex items-center gap-2" 
+			onclick={() => (showCharacter = true)}
+		>
+			<span>Character</span>
+		</button>
+		<button 
+			class="btn preset-tonal-surface flex items-center gap-2" 
+			onclick={() => (showMap = true)}
+		>
+			<span>Map</span>
+		</button>
+		<button 
+			class="btn preset-tonal-surface flex items-center gap-2" 
+			onclick={() => (showQuests = true)}
+		>
+			<span>Quests</span>
+		</button>
+		<button 
+			class="btn preset-tonal-surface flex items-center gap-2" 
+			onclick={() => (showLog = true)}
+		>
+			<span>Activity Log</span>
+		</button>
 	</div>
-	-->
 
-	<!-- Modal Activation Buttons -->
-	<div class="mb-8 flex flex-auto justify-between gap-4">
-		<button class="btn preset-glass-surface" onclick={() => (showCharacter = true)}
-			>Character Info</button
-		>
-		<button class="btn preset-glass-surface" onclick={() => (showMap = true)}>Map</button>
-		<button class="btn preset-glass-surface" onclick={() => (showQuests = true)}
-			>Quests</button
-		>
-		<button class="btn preset-glass-surface" onclick={() => (showLog = true)}
-			>Activity Log</button
-		>
-	</div>
-
-	<!-- Main Scene Content Area -->
-	<div
-		class="bg-surface-400 dark:bg-surface-600 text-surface-900 dark:text-surface-100 flex min-h-[300px] flex-col items-center justify-center rounded-lg p-6 shadow-lg"
-	>
-		<h2 class="mb-2 text-2xl font-bold">Current Scene</h2>
-		<div class="text-lg">
-			{#if !data.currentStoryline}
-				<div class="mx-auto max-w-xl p-6">
-					<h2 class="mb-4 text-xl font-bold">Choose Your Story</h2>
-					<ul class="space-y-2">
-						{#each data.storylines ?? [] as s}
-							<li>
-								<button class="btn preset-glass-primary w-full" onclick={() => chooseStory(s.id)}>
-									{s.title}
+	<!-- Main Story Content -->
+	<div class="card preset-glass-surface bg-surface-50 dark:bg-surface-900 min-h-[400px] p-6 md:p-8">
+		<!-- Intro Stages -->
+		{#if data.introStage === null || data.introStage === 'tutorial_complete'}
+			<!-- World Introduction -->
+			<WorldIntroduction onContinue={() => advanceIntroStage('world_intro')} />
+		{:else if data.introStage === 'world_intro'}
+			<!-- Story Prologue -->
+			<StoryPrologue onContinue={() => advanceIntroStage('story_prologue')} />
+		{:else if data.introStage === 'story_prologue'}
+			<!-- Arc Choice -->
+			<ArcChoice onChoice={chooseArc} />
+		{:else}
+			<!-- Main Game Content -->
+			<h1 class="mb-6 text-3xl md:text-4xl font-bold text-primary-500 dark:text-primary-400">Adventure</h1>
+		
+			<div class="text-lg">
+				{#if !data.currentStoryline}
+					<!-- Storyline Selection -->
+					<div class="mx-auto max-w-2xl">
+						<h2 class="mb-6 text-2xl font-bold text-primary-500 dark:text-primary-400">Choose Your Path</h2>
+						<div class="space-y-3">
+							{#each data.storylines ?? [] as s}
+								<button 
+									class="card preset-outlined-surface-200-800 hover:preset-tonal-primary w-full p-4 text-left transition-all duration-200" 
+									onclick={() => chooseStory(s.id)}
+								>
+									<h3 class="text-xl font-semibold text-surface-900 dark:text-surface-100">{s.title}</h3>
+									{#if s.description}
+										<p class="mt-2 text-surface-700 dark:text-surface-300">{s.description}</p>
+									{/if}
 								</button>
-							</li>
-						{/each}
-					</ul>
-				</div>
-			{:else if data.currentQuest && data.currentEncounter}
-				<div
-					class="bg-surface-100 dark:bg-surface-900 border-surface-200 dark:border-surface-800 mx-auto max-w-xl rounded-xl border p-6 shadow"
-				>
-					<div class="text-surface-500 dark:text-surface-400 mb-2 text-xs tracking-wider uppercase">Quest</div>
-					<div class="text-surface-900 dark:text-surface-100 mb-1 text-2xl font-bold">{data.currentQuest.title}</div>
-					<div class="text-surface-800 dark:text-surface-200 mb-4 text-base">{data.currentQuest.description}</div>
-					<div class="text-surface-500 dark:text-surface-400 mb-2 text-xs tracking-wider uppercase">Encounter</div>
-					<div class="text-surface-900 dark:text-surface-100 mb-2 text-lg font-semibold">
-						{data.currentEncounter.title}
+							{/each}
+						</div>
 					</div>
-					<div class="text-surface-800 dark:text-surface-200 mb-4 text-base">{data.currentEncounter.description}</div>
-					{#if data.availableChoices && data.availableChoices.length > 0}
-						{#if outcome && awaitingContinue}
-							<div
-								class="bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 mt-4 rounded p-4 text-center font-semibold shadow"
-							>
-								{outcome}
-							</div>
-							<button class="btn preset-glass-primary mx-auto mt-4" onclick={handleContinue}>Continue</button
-							>
+			{:else if data.currentQuest && data.currentEncounter}
+				<!-- Active Quest/Encounter -->
+				<div class="mx-auto max-w-3xl space-y-6">
+					<!-- Quest Info -->
+					<div class="card preset-outlined-surface-200-800 bg-surface-100 dark:bg-surface-800 p-6">
+						<div class="mb-2 text-xs tracking-wider uppercase text-surface-500 dark:text-surface-400">Quest</div>
+						<h2 class="mb-2 text-2xl font-bold text-surface-900 dark:text-surface-100">{data.currentQuest.title}</h2>
+						<p class="text-surface-700 dark:text-surface-300">{data.currentQuest.description}</p>
+					</div>
+
+					<!-- Encounter Info -->
+					<div class="card preset-glass-surface bg-surface-50 dark:bg-surface-900 p-6">
+						<div class="mb-2 text-xs tracking-wider uppercase text-surface-500 dark:text-surface-400">Encounter</div>
+						<h3 class="mb-3 text-xl font-semibold text-surface-900 dark:text-surface-100">
+							{data.currentEncounter.title}
+						</h3>
+						<p class="mb-6 text-base leading-relaxed text-surface-800 dark:text-surface-200">{data.currentEncounter.description}</p>
+
+						<!-- Choices or Outcome -->
+						{#if data.availableChoices && data.availableChoices.length > 0}
+							{#if outcome && awaitingContinue}
+								<!-- Outcome Display -->
+								<div class="card preset-filled-secondary-500 mb-4 p-6 text-center shadow-lg">
+									<p class="text-lg font-semibold">{outcome}</p>
+								</div>
+								<button 
+									class="btn preset-filled-primary-500 w-full flex items-center justify-center gap-2" 
+									onclick={handleContinue}
+								>
+									<span>Continue</span>
+								</button>
+							{:else}
+								<!-- Choice Buttons -->
+								<div class="flex flex-col gap-3">
+									{#each data.availableChoices as choice}
+										<button
+											onclick={() => handleChoice(choice)}
+											class="card preset-outlined-surface-200-800 hover:preset-tonal-primary p-4 text-left transition-all duration-200"
+										>
+											<span class="font-semibold text-surface-900 dark:text-surface-100">{choice.text}</span>
+										</button>
+									{/each}
+								</div>
+							{/if}
 						{:else}
-							<div class="mt-4 flex flex-col gap-2">
-								{#each data.availableChoices as choice}
-									<button
-										onclick={() => handleChoice(choice)}
-										class="bg-amber-400-600 border-amber-300-700 text-surface-900 dark:text-surface-100 rounded border-2 px-4 py-2 font-semibold shadow transition hover:border-amber-400 hover:bg-amber-500"
-									>
-										{choice.text}
-									</button>
-								{/each}
+							<!-- Encounter Complete -->
+							<div class="card preset-filled-secondary-500 p-4 text-center">
+								<span class="font-semibold">Encounter complete!</span>
 							</div>
 						{/if}
-					{:else}
-						<div class="text-green-700-300 mt-4 font-semibold">Encounter complete!</div>
-					{/if}
+					</div>
 				</div>
-			{:else}
-				<div class="text-surface-500 dark:text-surface-400 text-center text-lg">No active quest.</div>
-			{/if}
-		</div>
-		<!-- Add scene actions, choices, or visuals here -->
+				{:else}
+					<!-- No Active Quest -->
+					<div class="text-center">
+						<p class="text-lg text-surface-500 dark:text-surface-400">No active quest. Your journey begins...</p>
+					</div>
+				{/if}
+			</div>
+		{/if}
 	</div>
 
-	<!-- Recap/Recent Activity -->
-	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+	<!-- Recent Activity Section -->
+	<div class="card preset-glass-surface bg-surface-50 dark:bg-surface-900 p-6">
+		<h2 class="mb-4 text-2xl font-bold text-primary-500 dark:text-primary-400">Recent Activity</h2>
 		<Recap />
-		<!-- <CurrentQuest /> -->
-		<!-- <CurrentLocation /> -->
 	</div>
 </div>
 

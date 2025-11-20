@@ -4,14 +4,12 @@
 	let { data, children } = $props();
 </script>
 
-<div class="game-layout bg-surface-100 dark:bg-surface-900 text-surface-900 dark:text-surface-100 flex h-full w-full flex-col">
+<div class="flex h-full w-full flex-col bg-surface-50 dark:bg-surface-950">
 	<!-- Game Header -->
-	<div class="w-full flex-row">
-		<GameHeader character={data.character} />
-	</div>
+	<GameHeader character={data.character} />
 
-	<!-- Main Game Content (no sidebar) -->
-	<main class="flex-row p-4">
+	<!-- Main Game Content -->
+	<main class="flex-1 overflow-y-auto">
 		{@render children()}
 	</main>
 </div>

@@ -11,6 +11,7 @@ export const playerStoryProgress = pgTable('player_story_progress', {
 	questId: integer('quest_id'),
 	encounterId: integer('encounter_id'),
 	choiceId: integer('choice_id'),
+	introStage: text('intro_stage'), // 'tutorial_complete' | 'world_intro' | 'story_prologue' | 'arc_choice' | 'main_story'
 	createdAt: timestamp('created_at').defaultNow().notNull(),
 	updatedAt: timestamp('updated_at').defaultNow().notNull()
 });
