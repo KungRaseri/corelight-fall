@@ -27,6 +27,11 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		redirect(302, '/onboarding');
 	}
 
+	// If character hasn't completed onboarding, send them there
+	if (!characterData.onboarding) {
+		redirect(302, '/onboarding');
+	}
+
 	const attributes = await db
 		.select({
 			attribute: {

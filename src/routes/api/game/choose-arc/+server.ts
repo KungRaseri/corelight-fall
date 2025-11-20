@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db';
-import { playerStoryProgress, storyline } from '$lib/server/db/schema';
+import { playerStoryProgress, storyline, quest, encounter } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -32,6 +32,34 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		error(500, 'Main storyline not found');
 	}
 
+	// Get the first quest of the storyline
+	const firstQuest = (
+		await db
+			.select()
+			.from(quest)
+			.where(eq(quest.storylineId, mainStoryline.id))
+			.orderBy(quest.order)
+			.limit(1)
+	)[0];
+
+	if (!firstQuest) {
+		error(500, 'First quest not found');
+	}
+
+	// Get the first encounter of the quest
+	const firstEncounter = (
+		await db
+			.select()
+			.from(encounter)
+			.where(eq(encounter.questId, firstQuest.id))
+			.orderBy(encounter.order)
+			.limit(1)
+	)[0];
+
+	if (!firstEncounter) {
+		error(500, 'First encounter not found');
+	}
+
 	// Check if progress exists
 	const existing = (
 		await db
@@ -47,6 +75,8 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 			.update(playerStoryProgress)
 			.set({
 				storylineId: mainStoryline.id,
+				questId: firstQuest.id,
+				encounterId: firstEncounter.id,
 				introStage: 'main_story',
 				updatedAt: new Date()
 			})
@@ -56,6 +86,8 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		await db.insert(playerStoryProgress).values({
 			userId: locals.user.id,
 			storylineId: mainStoryline.id,
+			questId: firstQuest.id,
+			encounterId: firstEncounter.id,
 			introStage: 'main_story',
 			createdAt: new Date(),
 			updatedAt: new Date()

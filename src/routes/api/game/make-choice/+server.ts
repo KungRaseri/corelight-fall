@@ -1,7 +1,9 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { 
-	character, 
+	character,
+	characterAttribute,
+	attribute,
 	playerStoryProgress, 
 	encounter, 
 	quest,
@@ -10,6 +12,7 @@ import {
 import { eq, and } from 'drizzle-orm';
 import { requireSession } from '$lib/utils/requireSession';
 import { checkLevelUp, getLevelUpRewards } from '$lib/utils/leveling';
+import { performSkillCheck, formatSkillCheckResult } from '$lib/utils/skillCheck';
 
 /**
  * POST /api/game/make-choice
@@ -21,7 +24,7 @@ import { checkLevelUp, getLevelUpRewards } from '$lib/utils/leveling';
  * - Advances to next encounter or quest
  */
 export const POST: RequestHandler = async ({ request, locals }) => {
-	const session = requireSession(locals);
+	await requireSession(locals);
 
 	try {
 		const { choiceId, encounterId } = await request.json();
@@ -49,26 +52,92 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			.limit(1);
 
 		if (!currentEncounter) {
+			console.error('Encounter not found:', encounterId);
 			return json({ error: 'Encounter not found' }, { status: 404 });
+		}
+
+		if (!currentEncounter.questId) {
+			console.error('Encounter has no questId:', currentEncounter);
+			return json({ error: 'Encounter has no associated quest' }, { status: 400 });
 		}
 
 		// Get current character
 		const [currentCharacter] = await db
 			.select()
 			.from(character)
-			.where(eq(character.userId, session.user.id))
+			.where(eq(character.userId, locals.user!.id))
 			.limit(1);
 
 		if (!currentCharacter) {
 			return json({ error: 'Character not found' }, { status: 404 });
 		}
 
+		// Perform skill check if required
+		let skillCheckResult = null;
+		let actualOutcome = selectedChoice.outcome;
+		let actualXpReward = selectedChoice.xpReward || 0;
+		let actualGoldReward = selectedChoice.goldReward || 0;
+		let actualNextEncounterId = selectedChoice.nextEncounterId;
+
+	if (selectedChoice.requiresCheck) {
+		// Validate character and choice data
+		if (!currentCharacter?.id) {
+			console.error('Invalid character:', currentCharacter);
+			return json({ error: 'Invalid character data' }, { status: 400 });
+		}
+
+		if (!selectedChoice.requiresCheck) {
+			console.error('Invalid requiresCheck:', selectedChoice);
+			return json({ error: 'Invalid skill check configuration' }, { status: 400 });
+		}
+
+		// Get character's attribute value for the check
+		const [charAttr] = await db
+			.select({
+				value: characterAttribute.value,
+				name: attribute.name
+			})
+			.from(characterAttribute)
+			.innerJoin(attribute, eq(characterAttribute.attributeId, attribute.id))
+			.where(and(
+				eq(characterAttribute.characterId, currentCharacter.id),
+				eq(attribute.name, selectedChoice.requiresCheck)
+			))
+			.limit(1);
+
+		if (!charAttr) {
+			console.error(`Attribute ${selectedChoice.requiresCheck} not found for character ${currentCharacter.id}`);
+			console.error('Character:', currentCharacter);
+			console.error('Choice:', selectedChoice);
+			return json({ error: `Attribute ${selectedChoice.requiresCheck} not found for character` }, { status: 400 });
+		}			// Perform the skill check
+			skillCheckResult = performSkillCheck(
+				charAttr.value,
+				selectedChoice.checkDifficulty || 10
+			);
+
+			// If failed, use failure outcomes
+			if (!skillCheckResult.success) {
+				actualOutcome = selectedChoice.failureOutcome || selectedChoice.outcome;
+				actualXpReward = selectedChoice.failureXpReward || 0;
+				actualGoldReward = selectedChoice.failureGoldReward || 0;
+				actualNextEncounterId = selectedChoice.failureNextEncounterId || selectedChoice.nextEncounterId;
+			}
+
+			// Format check result for display
+			skillCheckResult.formattedResult = formatSkillCheckResult(skillCheckResult, charAttr.name);
+		}
+
 		// Award encounter rewards
 		const newXp = currentCharacter.xp + (currentEncounter.xpReward || 0);
 		const newGold = currentCharacter.gold + (currentEncounter.goldReward || 0);
 
+		// Add choice-specific rewards (using actual rewards based on success/failure)
+		const totalXp = newXp + actualXpReward;
+		const totalGold = newGold + actualGoldReward;
+
 		// Check for level up
-		const levelUpResult = checkLevelUp(newXp, currentCharacter.level);
+		const levelUpResult = checkLevelUp(totalXp, currentCharacter.level);
 
 		let updateData: {
 			xp: number;
@@ -77,32 +146,32 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			maxHp?: number;
 			hp?: number;
 		} = {
-			xp: newXp,
-			gold: newGold,
+			xp: totalXp,
+			gold: totalGold,
 		};
 
 		let levelUpRewards = null;
 
-		if (levelUpResult.canLevelUp) {
-			const rewards = getLevelUpRewards(levelUpResult.levelsGained);
-			
-			updateData.level = levelUpResult.newLevel;
-			updateData.maxHp = currentCharacter.maxHp + rewards.maxHpIncrease;
-			// Heal to full on level up
-			updateData.hp = currentCharacter.maxHp + rewards.maxHpIncrease;
-			// Add gold bonus
-			updateData.gold = newGold + rewards.goldBonus;
+	if (levelUpResult.canLevelUp) {
+		const rewards = getLevelUpRewards(levelUpResult.levelsGained);
+		
+		const newMaxHp = currentCharacter.maxHp + rewards.maxHpIncrease;
+		
+		updateData.level = levelUpResult.newLevel;
+		updateData.maxHp = newMaxHp;
+		// Heal to full on level up (set HP to the new max HP)
+		updateData.hp = newMaxHp;
+		// Add gold bonus
+		updateData.gold = totalGold + rewards.goldBonus;
 
-			levelUpRewards = {
-				newLevel: levelUpResult.newLevel,
-				levelsGained: levelUpResult.levelsGained,
-				attributePoints: rewards.attributePoints,
-				maxHpIncrease: rewards.maxHpIncrease,
-				goldBonus: rewards.goldBonus,
-			};
-		}
-
-		// Update character with rewards
+		levelUpRewards = {
+			newLevel: levelUpResult.newLevel,
+			levelsGained: levelUpResult.levelsGained,
+			attributePoints: rewards.attributePoints,
+			maxHpIncrease: rewards.maxHpIncrease,
+			goldBonus: rewards.goldBonus,
+		};
+	}		// Update character with rewards
 		const [updatedCharacter] = await db
 			.update(character)
 			.set(updateData)
@@ -115,6 +184,10 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			.from(quest)
 			.where(eq(quest.id, currentEncounter.questId))
 			.limit(1);
+
+		if (!currentQuest) {
+			return json({ error: 'Quest not found' }, { status: 404 });
+		}
 
 		// Get all encounters for this quest ordered by order
 		const questEncounters = await db
@@ -155,24 +228,24 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 					gold: questGold,
 				};
 
-				if (questLevelUp.canLevelUp && !levelUpRewards) {
-					const rewards = getLevelUpRewards(questLevelUp.levelsGained);
-					
-					questUpdateData.level = questLevelUp.newLevel;
-					questUpdateData.maxHp = updatedCharacter.maxHp + rewards.maxHpIncrease;
-					questUpdateData.hp = updatedCharacter.maxHp + rewards.maxHpIncrease;
-					questUpdateData.gold = questGold + rewards.goldBonus;
+			if (questLevelUp.canLevelUp && !levelUpRewards) {
+				const rewards = getLevelUpRewards(questLevelUp.levelsGained);
+				
+				const questNewMaxHp = updatedCharacter.maxHp + rewards.maxHpIncrease;
+				
+				questUpdateData.level = questLevelUp.newLevel;
+				questUpdateData.maxHp = questNewMaxHp;
+				questUpdateData.hp = questNewMaxHp;
+				questUpdateData.gold = questGold + rewards.goldBonus;
 
-					levelUpRewards = {
-						newLevel: questLevelUp.newLevel,
-						levelsGained: questLevelUp.levelsGained,
-						attributePoints: rewards.attributePoints,
-						maxHpIncrease: rewards.maxHpIncrease,
-						goldBonus: rewards.goldBonus,
-					};
-				}
-
-				await db
+				levelUpRewards = {
+					newLevel: questLevelUp.newLevel,
+					levelsGained: questLevelUp.levelsGained,
+					attributePoints: rewards.attributePoints,
+					maxHpIncrease: rewards.maxHpIncrease,
+					goldBonus: rewards.goldBonus,
+				};
+			}				await db
 					.update(character)
 					.set(questUpdateData)
 					.where(eq(character.id, currentCharacter.id));
@@ -185,26 +258,37 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		}
 
 		// Update story progress to next encounter (or mark quest complete)
+		// Use actualNextEncounterId which may be different on failure
+		const progressNextEncounter = actualNextEncounterId 
+			? questEncounters.find(e => e.id === actualNextEncounterId) || nextEncounter
+			: nextEncounter;
+
 		await db
 			.update(playerStoryProgress)
 			.set({
-				encounterId: nextEncounter?.id || null,
+				encounterId: progressNextEncounter?.id || null,
 				questId: questComplete ? null : currentEncounter.questId,
 				updatedAt: new Date(),
 			})
-			.where(eq(playerStoryProgress.userId, session.user.id));
+			.where(eq(playerStoryProgress.userId, locals.user!.id));
 
 		return json({
 			success: true,
 			choice: selectedChoice,
-			outcome: selectedChoice.outcome,
+			outcome: actualOutcome,
+			skillCheck: skillCheckResult,
+			character: updatedCharacter,
 			rewards: {
-				xpGained: currentEncounter.xpReward || 0,
-				goldGained: currentEncounter.goldReward || 0,
+				xpGained: (currentEncounter.xpReward || 0) + actualXpReward,
+				goldGained: (currentEncounter.goldReward || 0) + actualGoldReward,
+				encounterXp: currentEncounter.xpReward || 0,
+				encounterGold: currentEncounter.goldReward || 0,
+				choiceXp: actualXpReward,
+				choiceGold: actualGoldReward,
 			},
 			questRewards,
 			levelUp: levelUpRewards,
-			nextEncounter: nextEncounter || null,
+			nextEncounter: progressNextEncounter || null,
 			questComplete,
 		});
 	} catch (error) {

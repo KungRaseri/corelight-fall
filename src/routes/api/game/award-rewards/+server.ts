@@ -50,26 +50,26 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 		let levelUpRewards = null;
 
-		if (levelUpResult.canLevelUp) {
-			const rewards = getLevelUpRewards(levelUpResult.levelsGained);
-			
-			updateData.level = levelUpResult.newLevel;
-			updateData.maxHp = currentCharacter.maxHp + rewards.maxHpIncrease;
-			// Heal to full on level up
-			updateData.hp = currentCharacter.maxHp + rewards.maxHpIncrease;
-			// Add gold bonus
-			updateData.gold = newGold + rewards.goldBonus;
+	if (levelUpResult.canLevelUp) {
+		const rewards = getLevelUpRewards(levelUpResult.levelsGained);
+		
+		const newMaxHp = currentCharacter.maxHp + rewards.maxHpIncrease;
+		
+		updateData.level = levelUpResult.newLevel;
+		updateData.maxHp = newMaxHp;
+		// Heal to full on level up (set HP to the new max HP)
+		updateData.hp = newMaxHp;
+		// Add gold bonus
+		updateData.gold = newGold + rewards.goldBonus;
 
-			levelUpRewards = {
-				newLevel: levelUpResult.newLevel,
-				levelsGained: levelUpResult.levelsGained,
-				attributePoints: rewards.attributePoints,
-				maxHpIncrease: rewards.maxHpIncrease,
-				goldBonus: rewards.goldBonus,
-			};
-		}
-
-		// Update character
+		levelUpRewards = {
+			newLevel: levelUpResult.newLevel,
+			levelsGained: levelUpResult.levelsGained,
+			attributePoints: rewards.attributePoints,
+			maxHpIncrease: rewards.maxHpIncrease,
+			goldBonus: rewards.goldBonus,
+		};
+	}		// Update character
 		const [updatedCharacter] = await db
 			.update(character)
 			.set(updateData)

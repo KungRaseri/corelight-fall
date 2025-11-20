@@ -82,3 +82,43 @@ export async function resetDatabase() {
 	
 	console.log('✅ Database reset.');
 }
+
+export async function resetGameData() {
+	console.log('🔄 Resetting game data (preserving user data)...');
+	
+	// Delete character-related data first
+	await db.delete(characterAchievement);
+	await db.delete(characterFacility);
+	await db.delete(characterFaction);
+	await db.delete(characterEquipment);
+	await db.delete(characterItem);
+	await db.delete(characterLocation);
+	await db.delete(characterRecipe);
+	await db.delete(characterResource);
+	await db.delete(characterAttribute);
+	await db.delete(characterStatusEffect);
+	await db.delete(character);
+
+	// Delete story progress
+	await db.delete(playerStoryProgress);
+
+	// Delete story structure (child to parent order)
+	await db.delete(choice);
+	await db.delete(encounter);
+	await db.delete(quest);
+	await db.delete(storyline);
+	await db.delete(phase);
+	await db.delete(act);
+
+	// Delete items and blog posts
+	await db.delete(item);
+	await db.delete(blogPost);
+	
+	// Delete gameplay data
+	await db.delete(attribute);
+	await db.delete(region);
+	await db.delete(location);
+	await db.delete(faction);
+	
+	console.log('✅ Game data reset (users, roles, and permissions preserved).');
+}

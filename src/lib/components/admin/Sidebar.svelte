@@ -64,7 +64,7 @@
 			</a>
 			<a href="/admin/database" class="btn preset-glass-surface-primary flex items-center gap-3 px-3 py-2 rounded-lg mb-1">
 				<IconSeed class="size-5" />
-				<span>Seed Data</span>
+				<span>Database</span>
 			</a>
 		</div>
 	</div>

@@ -20,13 +20,21 @@
 
 	const { data } = $props();
 	let outcome = $state<string | null>(null);
+	let skillCheckResult = $state<any>(null);
 	let awaitingContinue = $state(false);
 	let isProcessingChoice = $state(false);
 	
 	// Reward tracking
 	let showLevelUpModal = $state(false);
 	let levelUpData = $state<any>(null);
-	let encounterRewards = $state<{ xpGained: number; goldGained: number } | null>(null);
+	let encounterRewards = $state<{ 
+		xpGained: number; 
+		goldGained: number;
+		encounterXp?: number;
+		encounterGold?: number;
+		choiceXp?: number;
+		choiceGold?: number;
+	} | null>(null);
 	let questRewards = $state<{ xpGained: number; goldGained: number } | null>(null);
 	let currentCharacter = $state(data.character);
 
@@ -48,8 +56,14 @@
 			if (res.ok) {
 				const result = await res.json();
 				
+				// Update character data immediately with the new values
+				if (result.character) {
+					currentCharacter = result.character;
+				}
+				
 				// Show outcome
 				outcome = result.outcome ?? choice.outcome ?? 'You made a choice.';
+				skillCheckResult = result.skillCheck || null;
 				awaitingContinue = true;
 				
 				// Store rewards to display
@@ -90,6 +104,7 @@
 		levelUpData = null;
 		encounterRewards = null;
 		questRewards = null;
+		skillCheckResult = null;
 		// Reload to show next encounter
 		window.location.reload();
 	}
@@ -230,6 +245,72 @@
 							{#if outcome && awaitingContinue}
 								<!-- Outcome Display -->
 								<div class="space-y-4">
+								<!-- Skill Check Result -->
+								{#if skillCheckResult}
+									<div class="card p-6 {skillCheckResult.success ? 'preset-tonal-success bg-success-50 dark:bg-success-950' : 'preset-tonal-error bg-error-50 dark:bg-error-950'}">
+										<div class="space-y-3">
+											<!-- Title -->
+											<div class="text-center">
+												<div class="text-sm font-bold uppercase tracking-wide {skillCheckResult.success ? 'text-success-600 dark:text-success-400' : 'text-error-600 dark:text-error-400'}">
+													{skillCheckResult.success ? '✓ Check Passed' : '✗ Check Failed'}
+												</div>
+											</div>
+											
+											<!-- Roll Breakdown -->
+											<div class="flex items-center justify-center gap-3 text-surface-900 dark:text-surface-100">
+												<!-- D20 Roll -->
+												<div class="text-center">
+													<div class="text-3xl font-bold {skillCheckResult.criticalSuccess ? 'text-success-500' : skillCheckResult.criticalFailure ? 'text-error-500' : ''}">
+														🎲 {skillCheckResult.roll}
+													</div>
+													<div class="text-xs text-surface-600 dark:text-surface-400">d20</div>
+												</div>
+												
+												<!-- Plus -->
+												<div class="text-2xl font-bold text-surface-500">+</div>
+												
+												<!-- Modifier -->
+												<div class="text-center">
+													<div class="text-3xl font-bold">{skillCheckResult.modifier}</div>
+													<div class="text-xs text-surface-600 dark:text-surface-400">modifier</div>
+												</div>
+												
+												<!-- Equals -->
+												<div class="text-2xl font-bold text-surface-500">=</div>
+												
+												<!-- Total -->
+												<div class="text-center">
+													<div class="text-3xl font-bold {skillCheckResult.success ? 'text-success-500' : 'text-error-500'}">
+														{skillCheckResult.total}
+													</div>
+													<div class="text-xs text-surface-600 dark:text-surface-400">total</div>
+												</div>
+												
+												<!-- vs DC -->
+												<div class="text-center">
+													<div class="text-sm text-surface-600 dark:text-surface-400">vs DC</div>
+													<div class="text-2xl font-bold">{skillCheckResult.dc}</div>
+												</div>
+											</div>
+											
+											<!-- Formatted Result Text -->
+											<div class="text-center text-sm font-medium text-surface-700 dark:text-surface-300">
+												{skillCheckResult.formattedResult}
+											</div>
+											
+											<!-- Critical Indicator -->
+											{#if skillCheckResult.criticalSuccess}
+												<div class="text-center text-sm font-bold text-success-600 dark:text-success-400">
+													🎯 Critical Success!
+												</div>
+											{:else if skillCheckResult.criticalFailure}
+												<div class="text-center text-sm font-bold text-error-600 dark:text-error-400">
+													💥 Critical Failure!
+												</div>
+											{/if}
+										</div>
+									</div>
+								{/if}									<!-- Outcome Text -->
 									<div class="card preset-filled-secondary-500 p-6 text-center shadow-lg">
 										<p class="text-lg font-semibold">{outcome}</p>
 									</div>
@@ -237,19 +318,41 @@
 									<!-- Rewards Display -->
 									{#if encounterRewards && (encounterRewards.xpGained > 0 || encounterRewards.goldGained > 0)}
 										<div class="card preset-tonal-primary p-4">
-											<div class="flex items-center gap-3 justify-center">
-												<Award class="size-5 text-primary-500" />
-												<div class="font-semibold text-surface-900 dark:text-surface-100">
-													{#if encounterRewards.xpGained > 0}
-														<span>+{encounterRewards.xpGained} XP</span>
-													{/if}
-													{#if encounterRewards.xpGained > 0 && encounterRewards.goldGained > 0}
-														<span class="mx-2">•</span>
-													{/if}
-													{#if encounterRewards.goldGained > 0}
-														<span>+{encounterRewards.goldGained} Gold</span>
-													{/if}
+											<div class="space-y-2">
+												<div class="flex items-center gap-3 justify-center">
+													<Award class="size-5 text-primary-500" />
+													<div class="font-semibold text-surface-900 dark:text-surface-100">
+														{#if encounterRewards.xpGained > 0}
+															<span>+{encounterRewards.xpGained} XP</span>
+														{/if}
+														{#if encounterRewards.xpGained > 0 && encounterRewards.goldGained > 0}
+															<span class="mx-2">•</span>
+														{/if}
+														{#if encounterRewards.goldGained > 0}
+															<span>+{encounterRewards.goldGained} Gold</span>
+														{/if}
+													</div>
 												</div>
+												<!-- Breakdown if choice has rewards -->
+												{#if (encounterRewards.choiceXp ?? 0) > 0 || (encounterRewards.choiceGold ?? 0) > 0}
+													<div class="text-xs text-center text-surface-600 dark:text-surface-400">
+														{#if (encounterRewards.encounterXp ?? 0) > 0}
+															<span>Encounter: +{encounterRewards.encounterXp} XP</span>
+															{#if (encounterRewards.encounterGold ?? 0) > 0}
+																<span>, +{encounterRewards.encounterGold} Gold</span>
+															{/if}
+														{/if}
+														{#if ((encounterRewards.encounterXp ?? 0) > 0 || (encounterRewards.encounterGold ?? 0) > 0) && ((encounterRewards.choiceXp ?? 0) > 0 || (encounterRewards.choiceGold ?? 0) > 0)}
+															<span class="mx-1">•</span>
+														{/if}
+														{#if (encounterRewards.choiceXp ?? 0) > 0}
+															<span>Choice Bonus: +{encounterRewards.choiceXp} XP</span>
+															{#if (encounterRewards.choiceGold ?? 0) > 0}
+																<span>, +{encounterRewards.choiceGold} Gold</span>
+															{/if}
+														{/if}
+													</div>
+												{/if}
 											</div>
 										</div>
 									{/if}

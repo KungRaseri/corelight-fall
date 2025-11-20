@@ -367,6 +367,8 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 				isMain: true,
 				isActive: true,
 				coverImage: '/images/dying-light.jpg',
+				xpReward: 500,
+				goldReward: 250,
 				createdAt: new Date(),
 				updatedAt: new Date()
 			};
@@ -392,6 +394,8 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 				order: 1,
 				isMain: true,
 				isActive: true,
+				xpReward: 200,
+				goldReward: 100,
 				createdAt: new Date(),
 				updatedAt: new Date()
 			};
@@ -416,6 +420,8 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 				factions: 'Cinderlight Conclave',
 				order: 1,
 				isActive: true,
+				xpReward: 50,
+				goldReward: 25,
 				createdAt: new Date(),
 				updatedAt: new Date()
 			};
@@ -440,6 +446,8 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 				factions: 'Cinderlight Conclave',
 				order: 2,
 				isActive: true,
+				xpReward: 75,
+				goldReward: 35,
 				createdAt: new Date(),
 				updatedAt: new Date()
 			};
@@ -462,6 +470,8 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 				factions: 'Cinderlight Conclave',
 				order: 3,
 				isActive: true,
+				xpReward: 75,
+				goldReward: 40,
 				createdAt: new Date(),
 				updatedAt: new Date()
 			};
@@ -479,6 +489,8 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 					text: 'Show the Signal Beacon and request entry',
 					nextEncounterId: encounter2Record.id,
 					outcome: 'The guard\'s eyes widen at the sight of the beacon. She immediately escorts you to Elder Cassia.',
+					xpReward: 10,
+					goldReward: 5,
 					order: 1,
 					createdAt: new Date(),
 					updatedAt: new Date()
@@ -489,22 +501,31 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 					text: 'Attempt to bribe the guard with Ancient Coins',
 					nextEncounterId: encounter2Record.id,
 					outcome: 'The guard pockets the coins and opens the gate, but warns you to keep your head down.',
+					xpReward: 5,
+					goldReward: 0,
 					order: 2,
 					createdAt: new Date(),
 					updatedAt: new Date()
 				};
 
-				const choice3: NewChoice = {
-					encounterId: encounter1Record.id,
-					text: 'Intimidate the guard (Presence check)',
-					nextEncounterId: encounter2Record.id,
-					outcome: 'Your forceful demeanor convinces the guard you\'re not someone to trifle with. She reluctantly allows entry.',
-					order: 3,
-					createdAt: new Date(),
-					updatedAt: new Date()
-				};
-
-				await db.insert(choice).values([choice1, choice2, choice3]);
+			const choice3: NewChoice = {
+				encounterId: encounter1Record.id,
+				text: 'Intimidate the guard (Presence check)',
+				nextEncounterId: encounter2Record.id,
+				outcome: 'Your forceful demeanor convinces the guard you\'re not someone to trifle with. She reluctantly allows entry, muttering under her breath.',
+				xpReward: 15,
+				goldReward: 10,
+				// Skill check configuration
+				requiresCheck: 'Presence',
+				checkDifficulty: 12,
+				failureOutcome: 'The guard bursts into laughter at your feeble attempt at intimidation. "Nice try, rookie. The Conclave doesn\'t see visitors today." She firmly blocks your path.',
+				failureXpReward: 5,
+				failureGoldReward: 0,
+				failureNextEncounterId: encounter2Record.id, // Still proceeds but with different context
+				order: 3,
+				createdAt: new Date(),
+				updatedAt: new Date()
+			};				await db.insert(choice).values([choice1, choice2, choice3]);
 			}
 		}
 
@@ -518,30 +539,36 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 					text: 'Agree to help the Conclave activate the beacon',
 					nextEncounterId: encounter3Record.id,
 					outcome: 'Elder Cassia nods gravely. "You have chosen a dangerous path, but perhaps a necessary one. We will prepare the ritual."',
-				order: 1,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			};
+					xpReward: 20,
+					goldReward: 15,
+					order: 1,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				};
 
-			const choice5: NewChoice = {
-				encounterId: encounter2Record.id,
-				text: 'Refuse and keep the beacon for yourself',
-				nextEncounterId: encounter3Record.id,
-				outcome: 'Cassia\'s expression hardens. "Then you do not understand the responsibility you bear. Leave this place—and pray you never activate it by accident."',
-				order: 2,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			};
+				const choice5: NewChoice = {
+					encounterId: encounter2Record.id,
+					text: 'Refuse and keep the beacon for yourself',
+					nextEncounterId: encounter3Record.id,
+					outcome: 'Cassia\'s expression hardens. "Then you do not understand the responsibility you bear. Leave this place—and pray you never activate it by accident."',
+					xpReward: 10,
+					goldReward: 20,
+					order: 2,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				};
 
-			const choice6: NewChoice = {
-				encounterId: encounter2Record.id,
-				text: 'Suggest taking it to the Forgewalkers Union instead',
-				nextEncounterId: encounter3Record.id,
-				outcome: 'Cassia\'s face flushes with anger. "The Forgewalkers would turn this sacred artifact into a weapon! But... perhaps that is the world we live in now."',
-				order: 3,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			};
+				const choice6: NewChoice = {
+					encounterId: encounter2Record.id,
+					text: 'Suggest taking it to the Forgewalkers Union instead',
+					nextEncounterId: encounter3Record.id,
+					outcome: 'Cassia\'s face flushes with anger. "The Forgewalkers would turn this sacred artifact into a weapon! But... perhaps that is the world we live in now."',
+					xpReward: 15,
+					goldReward: 10,
+					order: 3,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				};
 
 				await db.insert(choice).values([choice4, choice5, choice6]);
 			}

@@ -35,12 +35,23 @@
 
 	let totalPoints = 10;
 
-	// Initialize local state from the store only once
+	// Initialize local state from the store or existing character data
 	onMount(() => {
 		const current = get(onboardingData);
-		name = current.name ?? '';
-		appearance = current.appearance ?? '';
-		factionValue = current.faction ?? '';
+		
+		// If there's existing character data (from reset), use that as defaults
+		if (data.existingCharacter) {
+			name = data.existingCharacter.name ?? '';
+			appearance = data.existingCharacter.appearance ?? '';
+			factionValue = data.existingCharacter.faction ?? '';
+		} else {
+			// Otherwise use store data
+			name = current.name ?? '';
+			appearance = current.appearance ?? '';
+			factionValue = current.faction ?? '';
+		}
+		
+		// Always use store data for attributes and tutorial
 		allocation = current.attributes ?? {};
 		tutorial = current.tutorial ?? false;
 	});
