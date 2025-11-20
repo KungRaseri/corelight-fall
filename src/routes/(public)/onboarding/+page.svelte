@@ -1,6 +1,7 @@
 <script lang="ts">
 	import IconArrowLeft from 'lucide-svelte/icons/arrow-left';
 	import IconArrowRight from 'lucide-svelte/icons/arrow-right';
+	import IconCheck from 'lucide-svelte/icons/check';
 	import StepCharacter from '$lib/components/onboarding/StepCharacter.svelte';
 	import StepFaction from '$lib/components/onboarding/StepFaction.svelte';
 	import StepAttributes from '$lib/components/onboarding/StepAttributes.svelte';
@@ -98,126 +99,173 @@
 	}
 </script>
 
-<div class="w-full">
+<div class="container mx-auto max-w-5xl p-6">
 	<div class="space-y-8">
+		<!-- Header -->
+		<div class="text-center">
+			<h1 class="text-4xl font-bold text-primary-500 dark:text-primary-400 mb-2">Character Creation</h1>
+			<p class="text-surface-600 dark:text-surface-400">
+				{steps[currentStep].description}
+			</p>
+		</div>
+
 		<!-- Stepper Timeline -->
 		<div class="relative">
-			<div class="flex items-center justify-between gap-4">
+			<div class="flex items-center justify-between gap-2 sm:gap-4">
 				{#each steps as step, i}
 					<button
-						class="btn-icon btn-icon rounded-full {isCurrentStep(i)
-							? 'preset-glass-primary'
-							: 'preset-glass-surface'}"
+						class="btn-icon rounded-full transition-all {isCurrentStep(i)
+							? 'preset-filled-primary-500'
+							: i < currentStep
+								? 'preset-filled-secondary-500'
+								: 'preset-tonal-surface'}"
 						onclick={() => setStep(i)}
 						title={step.label}
 						type="button"
+						aria-label={`Step ${i + 1}: ${step.label}`}
 					>
-						<span class="font-bold">{i + 1}</span>
+						{#if i < currentStep}
+							<IconCheck class="size-5" />
+						{:else}
+							<span class="font-bold">{i + 1}</span>
+						{/if}
 					</button>
 				{/each}
 			</div>
-			<hr class="hr !border-surface-200 dark:border-surface-800 absolute top-[50%] right-0 left-0 z-[-1]" />
+			<div class="bg-surface-200 dark:bg-surface-800 absolute top-[50%] right-0 left-0 z-[-1] h-1"></div>
 		</div>
 
-		<!-- Step 0: Introduction -->
-		{#if isCurrentStep(0)}
-			<div class="card bg-surface-100 dark:bg-surface-900 mx-auto max-w-xl space-y-4 p-10 text-center">
-				<h2 class="h3 mb-2">Welcome to The Corelight Fall!</h2>
-				<p>
-					The world is fractured, and you are called to shape its fate.<br />
-					Your journey begins now. Choose your path, forge your identity, and prepare to explore a world
-					full of mystery and adventure.
-				</p>
-				<p>
-					<b>Ready to begin?</b>
-				</p>
-			</div>
-		{/if}
-
-		<!-- Step 1: Character -->
-		{#if isCurrentStep(1)}
-			<StepCharacter {name} {appearance} {setName} {setAppearance} />
-		{/if}
-
-		<!-- Step 2: Faction -->
-		{#if isCurrentStep(2)}
-			<StepFaction factions={data.factions} {factionValue} {setFaction} />
-		{/if}
-
-		<!-- Step 3: Attributes -->
-		{#if isCurrentStep(3)}
-			<StepAttributes attributes={data.attributes} {allocation} {setAllocation} {pointsLeft} />
-		{/if}
-
-		<!-- Step 4: Finalize -->
-		{#if isCurrentStep(4)}
-			<div class="card bg-surface-100 dark:bg-surface-900 mx-auto max-w-xl space-y-4 p-10 text-left">
-				<h2 class="h3 mb-4">{steps[4].label}</h2>
-				<div>
-					<div><b>Name:</b> {name}</div>
-					<div><b>Appearance:</b> {appearance}</div>
-					<div><b>Faction:</b> {factionValue}</div>
-					<div>
-						<b>Attributes:</b>
-						<ul class="ml-4">
-							{#each data.attributes as attr}
-								<li>{attr.name}: {allocation[attr.name] ?? attr.baseValue}</li>
-							{/each}
-						</ul>
+		<!-- Step Content -->
+		<div class="min-h-[400px]">
+			<!-- Step 0: Introduction -->
+			{#if isCurrentStep(0)}
+				<div class="card preset-glass-surface bg-surface-50 dark:bg-surface-900 mx-auto max-w-2xl space-y-6 p-10 text-center">
+					<h2 class="text-3xl font-bold text-primary-500 dark:text-primary-400">Welcome to The Corelight Fall!</h2>
+					<div class="text-surface-700 dark:text-surface-300 space-y-4">
+						<p>
+							The world is fractured, and you are called to shape its fate.
+						</p>
+						<p>
+							Your journey begins now. Choose your path, forge your identity, and prepare to explore a world
+							full of mystery and adventure.
+						</p>
+						<p class="text-primary-500 dark:text-primary-400 text-lg font-semibold">
+							Ready to begin?
+						</p>
 					</div>
 				</div>
-			</div>
-		{/if}
+			{/if}
 
-		<!-- Step 5: Tutorial -->
-		{#if isCurrentStep(5)}
-			<form
-				class="card bg-surface-100 dark:bg-surface-900 mx-auto max-w-md space-y-4 p-10 text-center"
-				onsubmit={(e) => {
-					e.preventDefault();
-					// Save onboardingData here if needed
-				}}
-			>
-				<h2 class="h3 mb-4">{steps[5].label}</h2>
-				<p>Would you like to start with a guided tutorial?</p>
-				<div class="flex justify-center gap-6">
-					<label>
-						<input
-							type="radio"
-							bind:group={tutorial}
-							value={true}
-							onchange={() => setTutorial(true)}
-							required
-						/>
-						Yes
-					</label>
-					<label>
-						<input
-							type="radio"
-							bind:group={tutorial}
-							value={false}
-							onchange={() => setTutorial(false)}
-						/>
-						No
-					</label>
+			<!-- Step 1: Character -->
+			{#if isCurrentStep(1)}
+				<StepCharacter {name} {appearance} {setName} {setAppearance} />
+			{/if}
+
+			<!-- Step 2: Faction -->
+			{#if isCurrentStep(2)}
+				<StepFaction factions={data.factions} {factionValue} {setFaction} />
+			{/if}
+
+			<!-- Step 3: Attributes -->
+			{#if isCurrentStep(3)}
+				<StepAttributes attributes={data.attributes} {allocation} {setAllocation} {pointsLeft} />
+			{/if}
+
+			<!-- Step 4: Finalize -->
+			{#if isCurrentStep(4)}
+				<div class="card preset-glass-surface bg-surface-50 dark:bg-surface-900 mx-auto max-w-2xl space-y-6 p-8">
+					<div class="space-y-2">
+						<h2 class="text-2xl font-bold text-primary-500 dark:text-primary-400">Review Your Character</h2>
+						<p class="text-surface-700 dark:text-surface-300 text-sm">
+							Confirm your choices before entering the world.
+						</p>
+					</div>
+
+					<div class="space-y-4">
+						<div class="card preset-outlined-surface-200-800 bg-surface-100 dark:bg-surface-800 p-4">
+							<div class="font-bold text-surface-900 dark:text-surface-100 mb-1">Character Name</div>
+							<div class="text-surface-700 dark:text-surface-300">{name || 'Not set'}</div>
+						</div>
+
+						<div class="card preset-outlined-surface-200-800 bg-surface-100 dark:bg-surface-800 p-4">
+							<div class="font-bold text-surface-900 dark:text-surface-100 mb-1">Appearance</div>
+							<div class="text-surface-700 dark:text-surface-300">{appearance || 'Not set'}</div>
+						</div>
+
+						<div class="card preset-outlined-surface-200-800 bg-surface-100 dark:bg-surface-800 p-4">
+							<div class="font-bold text-surface-900 dark:text-surface-100 mb-1">Faction</div>
+							<div class="text-surface-700 dark:text-surface-300">{factionValue || 'Not set'}</div>
+						</div>
+
+						<div class="card preset-outlined-surface-200-800 bg-surface-100 dark:bg-surface-800 p-4">
+							<div class="font-bold text-surface-900 dark:text-surface-100 mb-2">Attributes</div>
+							<div class="grid grid-cols-2 gap-2">
+								{#each data.attributes as attr}
+									<div class="flex justify-between">
+										<span class="text-surface-700 dark:text-surface-300">{attr.name}:</span>
+										<span class="font-semibold text-surface-900 dark:text-surface-100">
+											{allocation[attr.name] ?? attr.baseValue}
+										</span>
+									</div>
+								{/each}
+							</div>
+						</div>
+					</div>
 				</div>
-			</form>
-		{/if}
+			{/if}
+
+			<!-- Step 5: Tutorial -->
+			{#if isCurrentStep(5)}
+				<div class="card preset-glass-surface bg-surface-50 dark:bg-surface-900 mx-auto max-w-md space-y-6 p-8 text-center">
+					<div class="space-y-2">
+						<h2 class="text-2xl font-bold text-primary-500 dark:text-primary-400">Tutorial</h2>
+						<p class="text-surface-700 dark:text-surface-300 text-sm">
+							Would you like to start with a guided tutorial?
+						</p>
+					</div>
+
+					<div class="flex justify-center gap-4">
+						<label class="card preset-outlined-surface-200-800 bg-surface-100 dark:bg-surface-800 hover:preset-tonal-primary flex cursor-pointer items-center gap-3 px-6 py-4 transition-all">
+							<input
+								type="radio"
+								name="tutorial"
+								bind:group={tutorial}
+								value={true}
+								onchange={() => setTutorial(true)}
+								required
+							/>
+							<span class="font-semibold text-surface-900 dark:text-surface-100">Yes, guide me</span>
+						</label>
+						<label class="card preset-outlined-surface-200-800 bg-surface-100 dark:bg-surface-800 hover:preset-tonal-primary flex cursor-pointer items-center gap-3 px-6 py-4 transition-all">
+							<input
+								type="radio"
+								name="tutorial"
+								bind:group={tutorial}
+								value={false}
+								onchange={() => setTutorial(false)}
+							/>
+							<span class="font-semibold text-surface-900 dark:text-surface-100">Skip tutorial</span>
+						</label>
+					</div>
+				</div>
+			{/if}
+		</div>
 
 		<!-- Navigation -->
 		<nav class="flex items-center justify-between gap-4">
 			<button
 				type="button"
-				class="btn preset-glass hover:preset-glass-primary"
+				class="btn preset-tonal-surface flex items-center gap-2"
 				onclick={prevStep}
 				disabled={currentStep === 0}
+				aria-label="Previous step"
 			>
-				<IconArrowLeft size={18} />
+				<IconArrowLeft class="size-5" />
 				<span>Previous</span>
 			</button>
 			<button
 				type="button"
-				class="btn preset-glass hover:preset-glass-primary"
+				class="btn preset-filled-primary flex items-center gap-2"
 				onclick={async () => {
 					const forms = Array.from(document.querySelectorAll('form'));
 					const form = forms.find((f) => f.offsetParent !== null);
@@ -257,8 +305,12 @@
 					(currentStep === 2 && !factionValue) ||
 					(currentStep === 3 && pointsLeft !== 0)}
 			>
-				<span>{currentStep === steps.length - 1 ? 'Finish' : 'Next'}</span>
-				<IconArrowRight size={18} />
+				<span>{currentStep === steps.length - 1 ? 'Enter the World' : 'Next'}</span>
+				{#if currentStep === steps.length - 1}
+					<IconCheck class="size-5" />
+				{:else}
+					<IconArrowRight class="size-5" />
+				{/if}
 			</button>
 		</nav>
 	</div>
