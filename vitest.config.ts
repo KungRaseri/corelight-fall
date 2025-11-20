@@ -1,21 +1,14 @@
 import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
-import path from 'node:path';
 
 // Vitest 4.0+ uses 'projects' instead of workspace files
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit()],
-	resolve: {
-		alias: {
-			$lib: path.resolve('./src/lib'),
-			$app: path.resolve('./node_modules/@sveltejs/kit/src/runtime/app')
-		}
-	},
 	test: {
 		// Define multiple test projects
 		projects: [
 			{
+				plugins: [tailwindcss(), sveltekit()],
 				test: {
 					name: 'unit',
 					globals: true,
@@ -23,9 +16,13 @@ export default defineConfig({
 					setupFiles: ['./vitest-setup-client.ts'],
 					include: ['tests/unit/**/*.{test,spec}.{js,ts}'],
 					exclude: ['node_modules', 'dist', '.svelte-kit', 'build']
+				},
+				resolve: {
+					conditions: ['browser']
 				}
 			},
 			{
+				plugins: [tailwindcss(), sveltekit()],
 				test: {
 					name: 'integration',
 					globals: true,
@@ -33,6 +30,9 @@ export default defineConfig({
 					setupFiles: ['./vitest-setup-client.ts'],
 					include: ['tests/integration/**/*.{test,spec}.{js,ts}'],
 					exclude: ['node_modules', 'dist', '.svelte-kit', 'build']
+				},
+				resolve: {
+					conditions: ['browser']
 				}
 			}
 		],

@@ -13,7 +13,7 @@ describe('WorldIntroduction Component', () => {
 		});
 
 		// Check for key phrases in the introduction
-		expect(screen.getByText(/Welcome/i)).toBeInTheDocument();
+		expect(screen.getByText(/The World of Corelight Fall/i)).toBeInTheDocument();
 	});
 
 	it('should have a continue button', () => {

@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
 
+// Force Svelte 5 to run in browser mode (not SSR mode) for testing
+// This ensures mount() is available and components render correctly
+process.env.VITEST_BROWSER = 'true';
+
 // Required for Svelte 5 + jsdom as jsdom does not support matchMedia
 Object.defineProperty(globalThis, 'matchMedia', {
 	writable: true,
@@ -28,6 +32,31 @@ globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
 	unobserve: vi.fn(),
 	disconnect: vi.fn()
 })) as unknown as typeof ResizeObserver;
+
+// Mock Element.animate for Svelte transitions
+if (typeof Element !== 'undefined') {
+	Element.prototype.animate = vi.fn().mockImplementation(() => {
+		const animation = {
+			cancel: vi.fn(),
+			finish: vi.fn(),
+			pause: vi.fn(),
+			play: vi.fn(),
+			reverse: vi.fn(),
+			onfinish: null as (() => void) | null,
+			oncancel: null as (() => void) | null,
+			playState: 'finished',
+			ready: Promise.resolve(),
+			finished: Promise.resolve()
+		};
+		
+		// Immediately call onfinish to complete transitions in tests
+		setTimeout(() => {
+			if (animation.onfinish) animation.onfinish();
+		}, 0);
+		
+		return animation as Animation;
+	});
+}
 
 // Mock localStorage
 const localStorageMock = (() => {

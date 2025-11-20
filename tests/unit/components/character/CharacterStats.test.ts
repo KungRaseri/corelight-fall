@@ -57,7 +57,7 @@ describe('CharacterStats Component', () => {
 	});
 
 	it('should show MAX badge for max level character', () => {
-		const maxLevelChar = { ...mockCharacter, level: 20 };
+		const maxLevelChar = { ...mockCharacter, level: 50 };
 		render(CharacterStats, {
 			props: { character: maxLevelChar, showDetails: true }
 		});
