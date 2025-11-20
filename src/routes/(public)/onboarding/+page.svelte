@@ -44,6 +44,14 @@
 			name = data.existingCharacter.name ?? '';
 			appearance = data.existingCharacter.appearance ?? '';
 			factionValue = data.existingCharacter.faction ?? '';
+			
+			// Update the store with existing data so it persists
+			onboardingData.update((d) => ({
+				...d,
+				name: data.existingCharacter?.name ?? '',
+				appearance: data.existingCharacter?.appearance ?? '',
+				faction: data.existingCharacter?.faction ?? ''
+			}));
 		} else {
 			// Otherwise use store data
 			name = current.name ?? '';
