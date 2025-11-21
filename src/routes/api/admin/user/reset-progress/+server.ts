@@ -4,10 +4,9 @@ import {
 	character,
 	characterItem,
 	characterAttribute,
-	attribute,
 	characterFaction
 } from '$lib/server/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { requireAdmin } from '$lib/utils/requireAdmin';
@@ -66,23 +65,10 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 			gold: resetCharacter.gold
 		});
 
-		// Reset character attributes to base values
-		const attributes = await db.select().from(attribute);
-		
-		// Update each attribute to its base value using composite key
-		for (const attr of attributes) {
-			await db
-				.update(characterAttribute)
-				.set({
-					value: attr.baseValue || 5
-				})
-				.where(
-					and(
-						eq(characterAttribute.characterId, userCharacter.id),
-						eq(characterAttribute.attributeId, attr.id)
-					)
-				);
-		}
+		// Delete all character attributes to ensure clean state
+		await db.delete(characterAttribute).where(eq(characterAttribute.characterId, userCharacter.id));
+
+		console.log('[RESET] Deleted all character attributes for fresh reset');
 	}
 
 	// Delete all story progress for this user

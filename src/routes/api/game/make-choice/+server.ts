@@ -125,6 +125,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			}
 
 			// Format check result for display
+			// @ts-expect-error - formattedResult is added dynamically
 			skillCheckResult.formattedResult = formatSkillCheckResult(skillCheckResult, charAttr.name);
 		}
 
@@ -139,7 +140,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		// Check for level up
 		const levelUpResult = checkLevelUp(totalXp, currentCharacter.level);
 
-		let updateData: {
+		const updateData: {
 			xp: number;
 			gold: number;
 			level?: number;
@@ -172,11 +173,19 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			goldBonus: rewards.goldBonus,
 		};
 	}		// Update character with rewards
+		console.log('[MAKE-CHOICE] Updating character with data:', updateData);
 		const [updatedCharacter] = await db
 			.update(character)
 			.set(updateData)
 			.where(eq(character.id, currentCharacter.id))
 			.returning();
+		console.log('[MAKE-CHOICE] Character after update:', {
+			id: updatedCharacter.id,
+			name: updatedCharacter.name,
+			xp: updatedCharacter.xp,
+			gold: updatedCharacter.gold,
+			level: updatedCharacter.level
+		});
 
 		// Find next encounter in the quest
 		const [currentQuest] = await db
@@ -217,7 +226,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 				const questLevelUp = checkLevelUp(questXp, updatedCharacter.level);
 
-				let questUpdateData: {
+				const questUpdateData: {
 					xp: number;
 					gold: number;
 					level?: number;

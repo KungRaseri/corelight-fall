@@ -234,11 +234,6 @@
 			onDismiss={dismissHint}
 		/>
 	{/if}
-	
-	<!-- Character Stats Bar (visible during main game) -->
-	{#if currentCharacter && data.introStage === 'main_story'}
-		<CharacterStats character={currentCharacter} showDetails={false} />
-	{/if}
 
 	<!-- Quick Actions Bar -->
 	<div class="flex flex-wrap gap-2 md:gap-4">

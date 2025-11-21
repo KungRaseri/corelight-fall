@@ -3,7 +3,6 @@ import {
 	serial,
 	text,
 	integer,
-	foreignKey,
 	boolean,
 	timestamp
 } from 'drizzle-orm/pg-core';
@@ -14,6 +13,7 @@ export const character = pgTable('character', {
 	id: serial('id').primaryKey(),
 	userId: integer('user_id')
 		.notNull()
+		.unique() // ONE character per user
 		.references(() => user.id, { onDelete: 'cascade' }),
 	name: text('name').notNull(),
 	appearance: text('appearance'),
