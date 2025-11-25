@@ -14,6 +14,8 @@ import { eq, and } from 'drizzle-orm';
  * Dialogue Service - Manages dialogue trees, choices, and conversation flow
  */
 
+export type FlagCondition = { name: string; value: boolean | number | string };
+
 export interface SkillCheckResult {
 	success: boolean;
 	attributeUsed: string;
@@ -141,7 +143,8 @@ export class DialogueService {
 						)
 					);
 
-				if (!relationship || relationship.relationshipLevel < relReq.minLevel) {
+				const relationshipLevel = relationship?.relationshipLevel ?? 0;
+				if (relationshipLevel < relReq.minLevel) {
 					return false;
 				}
 			}
@@ -332,10 +335,19 @@ export class DialogueService {
 	}
 
 	/**
+	 * Determine flag type from value
+	 */
+	private getFlagType(value: boolean | number | string): 'boolean' | 'integer' | 'text' {
+		if (typeof value === 'boolean') return 'boolean';
+		if (typeof value === 'number') return 'integer';
+		return 'text';
+	}
+
+	/**
 	 * Set a story flag
 	 */
 	async setFlag(characterId: number, flagName: string, value: boolean | number | string) {
-		const flagType = typeof value === 'boolean' ? 'boolean' : typeof value === 'number' ? 'integer' : 'text';
+		const flagType = this.getFlagType(value);
 
 		await db
 			.insert(storyFlag)
@@ -365,14 +377,16 @@ export class DialogueService {
 			);
 
 		if (existing) {
-			const newLevel = Math.max(0, Math.min(100, existing.relationshipLevel + change));
+			const currentLevel = existing.relationshipLevel ?? 0;
+			const currentInteractions = existing.totalInteractions ?? 0;
+			const newLevel = Math.max(0, Math.min(100, currentLevel + change));
 			
 			await db
 				.update(characterNpcRelationship)
 				.set({
 					relationshipLevel: newLevel,
 					lastInteractionAt: new Date(),
-					totalInteractions: existing.totalInteractions + 1
+					totalInteractions: currentInteractions + 1
 				})
 				.where(eq(characterNpcRelationship.id, existing.id));
 		}
@@ -496,12 +510,14 @@ export class DialogueService {
 
 		if (!history) return;
 
+		const currentTimesCompleted = history.timesCompleted ?? 0;
+
 		await db
 			.update(characterDialogueHistory)
 			.set({
 				isCompleted: true,
 				completedAt: new Date(),
-				timesCompleted: history.timesCompleted + 1
+				timesCompleted: currentTimesCompleted + 1
 			})
 			.where(eq(characterDialogueHistory.id, history.id));
 	}
