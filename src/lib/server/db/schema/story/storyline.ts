@@ -4,7 +4,7 @@ import { phase } from './phase';
 // Storyline table (main arcs and side arcs)
 export const storyline = pgTable('storyline', {
 	id: serial('id').primaryKey(),
-	title: text('title').notNull(),
+	title: text('title').notNull().unique(), // Add unique constraint
 	description: text('description').notNull(),
 	phaseId: integer('phase_id').references(() => phase.id), // normalized phase reference
 	tone: text('tone'),

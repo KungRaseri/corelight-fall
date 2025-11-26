@@ -22,46 +22,63 @@ import { eq } from 'drizzle-orm';
 export async function seedPrologueContent() {
 	console.log('🌱 Seeding prologue content...');
 
+	// Helper function to get or create
+	async function getOrCreateStoryline(storylineData: {
+		title: string;
+		description: string;
+		tone: string;
+		goals: string;
+		summary: string;
+		tags: string;
+		factions: string;
+		order: number;
+		isMain: boolean;
+		isActive: boolean;
+		xpReward: number;
+		goldReward: number;
+	}) {
+		const existing = await db.select().from(storyline).where(eq(storyline.title, storylineData.title)).limit(1);
+		if (existing.length > 0) {
+			return existing[0];
+		}
+		const [newStoryline] = await db.insert(storyline).values(storylineData).returning();
+		return newStoryline;
+	}
+
 	// 0. Create storylines first (quests require storylineId)
 	console.log('📖 Creating storylines...');
 	
-	const [scavengerStoryline] = await db
-		.insert(storyline)
-		.values({
-			title: 'The Scavenger\'s Journey',
-			description: 'A tale of survival and resourcefulness in the ruins of the old world.',
-			tone: 'gritty',
-			goals: 'Protect Ashvale, gather resources, build community',
-			summary: 'Your story as a pragmatic survivor focused on protecting your community.',
-			tags: 'prologue,scavenger,survival',
-			factions: 'ashvale',
-			order: 1,
-			isMain: true,
-			isActive: true,
-			xpReward: 500,
-			goldReward: 200
-		})
-		.returning();
+	const scavengerStoryline = await getOrCreateStoryline({
+		title: 'The Scavenger\'s Journey',
+		description: 'A tale of survival and resourcefulness in the ruins of the old world.',
+		tone: 'gritty',
+		goals: 'Protect Ashvale, gather resources, build community',
+		summary: 'Your story as a pragmatic survivor focused on protecting your community.',
+		tags: 'prologue,scavenger,survival',
+		factions: 'ashvale',
+		order: 1,
+		isMain: true,
+		isActive: true,
+		xpReward: 500,
+		goldReward: 200
+	});
 
-	const [seekerStoryline] = await db
-		.insert(storyline)
-		.values({
-			title: 'The Seeker\'s Path',
-			description: 'A quest for knowledge and understanding of the ancient Luminarchs.',
-			tone: 'mysterious',
-			goals: 'Uncover the truth, decode mysteries, preserve knowledge',
-			summary: 'Your journey as a scholar driven by curiosity and the pursuit of lost knowledge.',
-			tags: 'prologue,seeker,knowledge',
-			factions: 'scholars',
-			order: 1,
-			isMain: true,
-			isActive: true,
-			xpReward: 500,
-			goldReward: 200
-		})
-		.returning();
+	const seekerStoryline = await getOrCreateStoryline({
+		title: 'The Seeker\'s Path',
+		description: 'A quest for knowledge and understanding of the ancient Luminarchs.',
+		tone: 'mysterious',
+		goals: 'Uncover the truth, decode mysteries, preserve knowledge',
+		summary: 'Your journey as a scholar driven by curiosity and the pursuit of lost knowledge.',
+		tags: 'prologue,seeker,knowledge',
+		factions: 'scholars',
+		order: 1,
+		isMain: true,
+		isActive: true,
+		xpReward: 500,
+		goldReward: 200
+	});
 
-	console.log(`✅ Created storylines: ${scavengerStoryline.id}, ${seekerStoryline.id}`);
+	console.log(`✅ Storylines: Scavenger (${scavengerStoryline.id}), Seeker (${seekerStoryline.id})`);
 
 	// 1. Create key NPCs from the prologue
 	console.log('👥 Creating NPCs...');

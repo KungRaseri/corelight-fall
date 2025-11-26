@@ -426,6 +426,116 @@ export class QuestService {
 
 		return { success: true };
 	}
+
+	/**
+	 * Check if a quest is available based on prerequisite quests
+	 * Uses the new prerequisiteQuestIds and alternativePrerequisiteQuestIds fields
+	 */
+	async isQuestAvailable(questId: number, characterId: number): Promise<boolean> {
+		// Get the quest with its prerequisites
+		const [questData] = await db
+			.select()
+			.from(quest)
+			.where(eq(quest.id, questId));
+
+		if (!questData?.isActive) {
+			return false;
+		}
+
+		// Get completed quests for this character
+		const completedQuests = await db
+			.select({ questId: characterQuestState.questId })
+			.from(characterQuestState)
+			.where(
+				and(
+					eq(characterQuestState.characterId, characterId),
+					eq(characterQuestState.status, 'completed')
+				)
+			);
+
+		const completedQuestIds = new Set(completedQuests.map((q) => q.questId));
+
+		// Check prerequisite quests (AND logic - all must be complete)
+		const prerequisiteIds = (questData.prerequisiteQuestIds as number[]) || [];
+		if (prerequisiteIds.length > 0) {
+			const allPrerequisitesComplete = prerequisiteIds.every((id) => completedQuestIds.has(id));
+			if (!allPrerequisitesComplete) {
+				return false;
+			}
+		}
+
+		// Check alternative prerequisites (OR logic - at least one must be complete)
+		const alternativeIds = (questData.alternativePrerequisiteQuestIds as number[]) || [];
+		if (alternativeIds.length > 0) {
+			const anyAlternativeComplete = alternativeIds.some((id) => completedQuestIds.has(id));
+			if (!anyAlternativeComplete) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get all available quests for a character (quests they can start now)
+	 */
+	async getAvailableQuests(characterId: number) {
+		// Get all active quests
+		const allQuests = await db
+			.select()
+			.from(quest)
+			.where(eq(quest.isActive, true));
+
+		// Filter to only quests that are available
+		const availableQuests = [];
+		for (const questData of allQuests) {
+			// Check if already started or completed
+			const [existing] = await db
+				.select()
+				.from(characterQuestState)
+				.where(
+					and(
+						eq(characterQuestState.characterId, characterId),
+						eq(characterQuestState.questId, questData.id)
+					)
+				);
+
+			// Skip if already started or completed
+			if (existing) {
+				continue;
+			}
+
+			// Check if prerequisites are met
+			const isAvailable = await this.isQuestAvailable(questData.id, characterId);
+			if (isAvailable) {
+				availableQuests.push(questData);
+			}
+		}
+
+		return availableQuests;
+	}
+
+	/**
+	 * Get quest chain info - shows which quests unlock which
+	 */
+	async getQuestChainInfo(storylineId?: number) {
+		const questQuery = storylineId
+			? db.select().from(quest).where(eq(quest.storylineId, storylineId))
+			: db.select().from(quest);
+
+		const quests = await questQuery;
+
+		return quests.map((q) => ({
+			id: q.id,
+			title: q.title,
+			order: q.order,
+			prerequisiteQuestIds: (q.prerequisiteQuestIds as number[]) || [],
+			alternativePrerequisiteQuestIds: (q.alternativePrerequisiteQuestIds as number[]) || [],
+			isMain: q.isMain,
+			storylineId: q.storylineId
+		}));
+	}
 }
+
 
 export const questService = new QuestService();

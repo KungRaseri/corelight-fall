@@ -9,7 +9,7 @@ export const npc = pgTable('npc', {
 	id: serial('id').primaryKey(),
 	
 	// Basic information
-	name: text('name').notNull(),
+	name: text('name').notNull().unique(),
 	title: text('title'), // "The Forgemaster", "Seeker of Truth", "Drifter King"
 	description: text('description').notNull(),
 	backstory: text('backstory'),

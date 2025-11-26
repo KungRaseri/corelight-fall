@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, boolean, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, integer, boolean, timestamp, jsonb } from 'drizzle-orm/pg-core';
 import { storyline } from './storyline';
 
 export const quest = pgTable('quest', {
@@ -6,7 +6,7 @@ export const quest = pgTable('quest', {
 	storylineId: integer('storyline_id')
 		.references(() => storyline.id)
 		.notNull(),
-	title: text('title').notNull(),
+	title: text('title').notNull().unique(), // Add unique constraint
 	description: text('description').notNull(),
 	tone: text('tone'),
 	goals: text('goals'),
@@ -16,6 +16,13 @@ export const quest = pgTable('quest', {
 	order: integer('order').default(0).notNull(),
 	isMain: boolean('is_main').default(false).notNull(),
 	isActive: boolean('is_active').default(true).notNull(),
+	
+	// Quest chain prerequisites - quests that must be completed before this quest becomes available
+	prerequisiteQuestIds: jsonb('prerequisite_quest_ids').$type<number[]>().default([]),
+	
+	// Alternative quests - if any of these are complete, this quest becomes available (OR logic)
+	// Used for path convergence where either Scavenger OR Seeker path completion unlocks main arc
+	alternativePrerequisiteQuestIds: jsonb('alternative_prerequisite_quest_ids').$type<number[]>().default([]),
 	
 	// Rewards
 	xpReward: integer('xp_reward').default(0).notNull(),
