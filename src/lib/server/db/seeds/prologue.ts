@@ -3,85 +3,85 @@
  * 
  * This script seeds the database with content from Sprint 2:
  * - Two starting paths (Scavenger and Seeker)
+ * - Storylines for both paths
  * - Prologue quests and objectives
  * - Initial NPCs
- * - Starter dialogue trees
- * - Fragment discoveries
- * - Story flags
+ * - Starter fragments
  */
 
 import { db } from '$lib/server/db';
 import {
-	path,
 	quest,
 	questObjective,
 	npc,
-	fragment
+	fragment,
+	storyline
 } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export async function seedPrologueContent() {
 	console.log('🌱 Seeding prologue content...');
 
-	// 1. Create the two starting paths
-	console.log('📍 Creating paths...');
+	// 0. Create storylines first (quests require storylineId)
+	console.log('📖 Creating storylines...');
 	
-	const [scavengerPath] = await db
-		.insert(path)
+	const [scavengerStoryline] = await db
+		.insert(storyline)
 		.values({
-			name: 'The Scavenger',
-			slug: 'scavenger',
-			description: 'A pragmatic survivor focused on protecting your community. You scavenge the ruins for resources, defend against threats, and build networks of trust.',
-			startingLocation: 'Ashvale',
-			thematicFocus: 'survival',
-			flavorText: 'The ruins hold secrets worth risking your life for. Every shard of Corelight is a piece of hope for your people.',
-			questlineStart: null, // Will link after quests are created
-			requiredLevel: 1,
-			isStartingPath: true,
-			isActive: true
+			title: 'The Scavenger\'s Journey',
+			description: 'A tale of survival and resourcefulness in the ruins of the old world.',
+			tone: 'gritty',
+			goals: 'Protect Ashvale, gather resources, build community',
+			summary: 'Your story as a pragmatic survivor focused on protecting your community.',
+			tags: 'prologue,scavenger,survival',
+			factions: 'ashvale',
+			order: 1,
+			isMain: true,
+			isActive: true,
+			xpReward: 500,
+			goldReward: 200
 		})
 		.returning();
 
-	const [seekerPath] = await db
-		.insert(path)
+	const [seekerStoryline] = await db
+		.insert(storyline)
 		.values({
-			name: 'The Seeker',
-			slug: 'seeker',
-			description: 'A scholar driven by curiosity and the pursuit of lost knowledge. You study ancient texts, decode Luminarch mysteries, and piece together the truth of the Fall.',
-			startingLocation: 'Ashvale',
-			thematicFocus: 'knowledge',
-			flavorText: 'Knowledge is power. Understanding what caused the Fall is the only way to prevent it from happening again.',
-			questlineStart: null, // Will link after quests are created
-			requiredLevel: 1,
-			isStartingPath: true,
-			isActive: true
+			title: 'The Seeker\'s Path',
+			description: 'A quest for knowledge and understanding of the ancient Luminarchs.',
+			tone: 'mysterious',
+			goals: 'Uncover the truth, decode mysteries, preserve knowledge',
+			summary: 'Your journey as a scholar driven by curiosity and the pursuit of lost knowledge.',
+			tags: 'prologue,seeker,knowledge',
+			factions: 'scholars',
+			order: 1,
+			isMain: true,
+			isActive: true,
+			xpReward: 500,
+			goldReward: 200
 		})
 		.returning();
 
-	console.log(`✅ Created paths: ${scavengerPath.id} (Scavenger), ${seekerPath.id} (Seeker)`);
+	console.log(`✅ Created storylines: ${scavengerStoryline.id}, ${seekerStoryline.id}`);
 
-	// 2. Create key NPCs from the prologue
+	// 1. Create key NPCs from the prologue
 	console.log('👥 Creating NPCs...');
 
 	const [elara] = await db
 		.insert(npc)
 		.values({
 			name: 'Elara Dawnshard',
-			slug: 'elara-dawnshard',
 			title: 'Elder of Ashvale',
 			description: 'A wise and weathered leader who has guided Ashvale through decades of hardship. Her eyes hold both sorrow and determination.',
-			locationId: null, // Ashvale location ID to be added
-			personality: 'Wise, protective, burdened by responsibility',
-			appearance: 'Silver-haired woman in worn but dignified robes, bearing a small fragment around her neck',
+			backstory: 'Once a scholar of the Luminarchs, Elara survived the Fall and dedicated her life to protecting the remnants of humanity in Ashvale.',
 			role: 'mentor',
-			isRomanceable: false,
-			faction: null,
-			relationshipSettings: {
-				initialTrust: 70,
-				canBecome: ['ally', 'mentor']
+			personality: {
+				traits: ['wise', 'protective', 'burdened'],
+				values: ['community', 'knowledge', 'hope'],
+				fears: ['losing_people', 'corruption_spreading'],
+				motivations: ['protect_ashvale', 'preserve_knowledge', 'guide_youth']
 			},
-			questsGiven: [],
-			dialogueTrees: [],
+			isQuestGiver: true,
+			isMentor: true,
 			isActive: true
 		})
 		.returning();
@@ -90,21 +90,18 @@ export async function seedPrologueContent() {
 		.insert(npc)
 		.values({
 			name: 'Kael Ironfist',
-			slug: 'kael-ironfist',
 			title: 'Captain of the Guard',
 			description: 'A battle-scarred veteran who takes protection of Ashvale seriously. Gruff exterior hides a caring heart.',
-			locationId: null,
-			personality: 'Gruff, loyal, pragmatic, secretly compassionate',
-			appearance: 'Tall, muscular man with a scarred face and heavy armor. Carries a fragment-enhanced blade.',
+			backstory: 'A former soldier who lost his family to corruption. Now dedicated to ensuring no one else suffers the same fate.',
 			role: 'ally',
-			isRomanceable: false,
-			faction: null,
-			relationshipSettings: {
-				initialTrust: 50,
-				canBecome: ['ally', 'friend']
+			personality: {
+				traits: ['gruff', 'loyal', 'pragmatic', 'compassionate'],
+				values: ['duty', 'strength', 'protection'],
+				fears: ['failure', 'losing_comrades'],
+				motivations: ['protect_ashvale', 'train_defenders', 'honor_fallen']
 			},
-			questsGiven: [],
-			dialogueTrees: [],
+			isQuestGiver: true,
+			combatRole: 'tank',
 			isActive: true
 		})
 		.returning();
@@ -113,185 +110,153 @@ export async function seedPrologueContent() {
 		.insert(npc)
 		.values({
 			name: 'Lyra Whisperwind',
-			slug: 'lyra-whisperwind',
 			title: 'Archivist',
 			description: 'A young scholar obsessed with pre-Fall history. Enthusiastic but reckless in pursuit of knowledge.',
-			locationId: null,
-			personality: 'Curious, enthusiastic, reckless, brilliant',
-			appearance: 'Young woman with ink-stained fingers, surrounded by books and scrolls. Wears spectacles.',
+			backstory: 'Born after the Fall, Lyra grew up hearing stories of the Luminarchs and became determined to uncover their secrets.',
 			role: 'ally',
-			isRomanceable: true,
-			faction: null,
-			relationshipSettings: {
-				initialTrust: 60,
-				canBecome: ['ally', 'friend', 'romance']
+			personality: {
+				traits: ['curious', 'enthusiastic', 'reckless', 'brilliant'],
+				values: ['knowledge', 'truth', 'discovery'],
+				fears: ['ignorance', 'forgotten_history'],
+				motivations: ['understand_fall', 'decode_luminarch_texts', 'share_knowledge']
 			},
-			questsGiven: [],
-			dialogueTrees: [],
+			isQuestGiver: true,
+			isRomanceable: true,
 			isActive: true
 		})
 		.returning();
 
 	console.log(`✅ Created NPCs: Elara (${elara.id}), Kael (${kael.id}), Lyra (${lyra.id})`);
 
-	// 3. Create prologue quests
+	// 2. Create prologue quests
 	console.log('📜 Creating quests...');
 
 	// Scavenger Path: Opening Quest
 	const [scavengerIntro] = await db
 		.insert(quest)
 		.values({
-			name: 'Shards of Hope',
-			slug: 'shards-of-hope',
+			storylineId: scavengerStoryline.id,
+			title: 'Shards of Hope',
 			description: 'Elder Elara has asked you to investigate strange energy readings from the Old Quarter ruins. The fragments there could provide crucial resources for Ashvale.',
-			category: 'main_story',
-			actNumber: 1,
-			chapter: 1,
-			questGiver: elara.id,
-			location: 'Old Quarter Ruins',
-			objectives: 'Investigate the ruins, collect 3 Corelight fragments, defeat corrupted creatures',
-			rewards: {
-				xp: 100,
-				gold: 50,
-				items: [],
-				reputation: [{ faction: 'ashvale', amount: 10 }]
-			},
-			prerequisites: {
-				pathRequired: scavengerPath.id
-			},
-			estimatedDuration: 20,
-			difficulty: 1,
-			requiredLevel: 1,
-			isRepeatable: false,
-			nextQuests: [],
-			isActive: true
+			tone: 'urgent',
+			goals: 'Travel to the Old Quarter ruins, Collect 3 Corelight fragments, Defeat corrupted creatures, Return to Elder Elara',
+			summary: 'Your first mission for Ashvale - venture into dangerous ruins to gather precious Corelight shards.',
+			tags: 'prologue,scavenger,exploration,combat',
+			factions: 'ashvale',
+			order: 1,
+			isMain: true,
+			isActive: true,
+			xpReward: 100,
+			goldReward: 50
 		})
 		.returning();
-
-	// Create objectives for Scavenger intro quest
-	await db.insert(questObjective).values([
-		{
-			questId: scavengerIntro.id,
-			objectiveOrder: 1,
-			description: 'Travel to the Old Quarter ruins',
-			objectiveType: 'reach_location',
-			targetType: 'location',
-			targetIdentifier: 'old-quarter-ruins',
-			requiredCount: 1,
-			isOptional: false
-		},
-		{
-			questId: scavengerIntro.id,
-			objectiveOrder: 2,
-			description: 'Collect Corelight fragments (0/3)',
-			objectiveType: 'collect',
-			targetType: 'item',
-			targetIdentifier: 'corelight-fragment',
-			requiredCount: 3,
-			isOptional: false
-		},
-		{
-			questId: scavengerIntro.id,
-			objectiveOrder: 3,
-			description: 'Defeat corrupted shadow beasts (0/5)',
-			objectiveType: 'defeat',
-			targetType: 'enemy',
-			targetIdentifier: 'shadow-beast',
-			requiredCount: 5,
-			isOptional: false
-		},
-		{
-			questId: scavengerIntro.id,
-			objectiveOrder: 4,
-			description: 'Return to Elder Elara',
-			objectiveType: 'talk',
-			targetType: 'npc',
-			targetIdentifier: elara.slug,
-			requiredCount: 1,
-			isOptional: false
-		}
-	]);
 
 	// Seeker Path: Opening Quest
 	const [seekerIntro] = await db
 		.insert(quest)
 		.values({
-			name: 'Echoes of the Luminarchs',
-			slug: 'echoes-of-luminarchs',
+			storylineId: seekerStoryline.id,
+			title: 'Echoes of the Luminarchs',
 			description: 'Lyra has discovered references to a Luminarch archive in the old library. Help her decipher the texts and unlock their secrets.',
-			category: 'main_story',
-			actNumber: 1,
-			chapter: 1,
-			questGiver: lyra.id,
-			location: 'Ancient Library',
-			objectives: 'Study ancient texts, solve cipher puzzles, discover hidden archive',
-			rewards: {
-				xp: 100,
-				gold: 30,
-				items: [],
-				reputation: [{ faction: 'scholars', amount: 15 }]
-			},
-			prerequisites: {
-				pathRequired: seekerPath.id
-			},
-			estimatedDuration: 25,
-			difficulty: 1,
-			requiredLevel: 1,
-			isRepeatable: false,
-			nextQuests: [],
-			isActive: true
+			tone: 'mysterious',
+			goals: 'Meet Lyra at the Ancient Library, Examine ancient texts, Solve the Luminarch cipher, Enter the hidden archive',
+			summary: 'Assist the young archivist in unlocking secrets from before the Fall.',
+			tags: 'prologue,seeker,knowledge,puzzle',
+			factions: 'scholars',
+			order: 1,
+			isMain: true,
+			isActive: true,
+			xpReward: 100,
+			goldReward: 30
 		})
 		.returning();
 
-	// Create objectives for Seeker intro quest
+	console.log(`✅ Created quests: ${scavengerIntro.id} (Scavenger), ${seekerIntro.id} (Seeker)`);
+
+	// 3. Create quest objectives
+	console.log('🎯 Creating quest objectives...');
+
+	// Scavenger quest objectives
 	await db.insert(questObjective).values([
 		{
-			questId: seekerIntro.id,
-			objectiveOrder: 1,
-			description: 'Meet Lyra at the Ancient Library',
-			objectiveType: 'talk',
-			targetType: 'npc',
-			targetIdentifier: lyra.slug,
-			requiredCount: 1,
-			isOptional: false
+			questId: scavengerIntro.id,
+			description: 'Travel to the Old Quarter ruins',
+			type: 'reach_location',
+			targetId: null, // Would be location ID once locations are seeded
+			targetCount: 1,
+			isOptional: false,
+			order: 1
 		},
 		{
-			questId: seekerIntro.id,
-			objectiveOrder: 2,
-			description: 'Examine ancient texts (0/4)',
-			objectiveType: 'interact',
-			targetType: 'object',
-			targetIdentifier: 'ancient-text',
-			requiredCount: 4,
-			isOptional: false
+			questId: scavengerIntro.id,
+			description: 'Collect Corelight fragments (0/3)',
+			type: 'collect',
+			targetId: null, // Would be item ID once items are seeded
+			targetCount: 3,
+			isOptional: false,
+			order: 2
 		},
 		{
-			questId: seekerIntro.id,
-			objectiveOrder: 3,
-			description: 'Solve the Luminarch cipher',
-			objectiveType: 'custom',
-			targetType: 'puzzle',
-			targetIdentifier: 'luminarch-cipher',
-			requiredCount: 1,
-			isOptional: false
+			questId: scavengerIntro.id,
+			description: 'Defeat corrupted shadow beasts (0/5)',
+			type: 'defeat',
+			targetId: null, // Would be enemy ID once enemies are seeded
+			targetCount: 5,
+			isOptional: false,
+			order: 3
 		},
 		{
-			questId: seekerIntro.id,
-			objectiveOrder: 4,
-			description: 'Enter the hidden archive',
-			objectiveType: 'reach_location',
-			targetType: 'location',
-			targetIdentifier: 'hidden-archive',
-			requiredCount: 1,
-			isOptional: false
+			questId: scavengerIntro.id,
+			description: 'Return to Elder Elara',
+			type: 'talk',
+			targetId: elara.id,
+			targetCount: 1,
+			isOptional: false,
+			order: 4
 		}
 	]);
 
-	// Update paths with their starting quests
-	await db.update(path).set({ questlineStart: scavengerIntro.id }).where(eq(path.id, scavengerPath.id));
-	await db.update(path).set({ questlineStart: seekerIntro.id }).where(eq(path.id, seekerPath.id));
+	// Seeker quest objectives
+	await db.insert(questObjective).values([
+		{
+			questId: seekerIntro.id,
+			description: 'Meet Lyra at the Ancient Library',
+			type: 'talk',
+			targetId: lyra.id,
+			targetCount: 1,
+			isOptional: false,
+			order: 1
+		},
+		{
+			questId: seekerIntro.id,
+			description: 'Examine ancient texts (0/4)',
+			type: 'interact',
+			targetId: null, // Would be object ID once objects are seeded
+			targetCount: 4,
+			isOptional: false,
+			order: 2
+		},
+		{
+			questId: seekerIntro.id,
+			description: 'Solve the Luminarch cipher',
+			type: 'custom',
+			targetId: null, // Would be puzzle ID once puzzles are seeded
+			targetCount: 1,
+			isOptional: false,
+			order: 3
+		},
+		{
+			questId: seekerIntro.id,
+			description: 'Enter the hidden archive',
+			type: 'reach_location',
+			targetId: null, // Would be location ID once locations are seeded
+			targetCount: 1,
+			isOptional: false,
+			order: 4
+		}
+	]);
 
-	console.log(`✅ Created quests: ${scavengerIntro.id} (Scavenger), ${seekerIntro.id} (Seeker)`);
+	console.log(`✅ Created quest objectives: 8 total (4 per quest)`);
 
 	// 4. Create starter fragments
 	console.log('✨ Creating fragments...');
@@ -301,25 +266,28 @@ export async function seedPrologueContent() {
 		.values({
 			name: 'Ember Shard',
 			slug: 'ember-shard',
-			type: 'offensive',
+			type: 'standard',
 			tier: 1,
 			description: 'A warm fragment that pulses with inner fire. It responds to your will, ready to unleash its power.',
 			loreText: 'This shard once belonged to a Luminarch of the Flame. Its warmth is a echo of the light that once filled the world.',
 			discoveryLore: 'You found this fragment in the Old Quarter ruins, still warm despite centuries in darkness.',
 			powerLevel: 15,
 			corruptionLevel: 0,
-			abilities: {
-				primary: {
+			abilities: [
+				{
+					id: 'flame-bolt',
 					name: 'Flame Bolt',
-					description: 'Launch a bolt of fire at enemies',
-					damage: 12,
-					range: 20,
-					cost: { type: 'energy', amount: 10 }
+					description: 'Launch a bolt of fire at enemies (12 damage, 20 range)',
+					type: 'active',
+					cooldown: 3
 				}
-			},
-			visionCount: 2,
+			],
+			requiresAttunement: true,
+			attunementDifficulty: 10,
+			glowColor: '#ff6b35',
 			isActive: true
 		})
+		.onConflictDoNothing()
 		.returning();
 
 	const [echoFragment] = await db
@@ -327,32 +295,40 @@ export async function seedPrologueContent() {
 		.values({
 			name: 'Echo Crystal',
 			slug: 'echo-crystal',
-			type: 'utility',
+			type: 'standard',
 			tier: 1,
 			description: 'A translucent crystal that hums with residual memories. When held, you hear whispers of the past.',
 			loreText: 'Memory crystals like this were used by Luminarch scribes to record history. This one still holds fragments of knowledge.',
 			discoveryLore: 'Lyra identified this as a memory storage device, though most of its contents have degraded over time.',
 			powerLevel: 10,
 			corruptionLevel: 0,
-			abilities: {
-				primary: {
+			abilities: [
+				{
+					id: 'reveal-memory',
 					name: 'Reveal Memory',
-					description: 'Unlock hidden memories and lore',
-					effect: 'knowledge',
-					cost: { type: 'focus', amount: 15 }
+					description: 'Unlock hidden memories and lore entries',
+					type: 'active',
+					cooldown: 0
 				}
-			},
-			visionCount: 3,
+			],
+			requiresAttunement: true,
+			attunementDifficulty: 8,
+			glowColor: '#4ecdc4',
 			isActive: true
 		})
+		.onConflictDoNothing()
 		.returning();
 
-	console.log(`✅ Created fragments: ${emberFragment.id} (Ember), ${echoFragment.id} (Echo)`);
+	// If fragments already exist, fetch them
+	const emberFragmentFinal = emberFragment || (await db.select().from(fragment).where(eq(fragment.slug, 'ember-shard')))[0];
+	const echoFragmentFinal = echoFragment || (await db.select().from(fragment).where(eq(fragment.slug, 'echo-crystal')))[0];
+
+	console.log(`✅ Created fragments: ${emberFragmentFinal?.id ?? 'existing'} (Ember), ${echoFragmentFinal?.id ?? 'existing'} (Echo)`);
 
 	console.log('✅ Prologue content seeding complete!');
 	console.log('');
 	console.log('Summary:');
-	console.log(`  - 2 Paths created`);
+	console.log(`  - 2 Storylines created`);
 	console.log(`  - 3 NPCs created`);
 	console.log(`  - 2 Main quests created`);
 	console.log(`  - 8 Quest objectives created`);
@@ -362,13 +338,12 @@ export async function seedPrologueContent() {
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-	seedPrologueContent()
-		.then(() => {
-			console.log('✅ Seeding completed successfully!');
-			process.exit(0);
-		})
-		.catch((error) => {
-			console.error('❌ Seeding failed:', error);
-			process.exit(1);
-		});
+	try {
+		await seedPrologueContent();
+		console.log('✅ Seeding completed successfully!');
+		process.exit(0);
+	} catch (error) {
+		console.error('❌ Seeding failed:', error);
+		process.exit(1);
+	}
 }

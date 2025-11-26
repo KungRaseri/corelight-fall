@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { db } from '../index.js';
 import { hash } from '@node-rs/argon2';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { seedPrologueContent } from './prologue.js';
 import type {
 	RolePermission,
 	NewRole,
@@ -575,6 +576,10 @@ The path ahead is dark and uncertain. But within the shadows lie opportunities f
 		}
 
 		console.log('✅ Story structure seeded');
+
+		// Seed prologue content
+		console.log('🌱 Seeding prologue content...');
+		await seedPrologueContent();
 
 		console.log('🌱 Seed complete!');
 	} catch (error) {
