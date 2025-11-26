@@ -243,6 +243,12 @@
 		>
 			<span>Character</span>
 		</button>
+		<a 
+			href="/game/journal"
+			class="btn preset-tonal-surface flex items-center gap-2"
+		>
+			<span>📖 Journal</span>
+		</a>
 		<button 
 			class="btn preset-tonal-surface flex items-center gap-2" 
 			onclick={() => (showMap = true)}
